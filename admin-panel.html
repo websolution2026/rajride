@@ -844,8 +844,10 @@ const SUPABASE_URL = 'https://ksgpotzxzvebrzdzjexb.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_AWBGqLtEHvWS5ITmlnzaHA_bfbLHHO-';
 // ===============================================
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.0';
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
+  auth: { persistSession: false }
+});
 
 const OWNER_PHONE = '917979720282';
 const OWNER_EMAIL = 'prabhat.raj.rj@gmail.com';
