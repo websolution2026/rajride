@@ -538,11 +538,15 @@ async function submitBooking() {
       headers: HEADERS,
       body: JSON.stringify({
         name, phone,
-        email:      document.getElementById('cust_email').value,
-        pickup, drop, date, time, vehicle,
-        passengers: document.getElementById('passengers').value,
-        note:       document.getElementById('special_note').value,
-        status:     'pending'
+        email:        document.getElementById('cust_email').value,
+        pickup,
+        drop_place:   drop,
+        journey_date: date,
+        journey_time: time,
+        vehicle,
+        passengers:   document.getElementById('passengers').value,
+        note:         document.getElementById('special_note').value,
+        status:       'pending'
       })
     });
 
