@@ -877,7 +877,14 @@ async function fetchRequests() {
     headers: HEADERS
   });
   if (res.ok) {
-    requests = await res.json();
+    const data = await res.json();
+    // Map DB column names back to app names
+    requests = data.map(r => ({
+      ...r,
+      date: r.journey_date,
+      time: r.journey_time,
+      drop: r.drop_place
+    }));
     renderReqs();
   }
 }
