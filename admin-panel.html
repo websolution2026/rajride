@@ -836,18 +836,20 @@
 
 <div class="toast" id="toast"></div>
 
-<script type="module">
+<script>
 // ===============================================
-//  ⚡ SUPABASE CONFIG
+//  ⚡ SUPABASE CONFIG (REST API)
 // ===============================================
 const SUPABASE_URL = 'https://ksgpotzxzvebrzdzjexb.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_AWBGqLtEHvWS5ITmlnzaHA_bfbLHHO-';
+const API_URL = SUPABASE_URL + '/rest/v1';
+const HEADERS = {
+  'Content-Type': 'application/json',
+  'apikey': SUPABASE_KEY,
+  'Authorization': 'Bearer ' + SUPABASE_KEY,
+  'Prefer': 'return=representation'
+};
 // ===============================================
-
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.0';
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
-  auth: { persistSession: false }
-});
 
 const OWNER_PHONE = '917979720282';
 const OWNER_EMAIL = 'prabhat.raj.rj@gmail.com';
@@ -858,30 +860,24 @@ let billCtr = parseInt(localStorage.getItem('rr_billctr') || '100');
 let reqFilter = 'all', reqSearch = '', billFilter = 'all';
 let _confirmReqId = null, _showPreview = false;
 
-// ===== LOAD + REALTIME FOR REQUESTS (Supabase) =====
+// ===== LOAD + POLLING FOR REQUESTS =====
 async function startRealtimeRequests() {
-  // Initial load
   await fetchRequests();
-
-  // Realtime subscription
-  supabase
-    .channel('requests-channel')
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'requests' }, async () => {
-      const prev = requests.filter(r => r.status === 'pending').length;
-      await fetchRequests();
-      const curr = requests.filter(r => r.status === 'pending').length;
-      if (curr > prev) showToast('🔔 Nayi booking request aayi!');
-    })
-    .subscribe();
+  // Poll every 15 seconds for new requests
+  setInterval(async () => {
+    const prev = requests.filter(r => r.status === 'pending').length;
+    await fetchRequests();
+    const curr = requests.filter(r => r.status === 'pending').length;
+    if (curr > prev) showToast('🔔 Nayi booking request aayi!');
+  }, 15000);
 }
 
 async function fetchRequests() {
-  const { data, error } = await supabase
-    .from('requests')
-    .select('*')
-    .order('created_at', { ascending: false });
-  if (!error && data) {
-    requests = data;
+  const res = await fetch(API_URL + '/requests?order=created_at.desc', {
+    headers: HEADERS
+  });
+  if (res.ok) {
+    requests = await res.json();
     renderReqs();
   }
 }
@@ -981,17 +977,24 @@ function renderReqs() {
 }
 
 async function setStatus(id, status) {
-  const { error } = await supabase.from('requests').update({ status }).eq('id', id);
-  if (error) showToast('Error: ' + error.message, '#ef4444');
-  else showToast('Status updated!');
+  const res = await fetch(API_URL + '/requests?id=eq.' + id, {
+    method: 'PATCH',
+    headers: HEADERS,
+    body: JSON.stringify({ status })
+  });
+  if (res.ok) { showToast('Status updated!'); await fetchRequests(); }
+  else showToast('Error updating status', '#ef4444');
 }
 window.setStatus = setStatus;
 
 async function delReq(id) {
   if (!confirm('Delete karein?')) return;
-  const { error } = await supabase.from('requests').delete().eq('id', id);
-  if (error) showToast('Error: ' + error.message, '#ef4444');
-  else showToast('Request delete ho gayi!', '#ef4444');
+  const res = await fetch(API_URL + '/requests?id=eq.' + id, {
+    method: 'DELETE',
+    headers: HEADERS
+  });
+  if (res.ok) { showToast('Request delete ho gayi!', '#ef4444'); await fetchRequests(); }
+  else showToast('Error deleting request', '#ef4444');
 }
 window.delReq = delReq;
 
