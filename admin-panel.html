@@ -118,6 +118,13 @@
   .tab-panel { display: none; animation: fadeUp 0.25s ease; }
   .tab-panel.active { display: block; }
   @keyframes fadeUp { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(8px); }
+    60% { transform: translateX(-6px); }
+    80% { transform: translateX(6px); }
+  }
 
   /* STAT STRIP */
   .stat-strip {
@@ -510,11 +517,191 @@
     .nav-btn { padding: 12px 14px; font-size: 13px; }
     .stat-strip { grid-template-columns: 1fr 1fr; gap: 10px; }
   }
+
+  /* REPORTS */
+  .report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+  .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 22px; }
+  .chart-title { font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700; color: var(--accent); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .chart-wrap { position: relative; height: 220px; }
+  .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 180px; padding: 0 4px; }
+  .bar-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .bar { width: 100%; border-radius: 6px 6px 0 0; background: var(--accent); min-height: 4px; transition: height 0.6s ease; position: relative; cursor: pointer; }
+  .bar:hover { filter: brightness(1.2); }
+  .bar-val { font-size: 10px; color: var(--accent); font-weight: 600; position: absolute; top: -18px; width: 100%; text-align: center; }
+  .bar-lbl { font-size: 10px; color: var(--muted2); text-align: center; }
+  .donut-wrap { display: flex; align-items: center; gap: 20px; }
+  .donut-legend { display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .legend-val { margin-left: auto; font-family: 'Rajdhani', sans-serif; font-weight: 700; color: var(--accent); }
+  .top-table { width: 100%; }
+  .top-table tr td { padding: 8px 4px; font-size: 13px; border-bottom: 1px solid var(--border); }
+  .top-table tr:last-child td { border: none; }
+  .progress-bar-wrap { background: var(--surface); border-radius: 20px; height: 6px; flex: 1; overflow: hidden; }
+  .progress-bar-fill { height: 100%; border-radius: 20px; background: var(--accent); transition: width 0.6s ease; }
+  .report-period { display: flex; gap: 8px; margin-bottom: 20px; }
+
+  /* MAPS */
+  .map-layout { display: grid; grid-template-columns: 340px 1fr; gap: 20px; }
+  .map-form-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 14px; }
+  #map-container { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; min-height: 500px; display: flex; align-items: center; justify-content: center; color: var(--muted2); font-size: 14px; }
+  .route-info-box { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .route-info-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px; border-bottom: 1px solid var(--border); }
+  .route-info-row:last-child { border: none; }
+  .map-api-notice { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); border-radius: 10px; padding: 12px 14px; font-size: 13px; color: var(--accent); margin-bottom: 16px; }
+  @media (max-width: 900px) {
+    .report-grid { grid-template-columns: 1fr; }
+    .map-layout { grid-template-columns: 1fr; }
+  }
+
+  /* ===== LOGIN SCREEN ===== */
+  .login-overlay {
+    position: fixed; inset: 0;
+    background: var(--bg);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .login-overlay.hidden { display: none; }
+
+  .login-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 40px 36px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+    animation: fadeUp 0.3s ease;
+  }
+  .login-logo {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-align: center;
+    margin-bottom: 4px;
+  }
+  .login-sub {
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted2);
+    letter-spacing: 2px;
+    margin-bottom: 32px;
+  }
+  .login-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .login-field label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--muted2);
+    text-transform: uppercase;
+  }
+  .login-field input {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 13px 16px;
+    color: var(--text);
+    font-family: 'Hind', sans-serif;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+  .login-field input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(245,158,11,0.1); }
+  .login-btn {
+    width: 100%;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 8px;
+  }
+  .login-btn:hover { background: #d97706; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(245,158,11,0.3); }
+  .login-error {
+    background: rgba(239,68,68,0.1);
+    border: 1px solid rgba(239,68,68,0.3);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--red);
+    text-align: center;
+    margin-top: 12px;
+    display: none;
+  }
+  .login-error.show { display: block; animation: fadeUp 0.2s ease; }
+  .login-attempts {
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted2);
+    margin-top: 12px;
+  }
+  .logout-btn {
+    background: rgba(239,68,68,0.1);
+    border: 1px solid rgba(239,68,68,0.2);
+    color: var(--red);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .logout-btn:hover { background: rgba(239,68,68,0.2); }
+  .login-lock-msg {
+    text-align: center;
+    color: var(--red);
+    font-size: 13px;
+    margin-top: 12px;
+    display: none;
+  }
 </style>
 </head>
 <body>
 
 <!-- TOP BAR -->
+<!-- ===== LOGIN OVERLAY ===== -->
+<div class="login-overlay" id="login-overlay">
+  <div class="login-box">
+    <div class="login-logo">🚗 RAJRIDE</div>
+    <div class="login-sub">ADMIN PANEL — SECURE LOGIN</div>
+
+    <div class="login-field">
+      <label>👤 Username</label>
+      <input type="text" id="login-user" placeholder="Username" autocomplete="username"
+        onkeydown="if(event.key==='Enter') doLogin()">
+    </div>
+    <div class="login-field">
+      <label>🔒 Password</label>
+      <input type="password" id="login-pass" placeholder="Password" autocomplete="current-password"
+        onkeydown="if(event.key==='Enter') doLogin()">
+    </div>
+
+    <button class="login-btn" onclick="doLogin()">🔓 Login Karein</button>
+
+    <div class="login-error" id="login-error">❌ Galat username ya password!</div>
+    <div class="login-lock-msg" id="login-lock">🔒 Bahut zyada galat attempts! 5 minute baad try karein.</div>
+    <div class="login-attempts" id="login-attempts"></div>
+  </div>
+</div>
+
 <div class="topbar">
   <div class="logo">
     🚗 RAJRIDE
@@ -524,6 +711,7 @@
   <div style="display:flex; align-items:center; gap:12px;">
     <span style="font-size:12px; color:var(--muted2);">📱 7979720282</span>
     <button class="refresh-btn" onclick="refreshAll()">⟳ Refresh</button>
+    <button class="logout-btn" onclick="doLogout()">🚪 Logout</button>
   </div>
 </div>
 
@@ -532,6 +720,8 @@
   <button class="nav-btn active" onclick="switchPanel('requests', this)">📋 Requests <span class="nav-count" id="nav-count">0</span></button>
   <button class="nav-btn" onclick="switchPanel('billing', this)">💰 Billing</button>
   <button class="nav-btn" onclick="switchPanel('history', this)">📜 Bill History</button>
+  <button class="nav-btn" onclick="switchPanel('reports', this)">📊 Reports</button>
+  <button class="nav-btn" onclick="switchPanel('maps', this)">🗺️ Maps</button>
 </div>
 
 <main>
@@ -750,6 +940,126 @@
     </div>
   </div>
 
+
+  <!-- ===== REPORTS PANEL ===== -->
+  <div class="tab-panel" id="panel-reports">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; flex-wrap:wrap; gap:12px;">
+      <div>
+        <div style="font-family:'Rajdhani',sans-serif; font-size:28px; font-weight:700; color:var(--accent);">📊 Revenue Reports</div>
+        <div style="font-size:13px; color:var(--muted2);">Business performance aur trends</div>
+      </div>
+      <div class="report-period">
+        <button class="filter-pill active" onclick="setReportPeriod(7,this)">7 Din</button>
+        <button class="filter-pill" onclick="setReportPeriod(30,this)">30 Din</button>
+        <button class="filter-pill" onclick="setReportPeriod(90,this)">3 Mahine</button>
+        <button class="filter-pill" onclick="setReportPeriod(365,this)">1 Saal</button>
+      </div>
+    </div>
+
+    <!-- Top Stats -->
+    <div class="stat-strip" style="margin-bottom:20px;" id="report-stats">
+      <div class="stat"><div class="stat-icon green">💰</div><div><div class="stat-val green" id="r-revenue">₹0</div><div class="stat-lbl">Total Revenue</div></div></div>
+      <div class="stat"><div class="stat-icon blue">📋</div><div><div class="stat-val blue" id="r-bookings">0</div><div class="stat-lbl">Total Bookings</div></div></div>
+      <div class="stat"><div class="stat-icon amber">💵</div><div><div class="stat-val amber" id="r-avg">₹0</div><div class="stat-lbl">Avg Bill</div></div></div>
+      <div class="stat"><div class="stat-icon red">⏳</div><div><div class="stat-val red" id="r-pending-amt">₹0</div><div class="stat-lbl">Pending Amount</div></div></div>
+    </div>
+
+    <div class="report-grid">
+      <!-- Monthly Revenue Bar Chart -->
+      <div class="chart-card">
+        <div class="chart-title">📅 Monthly Revenue</div>
+        <div class="bar-chart" id="monthly-chart"></div>
+        <div style="display:flex; justify-content:space-around; margin-top:8px;" id="monthly-labels"></div>
+      </div>
+
+      <!-- Vehicle-wise Donut -->
+      <div class="chart-card">
+        <div class="chart-title">🚗 Vehicle-wise Bookings</div>
+        <div class="donut-wrap">
+          <canvas id="donut-canvas" width="160" height="160"></canvas>
+          <div class="donut-legend" id="donut-legend"></div>
+        </div>
+      </div>
+
+      <!-- Top Routes -->
+      <div class="chart-card">
+        <div class="chart-title">📍 Top Routes</div>
+        <table class="top-table" id="top-routes"></table>
+      </div>
+
+      <!-- Payment Status -->
+      <div class="chart-card">
+        <div class="chart-title">💳 Payment Status</div>
+        <div style="display:flex; flex-direction:column; gap:16px;" id="payment-status-chart"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MAPS PANEL ===== -->
+  <div class="tab-panel" id="panel-maps">
+    <div style="font-family:'Rajdhani',sans-serif; font-size:28px; font-weight:700; color:var(--accent); margin-bottom:4px;">🗺️ Route & Distance</div>
+    <div style="font-size:13px; color:var(--muted2); margin-bottom:20px;">Pickup se Drop tak route aur distance calculate karein</div>
+
+    <div id="maps-api-warning" class="map-api-notice" style="display:none;">
+      ⚠️ Google Maps API key abhi set nahi hai। Neeche key enter karein ya <a href="https://console.cloud.google.com" target="_blank" style="color:var(--accent);">console.cloud.google.com</a> se lein।
+    </div>
+
+    <div class="map-layout">
+      <div class="map-form-card">
+        <div style="font-family:'Rajdhani',sans-serif; font-size:16px; font-weight:700; margin-bottom:4px;">Route Details</div>
+
+        <div class="field-group">
+          <div class="field-label">📍 Pickup Location</div>
+          <input type="text" id="map-pickup" class="dark" placeholder="Pickup address" oninput="mapAutocomplete('pickup')">
+          <div id="pickup-suggestions" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;display:none;max-height:150px;overflow-y:auto;margin-top:4px;"></div>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">🏁 Drop Location</div>
+          <input type="text" id="map-drop" class="dark" placeholder="Drop address" oninput="mapAutocomplete('drop')">
+          <div id="drop-suggestions" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;display:none;max-height:150px;overflow-y:auto;margin-top:4px;"></div>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">🚗 Vehicle Type</div>
+          <select id="map-vehicle" class="dark" onchange="updateFareEstimate()">
+            <option value="12">Hatchback (₹12/km)</option>
+            <option value="15">Sedan (₹15/km)</option>
+            <option value="20">SUV (₹20/km)</option>
+            <option value="30">Tempo Traveller (₹30/km)</option>
+            <option value="35">Luxury Car (₹35/km)</option>
+            <option value="50">Bus (₹50/km)</option>
+          </select>
+        </div>
+
+        <button class="gen-btn" onclick="calculateRoute()">🗺️ Route Calculate Karein</button>
+
+        <div class="route-info-box" id="route-info" style="display:none;">
+          <div class="route-info-row"><span style="color:var(--muted2)">📏 Distance</span><span id="ri-dist" style="font-weight:600;color:var(--accent)">—</span></div>
+          <div class="route-info-row"><span style="color:var(--muted2)">⏱️ Duration</span><span id="ri-dur" style="font-weight:600">—</span></div>
+          <div class="route-info-row"><span style="color:var(--muted2)">💰 Fare Estimate</span><span id="ri-fare" style="font-weight:700;font-family:'Rajdhani',sans-serif;font-size:18px;color:var(--green)">—</span></div>
+        </div>
+
+        <button class="gen-btn" id="fill-billing-btn" onclick="fillBillingFromMap()" style="display:none;background:var(--green);">
+          ➡️ Billing Me Fill Karein
+        </button>
+
+        <div class="field-group" style="margin-top:8px;">
+          <div class="field-label">🔑 Google Maps API Key</div>
+          <input type="text" id="maps-api-key" class="dark" placeholder="AIzaSy..." oninput="saveMapsKey()">
+          <div style="font-size:11px;color:var(--muted2);margin-top:4px;">console.cloud.google.com se lein — free hai</div>
+        </div>
+      </div>
+
+      <div id="map-container">
+        <div style="text-align:center;">
+          <div style="font-size:48px;margin-bottom:12px;">🗺️</div>
+          <div>Pickup aur Drop enter karke<br><b>Route Calculate</b> karein</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </main>
 
 <!-- REQUEST DETAIL MODAL -->
@@ -918,6 +1228,8 @@ function switchPanel(name, btn) {
     document.getElementById('b_date').value = today();
     autoRate();
   }
+  if (name === 'reports') { loadBills(); renderReports(reportDays); }
+  if (name === 'maps') { initMapsPanel(); }
 }
 window.switchPanel = switchPanel;
 
@@ -1312,7 +1624,7 @@ function switchPanelDirect(name) {
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('panel-' + name).classList.add('active');
-  const map = { requests:0, billing:1, history:2 };
+  const map = { requests:0, billing:1, history:2, reports:3, maps:4 };
   document.querySelectorAll('.nav-btn')[map[name]]?.classList.add('active');
   if (name === 'billing') {
     document.getElementById('b_no').value   = 'RR-' + (billCtr + 1);
@@ -1321,6 +1633,372 @@ function switchPanelDirect(name) {
 }
 window.switchPanelDirect = switchPanelDirect;
 window.refreshAll = refreshAll;
+
+// ===== REPORTS =====
+let reportDays = 7;
+
+function setReportPeriod(days, btn) {
+  reportDays = days;
+  document.querySelectorAll('#panel-reports .filter-pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderReports(days);
+}
+window.setReportPeriod = setReportPeriod;
+
+function renderReports(days) {
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - days);
+
+  const filtered = bills.filter(b => {
+    if (!b.date) return false;
+    const [y,m,d] = b.date.split('-');
+    return new Date(y,m-1,d) >= cutoff;
+  });
+
+  const totalRev   = filtered.reduce((s,b) => s + (b.payment==='paid' ? b.total : 0), 0);
+  const pendingAmt = filtered.reduce((s,b) => s + (b.payment==='unpaid' ? b.total : 0), 0);
+  const avgBill    = filtered.length ? Math.round(filtered.reduce((s,b)=>s+b.total,0)/filtered.length) : 0;
+
+  document.getElementById('r-revenue').textContent   = '₹' + totalRev.toLocaleString('en-IN');
+  document.getElementById('r-bookings').textContent  = filtered.length;
+  document.getElementById('r-avg').textContent       = '₹' + avgBill.toLocaleString('en-IN');
+  document.getElementById('r-pending-amt').textContent = '₹' + pendingAmt.toLocaleString('en-IN');
+
+  renderMonthlyChart(filtered);
+  renderDonut(filtered);
+  renderTopRoutes(filtered);
+  renderPaymentStatus(filtered);
+}
+
+function renderMonthlyChart(data) {
+  // Group by month
+  const months = {};
+  data.forEach(b => {
+    if (!b.date) return;
+    const key = b.date.substring(0,7); // YYYY-MM
+    months[key] = (months[key]||0) + b.total;
+  });
+  const keys = Object.keys(months).sort().slice(-6);
+  const vals = keys.map(k => months[k]);
+  const maxV = Math.max(...vals, 1);
+
+  const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const chart = document.getElementById('monthly-chart');
+  chart.innerHTML = keys.map((k,i) => {
+    const h = Math.round((vals[i]/maxV)*160);
+    const m = parseInt(k.split('-')[1])-1;
+    return `<div class="bar-item">
+      <div class="bar" style="height:${h}px;">
+        <div class="bar-val">₹${(vals[i]/1000).toFixed(0)}k</div>
+      </div>
+      <div class="bar-lbl">${monthNames[m]}</div>
+    </div>`;
+  }).join('') || '<div style="color:var(--muted2);padding:20px;">Data nahi hai</div>';
+}
+
+function renderDonut(data) {
+  const vMap = {};
+  data.forEach(b => { vMap[b.vehicle] = (vMap[b.vehicle]||0) + 1; });
+  const entries = Object.entries(vMap).sort((a,b)=>b[1]-a[1]);
+  const total = entries.reduce((s,e)=>s+e[1],0)||1;
+  const colors = ['#f59e0b','#10b981','#3b82f6','#ef4444','#8b5cf6','#ec4899'];
+
+  const canvas = document.getElementById('donut-canvas');
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0,0,160,160);
+  let start = -Math.PI/2;
+  entries.forEach(([name,val],i) => {
+    const slice = (val/total)*Math.PI*2;
+    ctx.beginPath();
+    ctx.moveTo(80,80);
+    ctx.arc(80,80,70,start,start+slice);
+    ctx.closePath();
+    ctx.fillStyle = colors[i%colors.length];
+    ctx.fill();
+    start += slice;
+  });
+  // Center hole
+  ctx.beginPath();
+  ctx.arc(80,80,40,0,Math.PI*2);
+  ctx.fillStyle = '#1a2030';
+  ctx.fill();
+  // Center text
+  ctx.fillStyle = '#f59e0b';
+  ctx.font = 'bold 18px Rajdhani';
+  ctx.textAlign = 'center';
+  ctx.fillText(total, 80, 85);
+
+  const legend = document.getElementById('donut-legend');
+  legend.innerHTML = entries.slice(0,5).map(([name,val],i) =>
+    `<div class="legend-item">
+      <div class="legend-dot" style="background:${colors[i%colors.length]}"></div>
+      <span style="font-size:12px">${name}</span>
+      <span class="legend-val">${val}</span>
+    </div>`
+  ).join('');
+}
+
+function renderTopRoutes(data) {
+  const routes = {};
+  data.forEach(b => {
+    const key = b.route || '—';
+    routes[key] = (routes[key]||0) + 1;
+  });
+  const top = Object.entries(routes).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const maxR = top[0]?.[1]||1;
+
+  document.getElementById('top-routes').innerHTML = top.map(([route,cnt]) =>
+    `<tr>
+      <td style="font-size:12px;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(route)}</td>
+      <td style="padding-left:8px;width:100%;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${Math.round(cnt/maxR*100)}%"></div></div>
+          <span style="font-size:12px;color:var(--accent);font-weight:600;white-space:nowrap;">${cnt}x</span>
+        </div>
+      </td>
+    </tr>`
+  ).join('') || '<tr><td colspan="2" style="color:var(--muted2);padding:12px;">Data nahi hai</td></tr>';
+}
+
+function renderPaymentStatus(data) {
+  const paid    = data.filter(b=>b.payment==='paid').length;
+  const unpaid  = data.filter(b=>b.payment==='unpaid').length;
+  const partial = data.filter(b=>b.payment==='partial').length;
+  const total   = data.length || 1;
+  const items = [
+    {label:'✅ Paid',   val:paid,    color:'#10b981'},
+    {label:'❌ Unpaid', val:unpaid,  color:'#ef4444'},
+    {label:'⏳ Partial',val:partial, color:'#f59e0b'},
+  ];
+  document.getElementById('payment-status-chart').innerHTML = items.map(item =>
+    `<div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:13px;">
+        <span>${item.label}</span>
+        <span style="color:${item.color};font-weight:700;">${item.val} (${Math.round(item.val/total*100)}%)</span>
+      </div>
+      <div class="progress-bar-wrap" style="height:10px;">
+        <div class="progress-bar-fill" style="width:${Math.round(item.val/total*100)}%;background:${item.color};height:10px;"></div>
+      </div>
+    </div>`
+  ).join('');
+}
+
+// ===== MAPS =====
+let mapsLoaded = false;
+let mapDistanceKm = 0;
+
+function saveMapsKey() {
+  const key = document.getElementById('maps-api-key').value.trim();
+  localStorage.setItem('rr_maps_key', key);
+}
+window.saveMapsKey = saveMapsKey;
+
+function initMapsPanel() {
+  const saved = localStorage.getItem('rr_maps_key') || '';
+  document.getElementById('maps-api-key').value = saved;
+  if (!saved) {
+    document.getElementById('maps-api-warning').style.display = 'block';
+  } else {
+    document.getElementById('maps-api-warning').style.display = 'none';
+    loadGoogleMaps(saved);
+  }
+}
+window.initMapsPanel = initMapsPanel;
+
+function loadGoogleMaps(key) {
+  if (mapsLoaded) return;
+  mapsLoaded = true;
+  const script = document.createElement('script');
+  script.src = `https://maps.googleapis.com/maps/api/js?key=${key}&libraries=places&callback=onMapsReady`;
+  script.async = true;
+  document.head.appendChild(script);
+}
+
+window.onMapsReady = function() {
+  const mapDiv = document.getElementById('map-container');
+  mapDiv.innerHTML = '';
+  window._gmap = new google.maps.Map(mapDiv, {
+    center: { lat: 25.5941, lng: 85.1376 },
+    zoom: 7,
+    styles: [
+      {elementType:'geometry',stylers:[{color:'#1a2030'}]},
+      {elementType:'labels.text.fill',stylers:[{color:'#8892a4'}]},
+      {elementType:'labels.text.stroke',stylers:[{color:'#0b0e16'}]},
+      {featureType:'road',elementType:'geometry',stylers:[{color:'#232a3a'}]},
+      {featureType:'water',elementType:'geometry',stylers:[{color:'#0b0e16'}]},
+    ]
+  });
+  window._directionsService = new google.maps.DirectionsService();
+  window._directionsRenderer = new google.maps.DirectionsRenderer({
+    map: window._gmap,
+    polylineOptions: { strokeColor: '#f59e0b', strokeWeight: 4 }
+  });
+
+  // Autocomplete
+  new google.maps.places.Autocomplete(document.getElementById('map-pickup'), { componentRestrictions: { country: 'in' } });
+  new google.maps.places.Autocomplete(document.getElementById('map-drop'), { componentRestrictions: { country: 'in' } });
+};
+
+function calculateRoute() {
+  const pickup = document.getElementById('map-pickup').value.trim();
+  const drop   = document.getElementById('map-drop').value.trim();
+  const apiKey = document.getElementById('maps-api-key').value.trim();
+
+  if (!pickup || !drop) { showToast('❗ Pickup aur Drop bharen!', '#ef4444'); return; }
+
+  if (!apiKey) {
+    showToast('❗ Google Maps API key enter karein!', '#ef4444');
+    document.getElementById('maps-api-warning').style.display = 'block';
+    return;
+  }
+
+  localStorage.setItem('rr_maps_key', apiKey);
+
+  if (!mapsLoaded || !window._gmap) {
+    loadGoogleMaps(apiKey);
+    showToast('⏳ Map load ho raha hai, dobara try karein...', '#f59e0b');
+    return;
+  }
+
+  window._directionsService.route({
+    origin: pickup,
+    destination: drop,
+    travelMode: google.maps.TravelMode.DRIVING
+  }, (result, status) => {
+    if (status === 'OK') {
+      window._directionsRenderer.setDirections(result);
+      const leg = result.routes[0].legs[0];
+      mapDistanceKm = Math.round(leg.distance.value / 1000);
+      const rate = parseInt(document.getElementById('map-vehicle').value);
+      const fare = mapDistanceKm * rate;
+
+      document.getElementById('ri-dist').textContent = leg.distance.text;
+      document.getElementById('ri-dur').textContent  = leg.duration.text;
+      document.getElementById('ri-fare').textContent = '₹' + fare.toLocaleString('en-IN');
+      document.getElementById('route-info').style.display = 'block';
+      document.getElementById('fill-billing-btn').style.display = 'block';
+    } else {
+      showToast('Route nahi mila: ' + status, '#ef4444');
+    }
+  });
+}
+window.calculateRoute = calculateRoute;
+
+function updateFareEstimate() {
+  if (!mapDistanceKm) return;
+  const rate = parseInt(document.getElementById('map-vehicle').value);
+  document.getElementById('ri-fare').textContent = '₹' + (mapDistanceKm * rate).toLocaleString('en-IN');
+}
+window.updateFareEstimate = updateFareEstimate;
+
+function mapAutocomplete(type) {} // placeholder — real autocomplete via Google Places
+window.mapAutocomplete = mapAutocomplete;
+
+function fillBillingFromMap() {
+  const pickup  = document.getElementById('map-pickup').value.trim();
+  const drop    = document.getElementById('map-drop').value.trim();
+  const rateVal = document.getElementById('map-vehicle').value;
+  const vehSel  = document.getElementById('map-vehicle').options[document.getElementById('map-vehicle').selectedIndex].text.split(' ')[0];
+
+  switchPanelDirect('billing');
+  setTimeout(() => {
+    document.getElementById('b_route').value = pickup + ' → ' + drop;
+    document.getElementById('b_km').value    = mapDistanceKm;
+    document.getElementById('b_rate').value  = rateVal;
+    calcPreview();
+    showToast('✅ Map se billing fill ho gayi!');
+  }, 100);
+}
+window.fillBillingFromMap = fillBillingFromMap;
+
+// ===== AUTH =====
+const ADMIN_USER = 'admin';
+const ADMIN_PASS = 'rajride123';
+const SESSION_KEY = 'rr_admin_session';
+const MAX_ATTEMPTS = 5;
+const LOCK_DURATION = 5 * 60 * 1000; // 5 minutes
+
+function checkSession() {
+  const session = localStorage.getItem(SESSION_KEY);
+  if (session) {
+    try {
+      const { token, expiry } = JSON.parse(session);
+      if (token === btoa(ADMIN_USER + ADMIN_PASS) && Date.now() < expiry) {
+        document.getElementById('login-overlay').classList.add('hidden');
+        return true;
+      }
+    } catch(e) {}
+  }
+  document.getElementById('login-overlay').classList.remove('hidden');
+  return false;
+}
+
+function doLogin() {
+  // Check lockout
+  const lockData = JSON.parse(localStorage.getItem('rr_lock') || '{"count":0,"until":0}');
+  if (Date.now() < lockData.until) {
+    document.getElementById('login-lock').style.display = 'block';
+    document.getElementById('login-error').classList.remove('show');
+    const mins = Math.ceil((lockData.until - Date.now()) / 60000);
+    document.getElementById('login-lock').textContent = `🔒 ${mins} minute baad try karein.`;
+    return;
+  }
+
+  const user = document.getElementById('login-user').value.trim();
+  const pass = document.getElementById('login-pass').value;
+
+  if (user === ADMIN_USER && pass === ADMIN_PASS) {
+    // Success
+    localStorage.removeItem('rr_lock');
+    localStorage.setItem(SESSION_KEY, JSON.stringify({
+      token: btoa(ADMIN_USER + ADMIN_PASS),
+      expiry: Date.now() + (8 * 60 * 60 * 1000) // 8 hours session
+    }));
+    document.getElementById('login-overlay').classList.add('hidden');
+    document.getElementById('login-error').classList.remove('show');
+    document.getElementById('login-attempts').textContent = '';
+    startRealtimeRequests();
+    loadBills();
+    renderBillHistory();
+    showToast('✅ Welcome Prabhat ji!');
+  } else {
+    // Failed
+    lockData.count = (lockData.count || 0) + 1;
+    const remaining = MAX_ATTEMPTS - lockData.count;
+
+    if (lockData.count >= MAX_ATTEMPTS) {
+      lockData.until = Date.now() + LOCK_DURATION;
+      localStorage.setItem('rr_lock', JSON.stringify(lockData));
+      document.getElementById('login-lock').style.display = 'block';
+      document.getElementById('login-error').classList.remove('show');
+      document.getElementById('login-attempts').textContent = '';
+    } else {
+      localStorage.setItem('rr_lock', JSON.stringify(lockData));
+      document.getElementById('login-error').classList.add('show');
+      document.getElementById('login-lock').style.display = 'none';
+      document.getElementById('login-attempts').textContent =
+        `⚠️ ${remaining} aur chances bache hain`;
+    }
+
+    // Shake animation
+    const box = document.querySelector('.login-box');
+    box.style.animation = 'none';
+    box.offsetHeight;
+    box.style.animation = 'shake 0.4s ease';
+  }
+}
+window.doLogin = doLogin;
+
+function doLogout() {
+  if (!confirm('Logout karna chahte hain?')) return;
+  localStorage.removeItem(SESSION_KEY);
+  document.getElementById('login-overlay').classList.remove('hidden');
+  document.getElementById('login-user').value = '';
+  document.getElementById('login-pass').value = '';
+  document.getElementById('login-error').classList.remove('show');
+  document.getElementById('login-attempts').textContent = '';
+}
+window.doLogout = doLogout;
 
 // ===== BOOT =====
 document.addEventListener('DOMContentLoaded', () => {
@@ -1336,8 +2014,11 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById(id)?.addEventListener('input', buildPreview)
   );
 
-  // Start real-time Supabase listener
-  startRealtimeRequests();
+  // Check session — agar logged in hai toh hi data load karo
+  if (checkSession()) {
+    startRealtimeRequests();
+    loadBills();
+  }
 });
 </script>
 </body>
