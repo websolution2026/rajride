@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RajRide – Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Hind:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0e16;
+    --surface: #131720;
+    --card: #1a2030;
+    --border: #232a3a;
+    --accent: #f59e0b;
+    --red: #ef4444;
+    --green: #10b981;
+    --blue: #3b82f6;
+    --text: #e8eaf0;
+    --muted: #5a6278;
+    --muted2: #8892a4;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Hind', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* TOP BAR */
+  .topbar {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.4);
+  }
+  .logo {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo-badge {
+    font-size: 10px;
+    background: rgba(245,158,11,0.15);
+    color: var(--accent);
+    border: 1px solid rgba(245,158,11,0.3);
+    border-radius: 6px;
+    padding: 2px 8px;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+  }
+  .live-dot {
+    width: 8px; height: 8px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+
+  /* NAV TABS */
+  .nav {
+    display: flex;
+    gap: 2px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    position: sticky;
+    top: 60px;
+    z-index: 99;
+    padding: 0 16px;
+  }
+  .nav-btn {
+    padding: 14px 22px;
+    background: transparent;
+    border: none;
+    color: var(--muted2);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nav-btn:hover { color: var(--text); }
+  .nav-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .nav-count {
+    background: var(--accent);
+    color: #000;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 6px;
+    min-width: 20px;
+    text-align: center;
+  }
+
+  /* MAIN */
+  main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 28px 16px; }
+  .tab-panel { display: none; animation: fadeUp 0.25s ease; }
+  .tab-panel.active { display: block; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+
+  /* STAT STRIP */
+  .stat-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .stat {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .stat-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .stat-icon.amber { background: rgba(245,158,11,0.12); }
+  .stat-icon.green { background: rgba(16,185,129,0.12); }
+  .stat-icon.blue  { background: rgba(59,130,246,0.12); }
+  .stat-icon.red   { background: rgba(239,68,68,0.12); }
+  .stat-val { font-family: 'Rajdhani', sans-serif; font-size: 28px; font-weight: 700; line-height: 1; }
+  .stat-val.amber { color: var(--accent); }
+  .stat-val.green { color: var(--green); }
+  .stat-val.blue  { color: var(--blue); }
+  .stat-val.red   { color: var(--red); }
+  .stat-lbl { font-size: 12px; color: var(--muted2); margin-top: 3px; }
+
+  /* CARD */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .card-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.5px;
+  }
+
+  /* TOOLBAR */
+  .toolbar { display: flex; gap: 8px; flex-wrap: wrap; }
+  .filter-pill {
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted2);
+    font-size: 13px;
+    cursor: pointer;
+    font-family: 'Hind', sans-serif;
+    transition: all 0.18s;
+  }
+  .filter-pill.active, .filter-pill:hover { background: var(--accent); color: #000; border-color: var(--accent); }
+
+  .search-wrap { position: relative; }
+  .search-wrap input {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 7px 12px 7px 34px;
+    color: var(--text);
+    font-size: 13px;
+    width: 200px;
+    outline: none;
+    font-family: 'Hind', sans-serif;
+  }
+  .search-wrap input:focus { border-color: var(--accent); }
+  .search-wrap::before { content:'🔍'; position:absolute; left:10px; top:50%; transform:translateY(-50%); font-size:13px; }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    background: var(--surface);
+    padding: 11px 16px;
+    text-align: left;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px;
+    letter-spacing: 1.2px;
+    color: var(--muted2);
+    border-bottom: 1px solid var(--border);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  td {
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    vertical-align: middle;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: rgba(255,255,255,0.015); }
+
+  /* BADGES */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: 'Rajdhani', sans-serif;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  .badge-pending   { background:rgba(245,158,11,0.12); color:var(--accent); }
+  .badge-confirmed { background:rgba(16,185,129,0.12);  color:var(--green); }
+  .badge-completed { background:rgba(59,130,246,0.12);  color:var(--blue); }
+  .badge-cancelled { background:rgba(239,68,68,0.12);   color:var(--red); }
+  .badge-paid      { background:rgba(16,185,129,0.12);  color:var(--green); }
+  .badge-unpaid    { background:rgba(239,68,68,0.12);   color:var(--red); }
+  .badge-partial   { background:rgba(245,158,11,0.12);  color:var(--accent); }
+
+  /* ICON BUTTONS */
+  .icon-btn {
+    width: 30px; height: 30px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--muted2);
+    cursor: pointer;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+  .icon-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(245,158,11,0.08); }
+  .icon-btn.green:hover { border-color: var(--green); color: var(--green); background: rgba(16,185,129,0.08); }
+  .icon-btn.blue:hover  { border-color: var(--blue); color: var(--blue); background: rgba(59,130,246,0.08); }
+  .icon-btn.red:hover   { border-color: var(--red); color: var(--red); background: rgba(239,68,68,0.08); }
+  .actions { display: flex; gap: 5px; }
+
+  /* EMPTY */
+  .empty { padding: 60px 20px; text-align: center; color: var(--muted2); }
+  .empty-icon { font-size: 40px; margin-bottom: 10px; }
+
+  /* BILLING LAYOUT */
+  .billing-grid { display: grid; grid-template-columns: 380px 1fr; gap: 24px; }
+  .billing-form { display: flex; flex-direction: column; gap: 14px; }
+  .field-group { display: flex; flex-direction: column; gap: 6px; }
+  .field-label { font-size: 11px; font-weight: 600; letter-spacing: 1px; color: var(--muted2); text-transform: uppercase; }
+  input.dark, select.dark {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 11px 14px;
+    color: var(--text);
+    font-family: 'Hind', sans-serif;
+    font-size: 14px;
+    outline: none;
+    width: 100%;
+    transition: border-color 0.2s;
+  }
+  input.dark:focus, select.dark:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(245,158,11,0.08); }
+  select.dark option { background: var(--card); }
+  select.dark { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a6278' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; padding-right:32px; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .gen-btn {
+    width: 100%;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 10px;
+    padding: 13px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 4px;
+  }
+  .gen-btn:hover { background: #d97706; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(245,158,11,0.3); }
+
+  /* BILL RECEIPT */
+  .receipt {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+  }
+  .receipt-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+  .receipt-brand { font-family: 'Rajdhani', sans-serif; font-size: 24px; font-weight: 700; color: var(--accent); }
+  .receipt-brand-sub { font-size: 11px; color: var(--muted2); margin-top: 2px; letter-spacing: 1px; }
+  .receipt-meta { text-align: right; font-size: 12px; color: var(--muted2); line-height: 1.7; }
+  .r-divider { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
+  .r-row { display: flex; justify-content: space-between; padding: 7px 0; font-size: 14px; }
+  .r-row .lbl { color: var(--muted2); }
+  .r-total { display: flex; justify-content: space-between; padding: 12px 0; border-top: 2px solid var(--accent); margin-top: 8px; font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 700; color: var(--accent); }
+  .r-footer { text-align: center; font-size: 12px; color: var(--muted2); margin-top: 16px; }
+
+  /* MODAL */
+  .modal-bg {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(4px);
+  }
+  .modal-bg.show { display: flex; }
+  .modal {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    max-width: 520px;
+    width: 100%;
+    max-height: 88vh;
+    overflow-y: auto;
+    animation: fadeUp 0.2s ease;
+  }
+  .modal-h { font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 700; color: var(--accent); margin-bottom: 18px; }
+  .modal-close { float: right; background: none; border: none; color: var(--muted2); font-size: 18px; cursor: pointer; margin-top: -4px; }
+  .modal-close:hover { color: var(--text); }
+  .detail-row { display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .detail-row:last-child { border: none; }
+  .detail-row .k { color: var(--muted2); }
+  .detail-row .v { font-weight: 500; text-align: right; max-width: 60%; }
+  .modal-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px; }
+
+  /* TOAST */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--green);
+    color: #fff;
+    padding: 11px 22px;
+    border-radius: 10px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    z-index: 9999;
+    display: none;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+    animation: slideUp 0.3s ease;
+  }
+  .toast.show { display: block; }
+  @keyframes slideUp { from { transform:translateY(16px); opacity:0; } to { transform:translateY(0); opacity:1; } }
+
+  /* CONFIRMATION MODAL */
+  .confirm-modal { max-width: 600px; }
+  .confirm-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+  }
+  .confirm-section-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--muted2);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .confirm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .confirm-grid.single { grid-template-columns: 1fr; }
+  .cf { display: flex; flex-direction: column; gap: 5px; }
+  .cf label { font-size: 11px; color: var(--muted2); font-weight: 600; letter-spacing: 0.5px; }
+  .cf input, .cf select, .cf textarea {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 12px;
+    color: var(--text);
+    font-family: 'Hind', sans-serif;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+  .cf input:focus, .cf select:focus, .cf textarea:focus { border-color: var(--accent); }
+  .cf textarea { resize: none; height: 60px; }
+  .cf select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%235a6278' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 10px center; padding-right:28px; }
+  .cf select option { background: var(--card); }
+
+  .msg-preview {
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 13px;
+    line-height: 1.8;
+    color: #c9d1d9;
+    white-space: pre-wrap;
+    font-family: monospace;
+    max-height: 180px;
+    overflow-y: auto;
+    margin-top: 10px;
+  }
+
+  .send-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+  .btn-wa-full {
+    flex: 1;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 12px 16px;
+    background: #25d366;
+    color: #fff;
+    border-radius: 10px;
+    text-decoration: none;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+  }
+  .btn-wa-full:hover { background: #1da851; transform: translateY(-1px); }
+  .btn-mail-full {
+    flex: 1;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 12px 16px;
+    background: var(--blue);
+    color: #fff;
+    border-radius: 10px;
+    text-decoration: none;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+  }
+  .btn-mail-full:hover { background: #2563eb; transform: translateY(-1px); }
+
+  .toggle-preview {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted2);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: 'Hind', sans-serif;
+    float: right;
+  }
+  .toggle-preview:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* REFRESH BTN */
+  .refresh-btn {
+    background: rgba(245,158,11,0.1);
+    border: 1px solid rgba(245,158,11,0.2);
+    color: var(--accent);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .refresh-btn:hover { background: rgba(245,158,11,0.2); }
+
+  @media (max-width: 900px) {
+    .billing-grid { grid-template-columns: 1fr; }
+    .stat-strip { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 600px) {
+    .nav-btn { padding: 12px 14px; font-size: 13px; }
+    .stat-strip { grid-template-columns: 1fr 1fr; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="logo">
+    🚗 RAJRIDE
+    <span class="logo-badge">ADMIN</span>
+    <div class="live-dot" title="Live data"></div>
+  </div>
+  <div style="display:flex; align-items:center; gap:12px;">
+    <span style="font-size:12px; color:var(--muted2);">📱 7979720282</span>
+    <button class="refresh-btn" onclick="refreshAll()">⟳ Refresh</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <button class="nav-btn active" onclick="switchPanel('requests', this)">📋 Requests <span class="nav-count" id="nav-count">0</span></button>
+  <button class="nav-btn" onclick="switchPanel('billing', this)">💰 Billing</button>
+  <button class="nav-btn" onclick="switchPanel('history', this)">📜 Bill History</button>
+</div>
+
+<main>
+
+  <!-- ===== REQUESTS PANEL ===== -->
+  <div class="tab-panel active" id="panel-requests">
+
+    <div class="stat-strip">
+      <div class="stat">
+        <div class="stat-icon amber">📋</div>
+        <div><div class="stat-val amber" id="s-total">0</div><div class="stat-lbl">Total</div></div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon amber">⏳</div>
+        <div><div class="stat-val amber" id="s-pending">0</div><div class="stat-lbl">Pending</div></div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon green">✅</div>
+        <div><div class="stat-val green" id="s-confirmed">0</div><div class="stat-lbl">Confirmed</div></div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon blue">🏁</div>
+        <div><div class="stat-val blue" id="s-completed">0</div><div class="stat-lbl">Completed</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">All Booking Requests</div>
+        <div class="toolbar">
+          <div class="toolbar">
+            <button class="filter-pill active" onclick="filterReq('all',this)">All</button>
+            <button class="filter-pill" onclick="filterReq('pending',this)">Pending</button>
+            <button class="filter-pill" onclick="filterReq('confirmed',this)">Confirmed</button>
+            <button class="filter-pill" onclick="filterReq('completed',this)">Completed</button>
+          </div>
+          <div class="search-wrap">
+            <input type="text" placeholder="Search..." oninput="reqSearch=this.value.toLowerCase(); renderReqs()">
+          </div>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Customer</th>
+              <th>Route</th>
+              <th>Date / Time</th>
+              <th>Vehicle</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="req-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== BILLING PANEL ===== -->
+  <div class="tab-panel" id="panel-billing">
+    <div class="billing-grid">
+
+      <!-- FORM -->
+      <div class="card" style="padding:24px;">
+        <div class="card-title" style="margin-bottom:20px; padding-bottom:12px; border-bottom:1px solid var(--border);">🧾 Naya Bill Banayein</div>
+        <div class="billing-form">
+          <div class="two-col">
+            <div class="field-group">
+              <div class="field-label">Bill Number</div>
+              <input type="text" id="b_no" class="dark" placeholder="Auto">
+            </div>
+            <div class="field-group">
+              <div class="field-label">Date</div>
+              <input type="date" id="b_date" class="dark">
+            </div>
+          </div>
+          <div class="field-group">
+            <div class="field-label">Customer Naam *</div>
+            <input type="text" id="b_cust" class="dark" placeholder="Customer ka naam">
+          </div>
+          <div class="field-group">
+            <div class="field-label">Contact Number</div>
+            <input type="text" id="b_contact" class="dark" placeholder="Phone number">
+          </div>
+          <div class="field-group">
+            <div class="field-label">Route (From → To) *</div>
+            <input type="text" id="b_route" class="dark" placeholder="Patna → Delhi">
+          </div>
+          <div class="field-group">
+            <div class="field-label">Vehicle Type</div>
+            <select id="b_veh" class="dark" onchange="autoRate()">
+              <option>Hatchback</option>
+              <option>Sedan</option>
+              <option>SUV</option>
+              <option>Tempo Traveller</option>
+              <option>Luxury Car</option>
+              <option>Bus</option>
+            </select>
+          </div>
+          <div class="two-col">
+            <div class="field-group">
+              <div class="field-label">Distance (km)</div>
+              <input type="number" id="b_km" class="dark" placeholder="0" oninput="calcPreview()">
+            </div>
+            <div class="field-group">
+              <div class="field-label">Rate (₹/km)</div>
+              <input type="number" id="b_rate" class="dark" placeholder="0" oninput="calcPreview()">
+            </div>
+          </div>
+          <div class="two-col">
+            <div class="field-group">
+              <div class="field-label">Extra (₹)</div>
+              <input type="number" id="b_extra" class="dark" value="0" oninput="calcPreview()">
+            </div>
+            <div class="field-group">
+              <div class="field-label">Discount (₹)</div>
+              <input type="number" id="b_disc" class="dark" value="0" oninput="calcPreview()">
+            </div>
+          </div>
+          <div class="field-group">
+            <div class="field-label">Payment Status</div>
+            <select id="b_pay" class="dark">
+              <option value="unpaid">Unpaid</option>
+              <option value="paid">Paid</option>
+              <option value="partial">Partial</option>
+            </select>
+          </div>
+          <button class="gen-btn" onclick="saveBill()">💾 Bill Save Karein</button>
+        </div>
+      </div>
+
+      <!-- RECEIPT PREVIEW -->
+      <div>
+        <div class="card-title" style="margin-bottom:16px; color:var(--accent);">📄 Live Preview</div>
+        <div class="receipt">
+          <div class="receipt-header">
+            <div>
+              <div class="receipt-brand">RAJRIDE</div>
+              <div class="receipt-brand-sub">VEHICLE HIRING SERVICE</div>
+            </div>
+            <div class="receipt-meta">
+              Bill: <b id="pv-no">—</b><br>
+              Date: <span id="pv-date">—</span>
+            </div>
+          </div>
+          <hr class="r-divider">
+          <div class="r-row"><span class="lbl">👤 Customer</span><span id="pv-cust">—</span></div>
+          <div class="r-row"><span class="lbl">📱 Contact</span><span id="pv-con">—</span></div>
+          <div class="r-row"><span class="lbl">📍 Route</span><span id="pv-route">—</span></div>
+          <div class="r-row"><span class="lbl">🚗 Vehicle</span><span id="pv-veh">—</span></div>
+          <div class="r-row"><span class="lbl">📏 Distance</span><span id="pv-km">—</span></div>
+          <hr class="r-divider">
+          <div class="r-row"><span>Base Fare</span><span id="pv-base">₹ 0</span></div>
+          <div class="r-row"><span>Extra Charges</span><span id="pv-ext">₹ 0</span></div>
+          <div class="r-row" style="color:var(--red)"><span>Discount</span><span id="pv-dis">- ₹ 0</span></div>
+          <div class="r-total"><span>TOTAL</span><span id="pv-tot">₹ 0</span></div>
+          <hr class="r-divider">
+          <div class="r-footer">Shukriya! 🙏 RajRide ke saath travel ke liye dhanyawaad</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== HISTORY PANEL ===== -->
+  <div class="tab-panel" id="panel-history">
+
+    <div class="stat-strip">
+      <div class="stat">
+        <div class="stat-icon blue">🧾</div>
+        <div><div class="stat-val blue" id="h-total">0</div><div class="stat-lbl">Total Bills</div></div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon green">💰</div>
+        <div><div class="stat-val green" id="h-rev">₹0</div><div class="stat-lbl">Revenue</div></div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon green">✅</div>
+        <div><div class="stat-val green" id="h-paid">0</div><div class="stat-lbl">Paid</div></div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon red">❌</div>
+        <div><div class="stat-val red" id="h-unpaid">0</div><div class="stat-lbl">Unpaid</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Bill History</div>
+        <div class="toolbar">
+          <button class="filter-pill active" onclick="filterBill('all',this)">All</button>
+          <button class="filter-pill" onclick="filterBill('paid',this)">Paid</button>
+          <button class="filter-pill" onclick="filterBill('unpaid',this)">Unpaid</button>
+          <button class="filter-pill" onclick="filterBill('partial',this)">Partial</button>
+          <button class="filter-pill" style="color:var(--red);" onclick="clearBills()">🗑️ Clear</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Bill No</th>
+              <th>Customer</th>
+              <th>Route</th>
+              <th>Vehicle</th>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="bill-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- REQUEST DETAIL MODAL -->
+<div class="modal-bg" id="req-modal">
+  <div class="modal">
+    <div class="modal-h">📋 Request Details <button class="modal-close" onclick="closeModals()">✕</button></div>
+    <div id="req-modal-body"></div>
+    <div class="modal-actions" id="req-modal-actions"></div>
+  </div>
+</div>
+
+<!-- BILL DETAIL MODAL -->
+<div class="modal-bg" id="bill-modal">
+  <div class="modal">
+    <div class="modal-h">🧾 Bill Details <button class="modal-close" onclick="closeModals()">✕</button></div>
+    <div id="bill-modal-body"></div>
+    <div style="margin-top:16px">
+      <button class="filter-pill" onclick="closeModals()">Band Karein</button>
+    </div>
+  </div>
+</div>
+
+<!-- BOOKING CONFIRMATION MODAL -->
+<div class="modal-bg" id="confirm-modal">
+  <div class="modal confirm-modal">
+    <div class="modal-h">
+      ✅ Booking Confirmation Bhejein
+      <button class="modal-close" onclick="closeModals()">✕</button>
+    </div>
+
+    <!-- Booking Summary (read-only) -->
+    <div class="confirm-section">
+      <div class="confirm-section-title">📋 Booking Details</div>
+      <div class="confirm-grid">
+        <div class="cf"><label>Customer Naam</label><input type="text" id="cf_name" readonly></div>
+        <div class="cf"><label>Customer Phone</label><input type="text" id="cf_phone" readonly></div>
+        <div class="cf"><label>Pickup</label><input type="text" id="cf_pickup" readonly></div>
+        <div class="cf"><label>Drop</label><input type="text" id="cf_drop" readonly></div>
+        <div class="cf"><label>Date</label><input type="text" id="cf_date" readonly></div>
+        <div class="cf"><label>Time</label><input type="text" id="cf_time" readonly></div>
+        <div class="cf"><label>Vehicle</label><input type="text" id="cf_vehicle" readonly></div>
+        <div class="cf"><label>Passengers</label><input type="text" id="cf_pass" readonly></div>
+      </div>
+    </div>
+
+    <!-- Driver Details -->
+    <div class="confirm-section">
+      <div class="confirm-section-title">🚘 Driver Details (Optional)</div>
+      <div class="confirm-grid">
+        <div class="cf"><label>Driver Naam</label><input type="text" id="cf_driver" placeholder="Driver ka naam"></div>
+        <div class="cf"><label>Driver Phone</label><input type="text" id="cf_dphone" placeholder="Driver ka number"></div>
+        <div class="cf"><label>Vehicle Number</label><input type="text" id="cf_vnum" placeholder="Jaise: BR01AB1234"></div>
+        <div class="cf"><label>Vehicle Color</label><input type="text" id="cf_vcolor" placeholder="Jaise: White Sedan"></div>
+      </div>
+    </div>
+
+    <!-- Extra Message -->
+    <div class="confirm-section">
+      <div class="confirm-section-title">
+        💬 Message Preview
+        <button class="toggle-preview" onclick="toggleMsgPreview()">👁 Preview</button>
+      </div>
+      <div class="cf">
+        <label>Koi Khaas Note Customer ke liye</label>
+        <textarea id="cf_note" placeholder="Jaise: Driver thodi der me pahunch jayega, please ready rahein..." oninput="buildPreview()"></textarea>
+      </div>
+      <div id="msg-preview-box" class="msg-preview" style="display:none;"></div>
+    </div>
+
+    <!-- Send Buttons -->
+    <div class="send-btns">
+      <a id="cf-wa-btn" href="#" target="_blank" class="btn-wa-full" onclick="markConfirmedAndClose()">
+        💬 WhatsApp pe Bhejein
+      </a>
+      <a id="cf-mail-btn" href="#" class="btn-mail-full" onclick="markConfirmedAndClose()">
+        📧 Email pe Bhejein
+      </a>
+    </div>
+    <div style="margin-top:10px; text-align:center;">
+      <button class="filter-pill" onclick="closeModals()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+// ===============================================
+//  ⚡ SUPABASE CONFIG
+// ===============================================
+const SUPABASE_URL = 'https://ksgpotzxzvebrzdzjexb.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_AWBGqLtEHvWS5ITmlnzaHA_bfbLHHO-';
+// ===============================================
+
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const OWNER_PHONE = '917979720282';
+const OWNER_EMAIL = 'prabhat.raj.rj@gmail.com';
+const RATES = { 'Hatchback':12, 'Sedan':15, 'SUV':20, 'Tempo Traveller':30, 'Luxury Car':35, 'Bus':50 };
+
+let requests = [], bills = [];
+let billCtr = parseInt(localStorage.getItem('rr_billctr') || '100');
+let reqFilter = 'all', reqSearch = '', billFilter = 'all';
+let _confirmReqId = null, _showPreview = false;
+
+// ===== LOAD + REALTIME FOR REQUESTS (Supabase) =====
+async function startRealtimeRequests() {
+  // Initial load
+  await fetchRequests();
+
+  // Realtime subscription
+  supabase
+    .channel('requests-channel')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'requests' }, async () => {
+      const prev = requests.filter(r => r.status === 'pending').length;
+      await fetchRequests();
+      const curr = requests.filter(r => r.status === 'pending').length;
+      if (curr > prev) showToast('🔔 Nayi booking request aayi!');
+    })
+    .subscribe();
+}
+
+async function fetchRequests() {
+  const { data, error } = await supabase
+    .from('requests')
+    .select('*')
+    .order('created_at', { ascending: false });
+  if (!error && data) {
+    requests = data;
+    renderReqs();
+  }
+}
+
+// Bills: localStorage (same device admin use karega billing ke liye)
+function loadBills() {
+  bills   = JSON.parse(localStorage.getItem('rr_bills') || '[]');
+  billCtr = parseInt(localStorage.getItem('rr_billctr') || '100');
+}
+
+function refreshAll() {
+  loadBills();
+  renderBillHistory();
+  showToast('✅ Bills refresh ho gaye!');
+}
+
+function updateNavCount() {
+  const pending = requests.filter(r => r.status === 'pending').length;
+  document.getElementById('nav-count').textContent = pending;
+}
+
+// ===== TABS =====
+function switchPanel(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  btn.classList.add('active');
+  if (name === 'history') { loadBills(); renderBillHistory(); }
+  if (name === 'billing') {
+    document.getElementById('b_no').value   = 'RR-' + (billCtr + 1);
+    document.getElementById('b_date').value = today();
+    autoRate();
+  }
+}
+window.switchPanel = switchPanel;
+
+// ===== REQUESTS =====
+function filterReq(f, btn) {
+  reqFilter = f;
+  document.querySelectorAll('#panel-requests .filter-pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderReqs();
+}
+window.filterReq = filterReq;
+
+function renderReqs() {
+  const filtered = requests.filter(r => {
+    const mf = reqFilter === 'all' || r.status === reqFilter;
+    const ms = !reqSearch ||
+      (r.name||'').toLowerCase().includes(reqSearch) ||
+      (r.pickup||'').toLowerCase().includes(reqSearch) ||
+      (r.drop||'').toLowerCase().includes(reqSearch) ||
+      (r.phone||'').includes(reqSearch);
+    return mf && ms;
+  });
+
+  document.getElementById('s-total').textContent     = requests.length;
+  document.getElementById('s-pending').textContent   = requests.filter(r=>r.status==='pending').length;
+  document.getElementById('s-confirmed').textContent = requests.filter(r=>r.status==='confirmed').length;
+  document.getElementById('s-completed').textContent = requests.filter(r=>r.status==='completed').length;
+  updateNavCount();
+
+  const tbody = document.getElementById('req-tbody');
+  if (!filtered.length) {
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty"><div class="empty-icon">📭</div>Koi request nahi</div></td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map((r, i) => `
+    <tr>
+      <td style="color:var(--muted2);font-size:12px">${i+1}</td>
+      <td>
+        <div style="font-weight:600">${esc(r.name)}</div>
+        <div style="font-size:12px;color:var(--muted2)">📱 ${esc(r.phone)}</div>
+      </td>
+      <td>
+        <div style="font-size:13px">${esc(r.pickup)}</div>
+        <div style="font-size:12px;color:var(--muted2)">→ ${esc(r.drop)}</div>
+      </td>
+      <td>
+        <div style="font-size:13px">${fmtDate(r.date)}</div>
+        <div style="font-size:12px;color:var(--muted2)">${r.time}</div>
+      </td>
+      <td style="font-size:13px">${esc(r.vehicle)}</td>
+      <td><span class="badge badge-${r.status}">${(r.status||'').toUpperCase()}</span></td>
+      <td>
+        <div class="actions">
+          <button class="icon-btn" onclick="viewReq('${r.id}')" title="View">👁️</button>
+          <button class="icon-btn green" onclick="openConfirmModal('${r.id}')" title="Confirmation Bhejein" style="background:rgba(16,185,129,0.1);">✅</button>
+          <button class="icon-btn blue"  onclick="setStatus('${r.id}','completed')" title="Complete">🏁</button>
+          <button class="icon-btn"       onclick="prefillBilling('${r.id}')" title="Bill Banao">🧾</button>
+          <button class="icon-btn red"   onclick="delReq('${r.id}')" title="Delete">🗑️</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+async function setStatus(id, status) {
+  const { error } = await supabase.from('requests').update({ status }).eq('id', id);
+  if (error) showToast('Error: ' + error.message, '#ef4444');
+  else showToast('Status updated!');
+}
+window.setStatus = setStatus;
+
+async function delReq(id) {
+  if (!confirm('Delete karein?')) return;
+  const { error } = await supabase.from('requests').delete().eq('id', id);
+  if (error) showToast('Error: ' + error.message, '#ef4444');
+  else showToast('Request delete ho gayi!', '#ef4444');
+}
+window.delReq = delReq;
+
+function viewReq(id) {
+  const r = requests.find(x => x.id === id);
+  if (!r) return;
+  const msg = `🚗 *RAJRIDE – Booking*\n\n👤 *Naam:* ${r.name}\n📱 *Contact:* ${r.phone}\n📍 *Pickup:* ${r.pickup}\n🏁 *Drop:* ${r.drop}\n📅 *Date:* ${fmtDate(r.date)}\n🕐 *Time:* ${r.time}\n🚘 *Vehicle:* ${r.vehicle}\n👥 *Passengers:* ${r.passengers}${r.note?'\n📝 *Note:* '+r.note:''}`;
+
+  document.getElementById('req-modal-body').innerHTML = `
+    <div class="detail-row"><span class="k">👤 Naam</span><span class="v">${esc(r.name)}</span></div>
+    <div class="detail-row"><span class="k">📱 Phone</span><span class="v">${esc(r.phone)}</span></div>
+    ${r.email?`<div class="detail-row"><span class="k">📧 Email</span><span class="v">${esc(r.email)}</span></div>`:''}
+    <div class="detail-row"><span class="k">📍 Pickup</span><span class="v">${esc(r.pickup)}</span></div>
+    <div class="detail-row"><span class="k">🏁 Drop</span><span class="v">${esc(r.drop)}</span></div>
+    <div class="detail-row"><span class="k">📅 Date</span><span class="v">${fmtDate(r.date)}</span></div>
+    <div class="detail-row"><span class="k">🕐 Time</span><span class="v">${r.time}</span></div>
+    <div class="detail-row"><span class="k">🚘 Vehicle</span><span class="v">${esc(r.vehicle)}</span></div>
+    <div class="detail-row"><span class="k">👥 Passengers</span><span class="v">${r.passengers}</span></div>
+    ${r.note?`<div class="detail-row"><span class="k">📝 Note</span><span class="v">${esc(r.note)}</span></div>`:''}
+    <div class="detail-row"><span class="k">📊 Status</span><span class="v"><span class="badge badge-${r.status}">${(r.status||'').toUpperCase()}</span></span></div>
+  `;
+  document.getElementById('req-modal-actions').innerHTML = `
+    <a href="https://wa.me/${OWNER_PHONE}?text=${encodeURIComponent(msg)}" target="_blank"
+       style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:#25d366;color:#fff;border-radius:8px;text-decoration:none;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:14px;">💬 WhatsApp</a>
+    <button class="filter-pill active" onclick="closeModals(); openConfirmModal('${r.id}')">✅ Confirmation Bhejein</button>
+    <button class="filter-pill active" onclick="prefillBilling('${r.id}'); closeModals()">🧾 Bill Banao</button>
+    <button class="filter-pill" onclick="setStatus('${r.id}','confirmed'); closeModals()">✔ Sirf Confirm</button>
+  `;
+  document.getElementById('req-modal').classList.add('show');
+}
+window.viewReq = viewReq;
+
+function prefillBilling(id) {
+  const r = requests.find(x => x.id === id);
+  if (!r) return;
+  switchPanelDirect('billing');
+  setTimeout(() => {
+    document.getElementById('b_cust').value    = r.name;
+    document.getElementById('b_contact').value = r.phone;
+    document.getElementById('b_route').value   = r.pickup + ' → ' + r.drop;
+    document.getElementById('b_date').value    = r.date;
+    document.getElementById('b_veh').value = Object.keys(RATES).includes(r.vehicle) ? r.vehicle : 'Sedan';
+    document.getElementById('b_no').value  = 'RR-' + (billCtr + 1);
+    autoRate(); calcPreview();
+  }, 80);
+}
+window.prefillBilling = prefillBilling;
+
+// ===== BILLING (localStorage) =====
+function autoRate() {
+  const veh = document.getElementById('b_veh').value;
+  document.getElementById('b_rate').value = RATES[veh] || '';
+  calcPreview();
+}
+window.autoRate = autoRate;
+
+function calcPreview() {
+  const km    = parseFloat(document.getElementById('b_km').value) || 0;
+  const rate  = parseFloat(document.getElementById('b_rate').value) || 0;
+  const extra = parseFloat(document.getElementById('b_extra').value) || 0;
+  const disc  = parseFloat(document.getElementById('b_disc').value) || 0;
+  const base  = km * rate;
+  const total = base + extra - disc;
+
+  document.getElementById('pv-no').textContent    = document.getElementById('b_no').value || '—';
+  document.getElementById('pv-date').textContent  = document.getElementById('b_date').value || '—';
+  document.getElementById('pv-cust').textContent  = document.getElementById('b_cust').value || '—';
+  document.getElementById('pv-con').textContent   = document.getElementById('b_contact').value || '—';
+  document.getElementById('pv-route').textContent = document.getElementById('b_route').value || '—';
+  document.getElementById('pv-veh').textContent   = document.getElementById('b_veh').value;
+  document.getElementById('pv-km').textContent    = km ? km + ' km @ ₹' + rate + '/km' : '—';
+  document.getElementById('pv-base').textContent  = '₹ ' + base.toFixed(0);
+  document.getElementById('pv-ext').textContent   = '₹ ' + extra.toFixed(0);
+  document.getElementById('pv-dis').textContent   = '- ₹ ' + disc.toFixed(0);
+  document.getElementById('pv-tot').textContent   = '₹ ' + total.toLocaleString('en-IN');
+}
+window.calcPreview = calcPreview;
+
+function saveBill() {
+  const cust  = document.getElementById('b_cust').value.trim();
+  const route = document.getElementById('b_route').value.trim();
+  if (!cust || !route) { showToast('❗ Naam aur route bharen!', '#ef4444'); return; }
+
+  const km    = parseFloat(document.getElementById('b_km').value) || 0;
+  const rate  = parseFloat(document.getElementById('b_rate').value) || 0;
+  const extra = parseFloat(document.getElementById('b_extra').value) || 0;
+  const disc  = parseFloat(document.getElementById('b_disc').value) || 0;
+
+  billCtr++;
+  const bill = {
+    id: Date.now(),
+    billNo:   document.getElementById('b_no').value || ('RR-' + billCtr),
+    customer: cust,
+    contact:  document.getElementById('b_contact').value,
+    route,
+    vehicle:  document.getElementById('b_veh').value,
+    date:     document.getElementById('b_date').value,
+    km, rate, extra, disc,
+    total:    km * rate + extra - disc,
+    payment:  document.getElementById('b_pay').value,
+    createdAt: new Date().toLocaleString('hi-IN')
+  };
+
+  bills.unshift(bill);
+  localStorage.setItem('rr_bills', JSON.stringify(bills));
+  localStorage.setItem('rr_billctr', billCtr);
+  document.getElementById('b_no').value = 'RR-' + (billCtr + 1);
+  showToast('🧾 Bill save ho gaya!');
+}
+window.saveBill = saveBill;
+
+// ===== HISTORY =====
+function filterBill(f, btn) {
+  billFilter = f;
+  document.querySelectorAll('#panel-history .filter-pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderBillHistory();
+}
+window.filterBill = filterBill;
+
+function renderBillHistory() {
+  const rev = bills.filter(b=>b.payment==='paid').reduce((s,b)=>s+b.total, 0);
+  document.getElementById('h-total').textContent  = bills.length;
+  document.getElementById('h-rev').textContent    = '₹' + rev.toLocaleString('en-IN');
+  document.getElementById('h-paid').textContent   = bills.filter(b=>b.payment==='paid').length;
+  document.getElementById('h-unpaid').textContent = bills.filter(b=>b.payment==='unpaid').length;
+
+  const filtered = billFilter === 'all' ? bills : bills.filter(b => b.payment === billFilter);
+  const tbody = document.getElementById('bill-tbody');
+
+  if (!filtered.length) {
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty"><div class="empty-icon">🧾</div>Koi bill nahi</div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = filtered.map(b => `
+    <tr>
+      <td><span style="font-family:'Rajdhani',sans-serif;color:var(--accent);font-weight:700">${esc(b.billNo)}</span></td>
+      <td><div style="font-weight:600">${esc(b.customer)}</div><div style="font-size:12px;color:var(--muted2)">${esc(b.contact||'')}</div></td>
+      <td style="font-size:13px">${esc(b.route)}</td>
+      <td style="font-size:13px">${esc(b.vehicle)}</td>
+      <td style="font-size:13px">${fmtDate(b.date)}</td>
+      <td><span style="font-family:'Rajdhani',sans-serif;font-weight:700;color:var(--accent)">₹${b.total.toLocaleString('en-IN')}</span></td>
+      <td><span class="badge badge-${b.payment}">${b.payment.toUpperCase()}</span></td>
+      <td>
+        <div class="actions">
+          <button class="icon-btn" onclick="viewBill(${b.id})" title="View">👁️</button>
+          <button class="icon-btn green" onclick="togglePaid(${b.id})">${b.payment==='paid'?'↩️':'💚'}</button>
+          <button class="icon-btn red" onclick="delBill(${b.id})">🗑️</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function viewBill(id) {
+  const b = bills.find(x => x.id === id);
+  if (!b) return;
+  document.getElementById('bill-modal-body').innerHTML = `
+    <div style="background:var(--surface);border-radius:12px;padding:20px;">
+      <div style="display:flex;justify-content:space-between;margin-bottom:14px;">
+        <div><div style="font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:var(--accent)">RAJRIDE</div><div style="font-size:11px;color:var(--muted2)">VEHICLE HIRING</div></div>
+        <div style="text-align:right;font-size:12px;color:var(--muted2)"><b>${esc(b.billNo)}</b><br>${fmtDate(b.date)}</div>
+      </div>
+      <hr style="border:none;border-top:1px solid var(--border);margin:12px 0">
+      <div class="detail-row"><span class="k">Customer</span><span class="v">${esc(b.customer)}</span></div>
+      <div class="detail-row"><span class="k">Contact</span><span class="v">${esc(b.contact||'—')}</span></div>
+      <div class="detail-row"><span class="k">Route</span><span class="v">${esc(b.route)}</span></div>
+      <div class="detail-row"><span class="k">Vehicle</span><span class="v">${esc(b.vehicle)}</span></div>
+      <div class="detail-row"><span class="k">Distance</span><span class="v">${b.km} km @ ₹${b.rate}/km</span></div>
+      <hr style="border:none;border-top:1px solid var(--border);margin:12px 0">
+      <div class="detail-row"><span class="k">Base Fare</span><span class="v">₹${(b.km*b.rate).toLocaleString('en-IN')}</span></div>
+      <div class="detail-row"><span class="k">Extra</span><span class="v">₹${b.extra}</span></div>
+      <div class="detail-row" style="color:var(--red)"><span class="k">Discount</span><span class="v">-₹${b.disc}</span></div>
+      <div style="display:flex;justify-content:space-between;padding:12px 0;border-top:2px solid var(--accent);margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--accent)"><span>TOTAL</span><span>₹${b.total.toLocaleString('en-IN')}</span></div>
+      <div style="text-align:center;margin-top:12px"><span class="badge badge-${b.payment}">${b.payment.toUpperCase()}</span></div>
+    </div>
+  `;
+  document.getElementById('bill-modal').classList.add('show');
+}
+window.viewBill = viewBill;
+
+function togglePaid(id) {
+  const b = bills.find(x => x.id === id);
+  if (b) {
+    b.payment = b.payment === 'paid' ? 'unpaid' : 'paid';
+    localStorage.setItem('rr_bills', JSON.stringify(bills));
+    renderBillHistory();
+    showToast('Payment status updated!');
+  }
+}
+window.togglePaid = togglePaid;
+
+function delBill(id) {
+  if (!confirm('Bill delete karein?')) return;
+  bills = bills.filter(x => x.id !== id);
+  localStorage.setItem('rr_bills', JSON.stringify(bills));
+  renderBillHistory();
+  showToast('Bill deleted!', '#ef4444');
+}
+window.delBill = delBill;
+
+function clearBills() {
+  if (!confirm('Sabhi bills permanently delete karein?')) return;
+  bills = [];
+  localStorage.setItem('rr_bills', JSON.stringify(bills));
+  renderBillHistory();
+  showToast('History cleared!', '#ef4444');
+}
+window.clearBills = clearBills;
+
+// ===== CONFIRMATION SYSTEM =====
+function openConfirmModal(id) {
+  const r = requests.find(x => x.id === id);
+  if (!r) return;
+  _confirmReqId = id;
+
+  document.getElementById('cf_name').value    = r.name;
+  document.getElementById('cf_phone').value   = r.phone;
+  document.getElementById('cf_pickup').value  = r.pickup;
+  document.getElementById('cf_drop').value    = r.drop;
+  document.getElementById('cf_date').value    = fmtDate(r.date);
+  document.getElementById('cf_time').value    = r.time;
+  document.getElementById('cf_vehicle').value = r.vehicle;
+  document.getElementById('cf_pass').value    = r.passengers;
+
+  ['cf_driver','cf_dphone','cf_vnum','cf_vcolor','cf_note'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('msg-preview-box').style.display = 'none';
+  _showPreview = false;
+
+  buildPreview();
+  document.getElementById('confirm-modal').classList.add('show');
+}
+window.openConfirmModal = openConfirmModal;
+
+function buildPreview() {
+  const r = requests.find(x => x.id === _confirmReqId);
+  if (!r) return;
+
+  const driver = document.getElementById('cf_driver').value.trim();
+  const dphone = document.getElementById('cf_dphone').value.trim();
+  const vnum   = document.getElementById('cf_vnum').value.trim();
+  const vcolor = document.getElementById('cf_vcolor').value.trim();
+  const note   = document.getElementById('cf_note').value.trim();
+
+  let msg = `✅ *RAJRIDE – Booking Confirmed!*\n\nNamaste *${r.name}* ji 🙏\n\nAapki booking confirm ho gayi hai. Neeche aapki trip ki details hain:\n\n`;
+  msg += `📍 *Pickup:* ${r.pickup}\n🏁 *Drop:* ${r.drop}\n📅 *Date:* ${fmtDate(r.date)}\n🕐 *Time:* ${r.time}\n🚘 *Vehicle:* ${r.vehicle}\n👥 *Passengers:* ${r.passengers}\n`;
+
+  if (driver || dphone || vnum || vcolor) {
+    msg += `\n🚗 *Aapka Driver:*\n`;
+    if (driver) msg += `   👤 Naam: ${driver}\n`;
+    if (dphone) msg += `   📱 Phone: ${dphone}\n`;
+    if (vnum)   msg += `   🔢 Vehicle No: ${vnum}\n`;
+    if (vcolor) msg += `   🎨 Vehicle: ${vcolor}\n`;
+  }
+  if (note) msg += `\n📝 *Note:* ${note}\n`;
+  msg += `\nKisi bhi sahayta ke liye:\n📞 *7979720282*\n\n_RajRide – Aapki Seva Mein Sada Taiyaar_ 🚗`;
+
+  document.getElementById('cf-wa-btn').href   = `https://wa.me/91${(r.phone||'').replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`;
+  document.getElementById('cf-mail-btn').href = `mailto:${r.email||''}?subject=${encodeURIComponent('RajRide Booking Confirmed – ' + fmtDate(r.date))}&body=${encodeURIComponent(msg.replace(/\*/g,''))}`;
+
+  if (_showPreview) document.getElementById('msg-preview-box').textContent = msg;
+}
+window.buildPreview = buildPreview;
+
+function toggleMsgPreview() {
+  _showPreview = !_showPreview;
+  const box = document.getElementById('msg-preview-box');
+  if (_showPreview) { buildPreview(); box.style.display = 'block'; }
+  else box.style.display = 'none';
+}
+window.toggleMsgPreview = toggleMsgPreview;
+
+function markConfirmedAndClose() {
+  if (_confirmReqId) setStatus(_confirmReqId, 'confirmed');
+  setTimeout(closeModals, 500);
+}
+window.markConfirmedAndClose = markConfirmedAndClose;
+
+// ===== HELPERS =====
+function closeModals() {
+  ['req-modal','bill-modal','confirm-modal'].forEach(id =>
+    document.getElementById(id).classList.remove('show')
+  );
+  _confirmReqId = null;
+}
+window.closeModals = closeModals;
+
+function showToast(msg, color = '#10b981') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.background = color;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function today() { return new Date().toISOString().split('T')[0]; }
+
+function fmtDate(d) {
+  if (!d) return '—';
+  const [y,m,day] = d.split('-');
+  return `${day} ${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+m-1]} ${y}`;
+}
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function switchPanelDirect(name) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  const map = { requests:0, billing:1, history:2 };
+  document.querySelectorAll('.nav-btn')[map[name]]?.classList.add('active');
+  if (name === 'billing') {
+    document.getElementById('b_no').value   = 'RR-' + (billCtr + 1);
+    document.getElementById('b_date').value = today();
+  }
+}
+window.switchPanelDirect = switchPanelDirect;
+window.refreshAll = refreshAll;
+
+// ===== BOOT =====
+document.addEventListener('DOMContentLoaded', () => {
+  loadBills();
+  document.getElementById('b_date').value = today();
+  document.getElementById('b_no').value   = 'RR-' + (billCtr + 1);
+
+  ['b_cust','b_contact','b_route','b_no','b_date'].forEach(id =>
+    document.getElementById(id).addEventListener('input', calcPreview)
+  );
+  document.getElementById('b_veh').addEventListener('change', () => { autoRate(); calcPreview(); });
+  ['cf_driver','cf_dphone','cf_vnum','cf_vcolor','cf_note'].forEach(id =>
+    document.getElementById(id)?.addEventListener('input', buildPreview)
+  );
+
+  // Start real-time Supabase listener
+  startRealtimeRequests();
+});
+</script>
+</body>
+</html>

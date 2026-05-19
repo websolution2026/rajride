@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RajRide – Book Your Ride</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f0e8;
+    --surface: #fffdf9;
+    --card: #ffffff;
+    --accent: #c8410a;
+    --accent2: #f5a623;
+    --text: #1a1208;
+    --muted: #7a6a52;
+    --border: #e2d8c8;
+    --green: #1a7a4a;
+    --shadow: 0 4px 24px rgba(26,18,8,0.10);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* HERO HEADER */
+  .hero {
+    background: var(--accent);
+    background-image: radial-gradient(ellipse at 80% 0%, #e8550f 0%, #8b2500 100%);
+    padding: 40px 24px 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    right: -60px; top: -60px;
+    width: 300px; height: 300px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 50%;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    left: -40px; bottom: -80px;
+    width: 200px; height: 200px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+  }
+  .hero-inner { max-width: 560px; margin: 0 auto; position: relative; z-index: 1; }
+  .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+  .brand-icon {
+    width: 44px; height: 44px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+  .brand-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: 1px;
+  }
+  .brand-tagline { font-size: 11px; color: rgba(255,255,255,0.6); letter-spacing: 2px; margin-top: 1px; }
+
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 38px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  .hero-title span { color: var(--accent2); }
+  .hero-sub { color: rgba(255,255,255,0.72); font-size: 16px; line-height: 1.6; }
+
+  /* FLOATING CARD */
+  .form-card {
+    max-width: 560px;
+    margin: -28px auto 40px;
+    background: var(--card);
+    border-radius: 24px;
+    box-shadow: var(--shadow), 0 1px 0 rgba(255,255,255,0.8) inset;
+    padding: 32px;
+    position: relative;
+    z-index: 10;
+    border: 1px solid var(--border);
+  }
+
+  .section-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .form-row.single { grid-template-columns: 1fr; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+  label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.3px;
+  }
+
+  input, select, textarea {
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    outline: none;
+    transition: all 0.2s;
+    width: 100%;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--accent);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(200,65,10,0.08);
+  }
+  input::placeholder { color: #bbb; }
+  textarea { resize: none; height: 72px; font-size: 14px; }
+  select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a6a52' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+
+  /* ROUTE VISUAL */
+  .route-box {
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .route-line {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    padding: 4px 0;
+  }
+  .route-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--green);
+    flex-shrink: 0;
+  }
+  .route-dot.end { background: var(--accent); }
+  .route-dash {
+    flex: 1;
+    width: 2px;
+    background: repeating-linear-gradient(to bottom, var(--border) 0, var(--border) 4px, transparent 4px, transparent 8px);
+    min-height: 32px;
+    margin: 3px 0;
+  }
+  .route-fields { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+  .route-fields input { margin: 0; }
+
+  /* VEHICLE SELECTOR */
+  .vehicle-scroll {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .veh-opt {
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.18s;
+    user-select: none;
+  }
+  .veh-opt:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(200,65,10,0.12); }
+  .veh-opt.selected { border-color: var(--accent); background: rgba(200,65,10,0.06); }
+  .veh-opt .vicon { font-size: 28px; margin-bottom: 6px; }
+  .veh-opt .vname { font-size: 12px; font-weight: 500; color: var(--text); }
+  .veh-opt .vprice { font-size: 11px; color: var(--accent); margin-top: 2px; font-weight: 600; }
+  .veh-opt.selected .vname { color: var(--accent); font-weight: 600; }
+
+  /* SUBMIT BUTTON */
+  .submit-btn {
+    width: 100%;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    padding: 16px;
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 8px;
+    box-shadow: 0 4px 20px rgba(200,65,10,0.3);
+  }
+  .submit-btn:hover { background: #a83408; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(200,65,10,0.4); }
+  .submit-btn:active { transform: translateY(0); }
+
+  /* SUCCESS STATE */
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 16px 0;
+  }
+  .success-screen.show { display: block; animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+  @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+  .success-icon {
+    width: 80px; height: 80px;
+    background: rgba(26,122,74,0.1);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 40px;
+    margin: 0 auto 20px;
+  }
+  .success-title { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+  .success-sub { color: var(--muted); font-size: 15px; margin-bottom: 24px; line-height: 1.6; }
+
+  .notify-btns { display: flex; flex-direction: column; gap: 10px; }
+  .btn-wa {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    padding: 14px;
+    background: #25d366;
+    color: #fff;
+    border-radius: 12px;
+    text-decoration: none;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    transition: all 0.2s;
+  }
+  .btn-wa:hover { background: #1da851; }
+  .btn-mail {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    padding: 14px;
+    background: var(--bg);
+    color: var(--text);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-decoration: none;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    transition: all 0.2s;
+  }
+  .btn-mail:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-new {
+    padding: 12px;
+    background: transparent;
+    color: var(--muted);
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .btn-new:hover { color: var(--accent); }
+
+  /* REQ SUMMARY CARD */
+  .req-summary {
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  .req-summary .row { display: flex; justify-content: space-between; font-size: 13px; padding: 5px 0; border-bottom: 1px solid var(--border); }
+  .req-summary .row:last-child { border: none; }
+  .req-summary .row .lbl { color: var(--muted); }
+  .req-summary .row .val { font-weight: 500; color: var(--text); text-align: right; max-width: 60%; }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 24px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  /* SECTION GAP */
+  .section-gap { margin-bottom: 20px; }
+
+  @media (max-width: 480px) {
+    .hero-title { font-size: 28px; }
+    .form-card { padding: 22px; margin: -20px 12px 32px; border-radius: 20px; }
+    .form-row { grid-template-columns: 1fr; }
+    .vehicle-scroll { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="brand">
+      <div class="brand-icon">🚗</div>
+      <div>
+        <div class="brand-name">RAJRIDE</div>
+        <div class="brand-tagline">VEHICLE HIRING SERVICE</div>
+      </div>
+    </div>
+    <div class="hero-title">Apni <span>Ride</span><br>Book Karein</div>
+    <div class="hero-sub">Reliable, comfortable aur affordable — jahan chahein, kab chahein.</div>
+  </div>
+</div>
+
+<div class="form-card">
+
+  <!-- BOOKING FORM -->
+  <div id="booking-form">
+
+    <!-- Personal Info -->
+    <div class="section-gap">
+      <div class="section-label">👤 Aapki Jankari</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Naam *</label>
+          <input type="text" id="cust_name" placeholder="Apna poora naam">
+        </div>
+        <div class="form-group">
+          <label>Mobile Number *</label>
+          <input type="tel" id="cust_phone" placeholder="10-digit number" maxlength="10">
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group">
+          <label>Email (Optional)</label>
+          <input type="email" id="cust_email" placeholder="aapka@email.com">
+        </div>
+      </div>
+    </div>
+
+    <!-- Route -->
+    <div class="section-gap">
+      <div class="section-label">📍 Route</div>
+      <div class="route-box">
+        <div class="route-line">
+          <div class="route-dot"></div>
+          <div class="route-dash"></div>
+          <div class="route-dot end"></div>
+        </div>
+        <div class="route-fields">
+          <input type="text" id="pickup" placeholder="Kahan se uthna hai (Pickup)">
+          <input type="text" id="drop" placeholder="Kahan jana hai (Drop)">
+        </div>
+      </div>
+    </div>
+
+    <!-- Date & Time -->
+    <div class="section-gap">
+      <div class="section-label">📅 Date & Time</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Journey Date *</label>
+          <input type="date" id="jour_date">
+        </div>
+        <div class="form-group">
+          <label>Pickup Time *</label>
+          <input type="time" id="jour_time">
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group">
+          <label>Kitne Log Jayenge?</label>
+          <select id="passengers">
+            <option value="1">1 Person</option>
+            <option value="2">2 Persons</option>
+            <option value="3">3 Persons</option>
+            <option value="4">4 Persons</option>
+            <option value="5">5 Persons</option>
+            <option value="6">6 Persons</option>
+            <option value="7+">7+ Persons</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vehicle -->
+    <div class="section-gap">
+      <div class="section-label">🚘 Vehicle Chunein *</div>
+      <div class="vehicle-scroll">
+        <div class="veh-opt" onclick="selectVeh(this,'Hatchback','₹12/km')">
+          <div class="vicon">🚗</div>
+          <div class="vname">Hatchback</div>
+          <div class="vprice">₹12/km</div>
+        </div>
+        <div class="veh-opt" onclick="selectVeh(this,'Sedan','₹15/km')">
+          <div class="vicon">🚙</div>
+          <div class="vname">Sedan</div>
+          <div class="vprice">₹15/km</div>
+        </div>
+        <div class="veh-opt" onclick="selectVeh(this,'SUV','₹20/km')">
+          <div class="vicon">🚐</div>
+          <div class="vname">SUV</div>
+          <div class="vprice">₹20/km</div>
+        </div>
+        <div class="veh-opt" onclick="selectVeh(this,'Tempo Traveller','₹30/km')">
+          <div class="vicon">🚌</div>
+          <div class="vname">Tempo</div>
+          <div class="vprice">₹30/km</div>
+        </div>
+        <div class="veh-opt" onclick="selectVeh(this,'Luxury Car','₹35/km')">
+          <div class="vicon">🏎️</div>
+          <div class="vname">Luxury</div>
+          <div class="vprice">₹35/km</div>
+        </div>
+        <div class="veh-opt" onclick="selectVeh(this,'Bus','₹50/km')">
+          <div class="vicon">🚎</div>
+          <div class="vname">Bus</div>
+          <div class="vprice">₹50/km</div>
+        </div>
+      </div>
+      <input type="hidden" id="vehicle_type">
+    </div>
+
+    <!-- Note -->
+    <div class="section-gap">
+      <div class="section-label">📝 Koi Khaas Baat?</div>
+      <textarea id="special_note" placeholder="Jaise: AC chahiye, baby seat, koi specific requirement..."></textarea>
+    </div>
+
+    <button class="submit-btn" onclick="submitBooking()">
+      <span>🚀</span> Ride Book Karein
+    </button>
+    <p id="err-msg" style="color:#c8410a; font-size:13px; margin-top:10px; text-align:center; display:none;"></p>
+  </div>
+
+  <!-- SUCCESS SCREEN -->
+  <div class="success-screen" id="success-screen">
+    <div class="success-icon">✅</div>
+    <div class="success-title">Request Submit Ho Gayi!</div>
+    <div class="success-sub">Aapki booking request hamein mil gayi hai.<br>Hum aapko jald confirm karenge. 🙏</div>
+
+    <div class="req-summary" id="req-summary"></div>
+
+    <div class="notify-btns">
+      <a id="wa-btn" href="#" target="_blank" class="btn-wa">💬 WhatsApp pe Confirm Karein</a>
+      <a id="mail-btn" href="#" class="btn-mail">📧 Email Bhejein</a>
+      <button class="btn-new" onclick="newBooking()">+ Nai Booking Karein</button>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  © RajRide Vehicle Hiring &nbsp;·&nbsp; 📱 7979720282 &nbsp;·&nbsp; 📧 prabhat.raj.rj@gmail.com
+</footer>
+
+<script type="module">
+// ===============================================
+//  ⚡ SUPABASE CONFIG
+// ===============================================
+const SUPABASE_URL = 'https://ksgpotzxzvebrzdzjexb.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_AWBGqLtEHvWS5ITmlnzaHA_bfbLHHO-';
+// ===============================================
+
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const OWNER_PHONE = '917979720282';
+const OWNER_EMAIL = 'prabhat.raj.rj@gmail.com';
+let selectedVehicle = '';
+
+document.getElementById('jour_date').min = new Date().toISOString().split('T')[0];
+
+function selectVeh(el, name, price) {
+  document.querySelectorAll('.veh-opt').forEach(v => v.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedVehicle = name;
+  document.getElementById('vehicle_type').value = name;
+}
+window.selectVeh = selectVeh;
+
+function showErr(msg) {
+  const el = document.getElementById('err-msg');
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 4000);
+}
+
+async function submitBooking() {
+  const name    = document.getElementById('cust_name').value.trim();
+  const phone   = document.getElementById('cust_phone').value.trim();
+  const pickup  = document.getElementById('pickup').value.trim();
+  const drop    = document.getElementById('drop').value.trim();
+  const date    = document.getElementById('jour_date').value;
+  const time    = document.getElementById('jour_time').value;
+  const vehicle = document.getElementById('vehicle_type').value;
+
+  if (!name)                          return showErr('❗ Apna naam bharen');
+  if (!phone || phone.length < 10)    return showErr('❗ Valid 10-digit mobile number dalen');
+  if (!pickup)                        return showErr('❗ Pickup location bharen');
+  if (!drop)                          return showErr('❗ Drop location bharen');
+  if (!date)                          return showErr('❗ Journey date chunein');
+  if (!time)                          return showErr('❗ Pickup time chunein');
+  if (!vehicle)                       return showErr('❗ Vehicle type chunein');
+
+  const btn = document.querySelector('.submit-btn');
+  btn.innerHTML = '⏳ Submit ho raha hai...';
+  btn.disabled = true;
+
+  try {
+    const { error } = await supabase.from('requests').insert([{
+      name, phone,
+      email:      document.getElementById('cust_email').value,
+      pickup, drop, date, time, vehicle,
+      passengers: document.getElementById('passengers').value,
+      note:       document.getElementById('special_note').value,
+      status:     'pending'
+    }]);
+
+    if (error) throw error;
+
+    const msg = `🚗 *RAJRIDE – Nayi Booking*\n\n👤 *Naam:* ${name}\n📱 *Contact:* ${phone}\n📍 *Pickup:* ${pickup}\n🏁 *Drop:* ${drop}\n📅 *Date:* ${fmtDate(date)}\n🕐 *Time:* ${time}\n🚘 *Vehicle:* ${vehicle}\n👥 *Passengers:* ${document.getElementById('passengers').value}${document.getElementById('special_note').value ? '\n📝 *Note:* ' + document.getElementById('special_note').value : ''}\n\n_RajRide Booking System_`;
+
+    document.getElementById('wa-btn').href   = `https://wa.me/${OWNER_PHONE}?text=${encodeURIComponent(msg)}`;
+    document.getElementById('mail-btn').href = `mailto:${OWNER_EMAIL}?subject=${encodeURIComponent('New Booking – ' + name + ' (' + fmtDate(date) + ')')}&body=${encodeURIComponent(msg.replace(/\*/g,''))}`;
+
+    document.getElementById('req-summary').innerHTML = `
+      <div class="row"><span class="lbl">Naam</span><span class="val">${name}</span></div>
+      <div class="row"><span class="lbl">Phone</span><span class="val">${phone}</span></div>
+      <div class="row"><span class="lbl">Pickup</span><span class="val">${pickup}</span></div>
+      <div class="row"><span class="lbl">Drop</span><span class="val">${drop}</span></div>
+      <div class="row"><span class="lbl">Date & Time</span><span class="val">${fmtDate(date)}, ${time}</span></div>
+      <div class="row"><span class="lbl">Vehicle</span><span class="val">${vehicle}</span></div>
+    `;
+
+    document.getElementById('booking-form').style.display = 'none';
+    document.getElementById('success-screen').classList.add('show');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  } catch (err) {
+    console.error(err);
+    showErr('❗ Submit nahi hua. Internet check karein aur dobara try karein.');
+    btn.innerHTML = '<span>🚀</span> Ride Book Karein';
+    btn.disabled = false;
+  }
+}
+window.submitBooking = submitBooking;
+
+function newBooking() {
+  document.getElementById('success-screen').classList.remove('show');
+  document.getElementById('booking-form').style.display = 'block';
+  ['cust_name','cust_phone','cust_email','pickup','drop','jour_date','jour_time','special_note'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('passengers').value = '1';
+  selectedVehicle = '';
+  document.getElementById('vehicle_type').value = '';
+  document.querySelectorAll('.veh-opt').forEach(v => v.classList.remove('selected'));
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+window.newBooking = newBooking;
+
+function fmtDate(d) {
+  if (!d) return '';
+  const [y,m,day] = d.split('-');
+  return `${day} ${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+m-1]} ${y}`;
+}
+</script>
+</body>
+</html>
