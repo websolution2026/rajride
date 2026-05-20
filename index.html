@@ -3,472 +3,505 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RajRide – Book Your Ride</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>Safar Saathi Ride – Book Your Cab</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Hind:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0f1420;
-  --bg2: #141928;
-  --card: #1a2035;
-  --card2: #1e2640;
-  --border: #2a3350;
-  --accent: #f5a623;
-  --accent2: #e8951a;
-  --text: #f0f2f8;
-  --muted: #8892a8;
-  --green: #22c55e;
-  --shadow: 0 20px 60px rgba(0,0,0,0.5);
+  --bg:      #0d1117;
+  --bg2:     #111620;
+  --card:    #161c28;
+  --card2:   #1c2438;
+  --border:  #252d40;
+  --accent:  #f5c518;
+  --accent2: #e8b800;
+  --dark:    #0a0d14;
+  --text:    #f0f2f8;
+  --muted:   #7a8499;
+  --green:   #22c55e;
+  --red:     #ef4444;
+  --shadow:  0 24px 64px rgba(0,0,0,0.6);
 }
-* { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior: smooth; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'DM Sans', sans-serif;
-  min-height: 100vh;
-}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Hind',sans-serif;min-height:100vh;}
 
 /* ── HERO ── */
-.hero {
-  background: linear-gradient(160deg, #0a0f1e 0%, #141928 50%, #0f1420 100%);
-  padding: 0 20px 60px;
-  position: relative;
-  overflow: hidden;
+.hero{
+  background: linear-gradient(160deg,#070a10 0%,#0d1117 40%,#111620 100%);
+  padding:0 16px 50px;
+  position:relative;overflow:hidden;
 }
-.hero::before {
-  content:'';
-  position:absolute;
-  top:-100px; right:-100px;
-  width:500px; height:500px;
-  background: radial-gradient(circle, rgba(245,166,35,0.08) 0%, transparent 70%);
+.hero-bg-glow{
+  position:absolute;top:-120px;right:-80px;
+  width:500px;height:500px;
+  background:radial-gradient(circle,rgba(245,197,24,0.10) 0%,transparent 65%);
   pointer-events:none;
 }
-.hero::after {
-  content:'';
-  position:absolute;
-  bottom:-80px; left:-80px;
-  width:350px; height:350px;
-  background: radial-gradient(circle, rgba(245,166,35,0.05) 0%, transparent 70%);
+.hero-bg-glow2{
+  position:absolute;bottom:-100px;left:-60px;
+  width:400px;height:400px;
+  background:radial-gradient(circle,rgba(245,197,24,0.06) 0%,transparent 65%);
   pointer-events:none;
 }
 
 /* NAV */
-.nav {
-  display:flex; align-items:center; justify-content:space-between;
-  padding: 20px 0;
-  position: relative; z-index: 10;
+.nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 0;position:relative;z-index:10;
+  border-bottom:1px solid rgba(245,197,24,0.1);
+  margin-bottom:32px;
 }
-.nav-logo {
-  font-family: 'Playfair Display', serif;
-  font-size: 24px; font-weight: 700;
-  color: #fff;
+.nav-logo-wrap{display:flex;align-items:center;gap:10px;}
+.nav-logo-icon{
+  width:40px;height:40px;
+  background:var(--accent);
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:900;color:#000;
+  font-family:'Montserrat',sans-serif;
 }
-.nav-logo span { color: var(--accent); }
-.nav-links { display:flex; gap:8px; }
-.nav-link {
-  padding: 8px 16px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--muted);
-  font-size: 13px;
-  cursor: pointer;
-  text-decoration: none;
-  transition: all 0.2s;
-  font-family: 'DM Sans', sans-serif;
+.nav-logo{
+  font-family:'Montserrat',sans-serif;
+  font-size:20px;font-weight:800;
+  color:#fff;letter-spacing:0.5px;
+  line-height:1.1;
 }
-.nav-link:hover { color: var(--text); border-color: var(--accent); }
-.nav-link.primary { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 600; }
+.nav-logo span{color:var(--accent);}
+.nav-tagline{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;}
+.nav-right{display:flex;gap:8px;align-items:center;}
+.nav-badge{
+  background:rgba(245,197,24,0.1);
+  border:1px solid rgba(245,197,24,0.3);
+  color:var(--accent);
+  font-size:11px;font-weight:600;
+  padding:5px 12px;border-radius:20px;
+  letter-spacing:0.5px;
+}
+.nav-call{
+  background:var(--accent);color:#000;
+  font-size:12px;font-weight:700;
+  padding:7px 14px;border-radius:8px;
+  text-decoration:none;
+  font-family:'Montserrat',sans-serif;
+}
 
 /* HERO CONTENT */
-.hero-content {
-  text-align: center;
-  padding: 48px 0 40px;
-  position: relative; z-index: 5;
+.hero-content{
+  position:relative;z-index:5;
+  max-width:480px;margin:0 auto;
+  text-align:center;
 }
-.hero-badge {
-  display: inline-block;
-  background: rgba(245,166,35,0.12);
-  border: 1px solid rgba(245,166,35,0.3);
-  color: var(--accent);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  padding: 6px 16px;
-  border-radius: 20px;
-  margin-bottom: 20px;
-  text-transform: uppercase;
+.hero-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(245,197,24,0.08);
+  border:1px solid rgba(245,197,24,0.2);
+  color:var(--accent);
+  font-size:10px;font-weight:700;
+  letter-spacing:2px;padding:5px 14px;
+  border-radius:20px;margin-bottom:18px;
+  text-transform:uppercase;
 }
-.hero-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 42px;
-  font-weight: 800;
-  line-height: 1.15;
-  margin-bottom: 14px;
-  color: #fff;
+.hero-brand{
+  font-family:'Montserrat',sans-serif;
+  font-size:44px;font-weight:900;
+  line-height:1;margin-bottom:6px;
+  text-transform:uppercase;letter-spacing:1px;
 }
-.hero-title span { color: var(--accent); }
-.hero-sub {
-  color: var(--muted);
-  font-size: 15px;
-  line-height: 1.7;
-  max-width: 380px;
-  margin: 0 auto 32px;
+.hero-brand .line1{color:#fff;}
+.hero-brand .line2{color:var(--accent);}
+.hero-brand .line3{
+  font-size:24px;font-weight:700;
+  background:#fff;color:#0a0d14;
+  padding:2px 16px;border-radius:4px;
+  display:inline-block;margin-top:4px;
+  letter-spacing:3px;
 }
-.hero-stats {
-  display: flex;
-  justify-content: center;
-  gap: 32px;
-  margin-top: 8px;
+.hero-quote{
+  font-family:'Montserrat',sans-serif;
+  font-style:italic;font-size:14px;
+  color:var(--muted);margin:12px 0 24px;
+  letter-spacing:0.5px;
 }
-.hero-stat { text-align: center; }
-.hero-stat-val {
-  font-family: 'Playfair Display', serif;
-  font-size: 24px; font-weight: 700;
-  color: var(--accent);
-}
-.hero-stat-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.hero-quote::before,.hero-quote::after{content:'—';margin:0 6px;color:var(--accent);}
 
-/* ── BOOKING CARD ── */
-.booking-wrap {
-  max-width: 480px;
-  margin: -20px auto 0;
-  padding: 0 16px 40px;
-  position: relative; z-index: 20;
+.hero-locs{
+  display:inline-flex;flex-wrap:wrap;gap:6px;
+  justify-content:center;margin-bottom:24px;
+}
+.hero-loc{
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);
+  border-radius:20px;font-size:11px;
+  color:var(--muted);padding:4px 12px;
+}
+
+.hero-stats{
+  display:flex;justify-content:center;gap:0;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  border-radius:16px;overflow:hidden;
+  margin-bottom:8px;
+}
+.hero-stat{
+  flex:1;padding:16px 8px;
+  border-right:1px solid var(--border);
+  text-align:center;
+}
+.hero-stat:last-child{border:none;}
+.hstat-val{
+  font-family:'Montserrat',sans-serif;
+  font-size:20px;font-weight:800;
+  color:var(--accent);
+}
+.hstat-lbl{font-size:10px;color:var(--muted);margin-top:2px;letter-spacing:0.5px;}
+
+/* ── BOOKING SECTION ── */
+.book-wrap{
+  max-width:480px;margin:-8px auto 0;
+  padding:0 16px 48px;position:relative;z-index:20;
 }
 
 /* STEP INDICATOR */
-.step-indicator {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
-  margin-bottom: 20px;
+.steps-bar{
+  display:flex;align-items:center;
+  justify-content:center;margin-bottom:16px;
 }
-.step-dot {
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  border: 2px solid var(--border);
-  background: var(--card);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13px; font-weight: 600;
-  color: var(--muted);
-  transition: all 0.3s;
-  position: relative;
-  z-index: 2;
+.sdot{
+  width:34px;height:34px;border-radius:50%;
+  border:2px solid var(--border);background:var(--card);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;color:var(--muted);
+  font-family:'Montserrat',sans-serif;transition:all 0.3s;
+  flex-shrink:0;
 }
-.step-dot.active { border-color: var(--accent); background: var(--accent); color: #000; }
-.step-dot.done { border-color: var(--green); background: var(--green); color: #fff; }
-.step-line {
-  flex: 1;
-  height: 2px;
-  background: var(--border);
-  max-width: 60px;
-  transition: background 0.3s;
+.sdot.active{border-color:var(--accent);background:var(--accent);color:#000;}
+.sdot.done{border-color:var(--green);background:var(--green);color:#fff;}
+.sline{flex:1;height:2px;background:var(--border);max-width:56px;transition:background 0.3s;}
+.sline.done{background:var(--green);}
+.step-lbls{
+  display:flex;justify-content:space-between;
+  margin-bottom:20px;padding:0 4px;
 }
-.step-line.done { background: var(--green); }
-.step-labels {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 8px;
-  margin-bottom: 20px;
-  padding: 0 8px;
+.slbl{
+  font-size:10px;color:var(--muted);text-align:center;
+  flex:1;letter-spacing:0.5px;font-weight:600;
+  text-transform:uppercase;transition:color 0.3s;
 }
-.step-label {
-  font-size: 10px;
-  color: var(--muted);
-  text-align: center;
-  flex: 1;
-  letter-spacing: 0.5px;
-  transition: color 0.3s;
-}
-.step-label.active { color: var(--accent); font-weight: 600; }
+.slbl.active{color:var(--accent);}
 
-/* BOOKING CARD */
-.book-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  padding: 28px 24px;
-  box-shadow: var(--shadow);
+/* CARD */
+.bcard{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:24px 20px;
+  box-shadow:var(--shadow);
 }
-.card-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 22px; font-weight: 700;
-  color: #fff;
-  margin-bottom: 20px;
+.ctitle{
+  font-family:'Montserrat',sans-serif;
+  font-size:20px;font-weight:800;
+  color:#fff;margin-bottom:18px;
+  display:flex;align-items:center;gap:8px;
 }
 
-/* TRIP TYPE TOGGLE */
-.trip-toggle {
-  display: flex;
-  background: var(--bg2);
-  border-radius: 12px;
-  padding: 4px;
-  margin-bottom: 20px;
-  border: 1px solid var(--border);
+/* TRIP TOGGLE */
+.trip-toggle{
+  display:flex;background:var(--bg2);
+  border-radius:10px;padding:3px;
+  margin-bottom:18px;
+  border:1px solid var(--border);
 }
-.trip-btn {
-  flex: 1;
-  padding: 10px;
-  border: none;
-  border-radius: 9px;
-  background: transparent;
-  color: var(--muted);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 14px; font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
+.trip-btn{
+  flex:1;padding:10px;border:none;
+  border-radius:8px;background:transparent;
+  color:var(--muted);font-family:'Montserrat',sans-serif;
+  font-size:13px;font-weight:700;cursor:pointer;
+  transition:all 0.2s;letter-spacing:0.5px;
 }
-.trip-btn.active { background: var(--accent); color: #000; font-weight: 600; }
+.trip-btn.active{background:var(--accent);color:#000;}
 
-/* FORM FIELDS */
-.field {
-  background: var(--bg2);
-  border: 1.5px solid var(--border);
-  border-radius: 14px;
-  padding: 14px 16px;
-  margin-bottom: 12px;
-  transition: border-color 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 12px;
+/* INPUT FIELD */
+.ifield{
+  background:var(--bg2);
+  border:1.5px solid var(--border);
+  border-radius:12px;padding:12px 14px;
+  margin-bottom:10px;
+  transition:border-color 0.2s;
+  position:relative;
 }
-.field:focus-within { border-color: var(--accent); }
-.field-icon { font-size: 18px; flex-shrink: 0; }
-.field-inner { flex: 1; }
-.field-label-sm {
-  font-size: 10px;
-  color: var(--muted);
-  font-weight: 600;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  margin-bottom: 3px;
+.ifield:focus-within{border-color:var(--accent);}
+.ifield-top{display:flex;align-items:center;gap:10px;}
+.ifield-icon{font-size:16px;flex-shrink:0;}
+.ifield-inner{flex:1;}
+.ilbl{
+  font-size:9px;font-weight:700;color:var(--muted);
+  letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px;
 }
-.field input, .field select {
-  background: transparent;
-  border: none;
-  outline: none;
-  color: var(--text);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 15px;
-  width: 100%;
+.ifield input,.ifield select{
+  background:transparent;border:none;outline:none;
+  color:var(--text);font-family:'Hind',sans-serif;
+  font-size:15px;width:100%;
 }
-.field input::placeholder { color: var(--muted); }
-.field select { appearance: none; color: var(--text); }
-.field select option { background: var(--card); }
+.ifield input::placeholder{color:var(--muted);}
+.ifield select{appearance:none;color:var(--text);}
+.ifield select option{background:var(--card);}
 
-/* ROUTE CONNECTOR */
-.route-connector {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: -4px 0;
-  position: relative;
-  z-index: 5;
+/* SUGGESTIONS DROPDOWN */
+.suggestions{
+  position:absolute;top:100%;left:0;right:0;
+  background:var(--card2);border:1px solid var(--accent);
+  border-radius:0 0 12px 12px;
+  z-index:100;max-height:180px;overflow-y:auto;
+  display:none;box-shadow:0 8px 24px rgba(0,0,0,0.4);
 }
-.route-dot-sm {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
+.sugg-item{
+  padding:11px 14px;font-size:13px;cursor:pointer;
+  border-bottom:1px solid var(--border);
+  transition:background 0.15s;
+  display:flex;align-items:center;gap:8px;
 }
-.route-dot-sm.green { background: var(--green); }
-.route-dot-sm.red { background: #ef4444; }
-.route-line-sm {
-  width: 2px; height: 20px;
-  background: var(--border);
-  margin: 3px 0;
+.sugg-item:last-child{border:none;}
+.sugg-item:hover{background:rgba(245,197,24,0.08);}
+.sugg-item .si-name{font-weight:500;}
+.sugg-item .si-detail{font-size:11px;color:var(--muted);margin-top:1px;}
+
+/* DISTANCE RESULT */
+.dist-box{
+  background:rgba(245,197,24,0.06);
+  border:1px solid rgba(245,197,24,0.2);
+  border-radius:12px;padding:14px;
+  margin:12px 0;display:none;
+  text-align:center;
 }
+.dist-km{
+  font-family:'Montserrat',sans-serif;
+  font-size:28px;font-weight:800;color:var(--accent);
+}
+.dist-sub{font-size:12px;color:var(--muted);margin-top:2px;}
 
 /* VEHICLE CARDS */
-.vehicle-list { display: flex; flex-direction: column; gap: 10px; }
-.veh-card {
-  background: var(--bg2);
-  border: 2px solid var(--border);
-  border-radius: 16px;
-  padding: 16px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  cursor: pointer;
-  transition: all 0.2s;
+.veh-list{display:flex;flex-direction:column;gap:10px;}
+.vcard{
+  background:var(--bg2);border:2px solid var(--border);
+  border-radius:14px;padding:16px;
+  display:flex;align-items:center;gap:14px;
+  cursor:pointer;transition:all 0.2s;
 }
-.veh-card:hover { border-color: var(--accent); transform: translateY(-1px); }
-.veh-card.selected { border-color: var(--accent); background: rgba(245,166,35,0.06); }
-.veh-emoji { font-size: 36px; }
-.veh-info { flex: 1; }
-.veh-name { font-size: 16px; font-weight: 600; margin-bottom: 2px; }
-.veh-desc { font-size: 12px; color: var(--muted); }
-.veh-price {
-  font-family: 'Playfair Display', serif;
-  font-size: 22px; font-weight: 700;
-  color: var(--accent);
-  text-align: right;
+.vcard:hover{border-color:var(--accent);transform:translateY(-1px);box-shadow:0 4px 20px rgba(245,197,24,0.1);}
+.vcard.selected{border-color:var(--accent);background:rgba(245,197,24,0.05);}
+.vcard-emoji{font-size:32px;flex-shrink:0;}
+.vcard-info{flex:1;}
+.vcard-name{font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;margin-bottom:2px;}
+.vcard-desc{font-size:12px;color:var(--muted);}
+.vcard-price-wrap{text-align:right;}
+.vcard-price{
+  font-family:'Montserrat',sans-serif;
+  font-size:22px;font-weight:800;color:var(--accent);
 }
-.veh-price-sub { font-size: 10px; color: var(--muted); text-align: right; font-family: 'DM Sans', sans-serif; }
+.vcard-rate{font-size:11px;color:var(--muted);}
+.vcard-selected-badge{
+  display:none;
+  background:var(--accent);color:#000;
+  font-size:9px;font-weight:700;
+  padding:2px 8px;border-radius:10px;
+  margin-top:4px;letter-spacing:0.5px;
+  font-family:'Montserrat',sans-serif;
+}
+.vcard.selected .vcard-selected-badge{display:inline-block;}
 
-/* REVIEW BOX */
-.review-row {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 14px 16px;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
+/* REVIEW ROWS */
+.rev-row{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:12px;padding:13px 14px;margin-bottom:8px;
+  display:flex;align-items:flex-start;gap:12px;
 }
-.review-icon { font-size: 16px; color: var(--muted); flex-shrink: 0; width: 20px; }
-.review-key { font-size: 10px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }
-.review-val { font-size: 14px; font-weight: 500; }
-.review-val.accent { color: var(--accent); font-family: 'Playfair Display', serif; font-size: 20px; }
+.rev-icon{font-size:15px;color:var(--muted);flex-shrink:0;margin-top:2px;}
+.rev-key{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px;}
+.rev-val{font-size:14px;font-weight:500;}
+.rev-val.big{
+  font-family:'Montserrat',sans-serif;
+  font-size:24px;font-weight:800;color:var(--accent);
+}
 
 /* BUTTONS */
-.btn-primary {
-  width: 100%;
-  background: var(--accent);
-  color: #000;
-  border: none;
-  border-radius: 14px;
-  padding: 15px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 16px; font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  margin-top: 16px;
+.btn-main{
+  width:100%;background:var(--accent);color:#000;
+  border:none;border-radius:12px;padding:15px;
+  font-family:'Montserrat',sans-serif;font-size:15px;font-weight:800;
+  cursor:pointer;transition:all 0.2s;letter-spacing:0.5px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  margin-top:14px;text-transform:uppercase;
 }
-.btn-primary:hover { background: var(--accent2); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(245,166,35,0.3); }
-.btn-secondary {
-  flex: 1;
-  background: transparent;
-  color: var(--muted);
-  border: 1.5px solid var(--border);
-  border-radius: 14px;
-  padding: 14px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 15px; font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
+.btn-main:hover{background:var(--accent2);transform:translateY(-1px);box-shadow:0 8px 24px rgba(245,197,24,0.3);}
+.btn-main:disabled{opacity:0.6;transform:none;cursor:not-allowed;}
+.btn-back{
+  flex:1;background:transparent;color:var(--muted);
+  border:1.5px solid var(--border);border-radius:12px;padding:14px;
+  font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;
+  cursor:pointer;transition:all 0.2s;letter-spacing:0.5px;
 }
-.btn-secondary:hover { color: var(--text); border-color: var(--text); }
-.btn-row { display: flex; gap: 10px; margin-top: 16px; }
+.btn-back:hover{color:var(--text);border-color:var(--text);}
+.btn-row2{display:flex;gap:10px;margin-top:14px;}
+
+/* MANUAL DIST */
+.manual-dist-box{
+  background:rgba(245,197,24,0.04);
+  border:1px dashed rgba(245,197,24,0.25);
+  border-radius:12px;padding:12px 14px;margin:10px 0;
+  font-size:12px;color:var(--muted);
+}
+.manual-dist-box b{color:var(--accent);}
 
 /* ERROR */
-.err-msg {
-  background: rgba(239,68,68,0.1);
-  border: 1px solid rgba(239,68,68,0.3);
-  border-radius: 10px;
-  padding: 10px 14px;
-  font-size: 13px; color: #ef4444;
-  text-align: center;
-  margin-top: 10px;
-  display: none;
+.err{
+  background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);
+  border-radius:10px;padding:10px 14px;font-size:13px;color:var(--red);
+  text-align:center;margin-top:10px;display:none;
 }
 
 /* SUCCESS */
-.success-card {
-  text-align: center;
-  padding: 12px 0;
-  display: none;
+.succ-card{text-align:center;padding:8px 0;}
+.succ-icon{
+  width:80px;height:80px;
+  background:rgba(34,197,94,0.1);
+  border:2px solid rgba(34,197,94,0.3);
+  border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:40px;
+  margin:0 auto 20px;
 }
-.success-icon {
-  width: 80px; height: 80px;
-  background: rgba(34,197,94,0.1);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 40px;
-  margin: 0 auto 20px;
-  border: 2px solid rgba(34,197,94,0.3);
+.succ-title{
+  font-family:'Montserrat',sans-serif;
+  font-size:26px;font-weight:800;margin-bottom:8px;
 }
-.success-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; margin-bottom: 8px; }
-.success-sub { color: var(--muted); font-size: 14px; line-height: 1.6; margin-bottom: 24px; }
-.notify-btns { display: flex; flex-direction: column; gap: 10px; }
-.btn-wa {
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  padding: 14px; background: #25d366; color: #fff;
-  border-radius: 12px; text-decoration: none;
-  font-weight: 700; font-size: 15px; transition: all 0.2s;
+.succ-sub{color:var(--muted);font-size:14px;line-height:1.7;margin-bottom:20px;}
+.btn-wa{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  padding:14px;background:#25d366;color:#fff;border-radius:12px;
+  text-decoration:none;font-family:'Montserrat',sans-serif;
+  font-weight:700;font-size:14px;transition:all 0.2s;margin-bottom:10px;
 }
-.btn-wa:hover { background: #1da851; }
-.btn-mail {
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  padding: 14px; background: transparent; color: var(--text);
-  border: 1.5px solid var(--border); border-radius: 12px;
-  text-decoration: none; font-weight: 600; font-size: 15px; transition: all 0.2s;
+.btn-wa:hover{background:#1da851;}
+.btn-email{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  padding:14px;background:transparent;color:var(--text);
+  border:1.5px solid var(--border);border-radius:12px;
+  text-decoration:none;font-family:'Montserrat',sans-serif;
+  font-weight:600;font-size:14px;transition:all 0.2s;margin-bottom:10px;
 }
-.btn-mail:hover { border-color: var(--accent); color: var(--accent); }
-.btn-new {
-  padding: 12px; background: transparent; color: var(--muted);
-  border: none; font-size: 14px; cursor: pointer; text-decoration: underline;
-  font-family: 'DM Sans', sans-serif;
+.btn-email:hover{border-color:var(--accent);color:var(--accent);}
+.btn-new{
+  width:100%;padding:12px;background:transparent;color:var(--muted);
+  border:none;font-size:13px;cursor:pointer;text-decoration:underline;
+  font-family:'Hind',sans-serif;
 }
 
-/* ── FEATURES SECTION ── */
-.features {
-  padding: 40px 20px;
-  max-width: 480px;
-  margin: 0 auto;
+/* KEY POINTS */
+.keypoints{
+  background:var(--bg2);border-top:3px solid var(--accent);
+  padding:36px 20px;margin-top:20px;
 }
-.features-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 24px; text-align: center;
-  margin-bottom: 20px; color: #fff;
+.kp-title{
+  font-family:'Montserrat',sans-serif;
+  font-size:14px;font-weight:800;
+  color:var(--text);text-align:center;
+  letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:24px;
+  display:flex;align-items:center;justify-content:center;gap:12px;
 }
-.features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.feat-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 18px 14px;
-  text-align: center;
+.kp-title::before,.kp-title::after{
+  content:'';flex:1;height:1px;background:var(--border);max-width:80px;
 }
-.feat-icon { font-size: 28px; margin-bottom: 8px; }
-.feat-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
-.feat-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
+.kp-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:14px;max-width:480px;margin:0 auto;
+}
+.kp-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:18px 14px;text-align:center;
+}
+.kp-icon{font-size:32px;margin-bottom:10px;}
+.kp-name{font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:#fff;margin-bottom:6px;letter-spacing:0.5px;}
+.kp-desc{font-size:11px;color:var(--muted);line-height:1.6;}
 
-/* ── FOOTER ── */
-footer {
-  background: var(--bg2);
-  border-top: 1px solid var(--border);
-  padding: 40px 24px 24px;
-  text-align: center;
+/* LOCATIONS */
+.locations-section{
+  padding:30px 20px;max-width:480px;margin:0 auto;
 }
-.footer-logo {
-  font-family: 'Playfair Display', serif;
-  font-size: 28px; font-weight: 700;
-  margin-bottom: 8px;
+.loc-title{
+  font-family:'Montserrat',sans-serif;
+  font-size:11px;font-weight:700;
+  color:var(--accent);letter-spacing:2px;
+  text-transform:uppercase;margin-bottom:14px;text-align:center;
 }
-.footer-logo span { color: var(--accent); }
-.footer-tagline { color: var(--muted); font-size: 13px; line-height: 1.6; max-width: 320px; margin: 0 auto 24px; }
-.footer-divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
-.footer-section-title {
-  font-size: 11px; font-weight: 700;
-  letter-spacing: 2px; color: var(--accent);
-  text-transform: uppercase;
-  margin-bottom: 14px;
+.loc-grid{
+  display:flex;flex-wrap:wrap;gap:8px;justify-content:center;
 }
-.footer-services { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
-.footer-services li { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 8px; justify-content: center; }
-.footer-services li::before { content: '—'; color: var(--accent); }
-.footer-contact { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
-.footer-contact a {
-  font-size: 14px; color: var(--muted); text-decoration: none;
-  display: flex; align-items: center; gap: 8px; justify-content: center;
-  transition: color 0.2s;
+.loc-chip{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:20px;padding:6px 14px;font-size:12px;color:var(--muted);
 }
-.footer-contact a:hover { color: var(--accent); }
-.footer-copyright { font-size: 12px; color: var(--muted); margin-top: 16px; }
 
-/* ANIMATIONS */
-@keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
-@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-.step-content { animation: fadeUp 0.3s ease; }
+/* FOOTER */
+footer{
+  background:var(--dark);
+  border-top:3px solid var(--accent);
+  padding:40px 20px 24px;
+  text-align:center;
+}
+.footer-logo{
+  font-family:'Montserrat',sans-serif;
+  font-size:28px;font-weight:900;
+  color:#fff;letter-spacing:1px;
+  margin-bottom:4px;text-transform:uppercase;
+}
+.footer-logo span{color:var(--accent);}
+.footer-logo-sub{
+  font-family:'Montserrat',sans-serif;
+  font-size:12px;font-weight:700;
+  background:var(--accent);color:#000;
+  display:inline-block;padding:2px 12px;
+  border-radius:4px;letter-spacing:2px;
+  margin-bottom:10px;
+}
+.footer-tagline{color:var(--muted);font-size:13px;line-height:1.7;max-width:340px;margin:0 auto 20px;}
+.footer-quote{
+  font-family:'Montserrat',sans-serif;
+  font-style:italic;color:var(--accent);
+  font-size:14px;margin-bottom:24px;
+}
+.fdiv{border:none;border-top:1px solid var(--border);margin:20px 0;}
+.fsec-title{
+  font-size:10px;font-weight:700;letter-spacing:2px;
+  color:var(--accent);text-transform:uppercase;margin-bottom:14px;
+}
+.fservices{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+.fservices li{
+  font-size:13px;color:var(--muted);
+  display:flex;align-items:center;gap:8px;justify-content:center;
+}
+.fservices li::before{content:'—';color:var(--accent);}
+.fcontact{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+.fcontact a{
+  font-size:14px;color:var(--muted);text-decoration:none;
+  display:flex;align-items:center;gap:8px;justify-content:center;transition:color 0.2s;
+}
+.fcontact a:hover{color:var(--accent);}
+.fcopyright{font-size:11px;color:var(--muted);margin-top:8px;}
+.ftagline-bottom{
+  font-family:'Montserrat',sans-serif;
+  font-style:italic;font-size:13px;color:var(--muted);margin-top:16px;
+}
 
-@media (max-width: 400px) {
-  .hero-title { font-size: 32px; }
-  .book-card { padding: 22px 18px; }
-  .hero-stats { gap: 20px; }
+/* ANIMS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.step-anim{animation:fadeUp 0.3s ease;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.spin{animation:spin 1s linear infinite;}
+
+@media(max-width:400px){
+  .hero-brand{font-size:34px;}
+  .bcard{padding:20px 16px;}
+  .kp-grid{grid-template-columns:1fr 1fr;}
 }
 </style>
 </head>
@@ -476,511 +509,663 @@ footer {
 
 <!-- HERO -->
 <div class="hero">
+  <div class="hero-bg-glow"></div>
+  <div class="hero-bg-glow2"></div>
+
   <div class="nav">
-    <div class="nav-logo">Raj<span>Ride</span></div>
-    <div class="nav-links">
-      <a href="tel:7979720282" class="nav-link">📞 Call</a>
-      <a href="admin-panel.html" class="nav-link primary">Admin</a>
+    <div class="nav-logo-wrap">
+      <div class="nav-logo-icon">S</div>
+      <div>
+        <div class="nav-logo">Safar <span>Saathi</span></div>
+        <div class="nav-tagline">Har Safar, Aapka Saathi</div>
+      </div>
+    </div>
+    <div class="nav-right">
+      <div class="nav-badge">24×7</div>
+      <a href="tel:7979720282" class="nav-call">📞 Call</a>
     </div>
   </div>
+
   <div class="hero-content">
-    <div class="hero-badge">⚡ Instant Booking Available</div>
-    <div class="hero-title">Book Your <span>Cab</span><br>In Seconds</div>
-    <div class="hero-sub">Safe, comfortable aur affordable cab service — Hazaribagh aur poore Jharkhand me.</div>
+    <div class="hero-tag">🚗🚗 Har Safar, Aapka Saathi 🚗🚗</div>
+    <div class="hero-brand">
+      <div class="line1">SAFAR</div>
+      <div class="line2">SAATHI</div>
+      <div class="line3">RIDE</div>
+    </div>
+    <div class="hero-quote">Safe Ride, Happy Journey</div>
+
+    <div class="hero-locs">
+      <span class="hero-loc">📍 Jharkhand</span>
+      <span class="hero-loc">📍 Bihar</span>
+      <span class="hero-loc">📍 UP</span>
+      <span class="hero-loc">📍 Chhattisgarh</span>
+      <span class="hero-loc">📍 Odisha</span>
+      <span class="hero-loc">📍 West Bengal</span>
+      <span class="hero-loc">📍 Delhi</span>
+    </div>
+
     <div class="hero-stats">
       <div class="hero-stat">
-        <div class="hero-stat-val">24/7</div>
-        <div class="hero-stat-lbl">Available</div>
+        <div class="hstat-val">24×7</div>
+        <div class="hstat-lbl">Service</div>
       </div>
       <div class="hero-stat">
-        <div class="hero-stat-val">100+</div>
-        <div class="hero-stat-lbl">Routes</div>
+        <div class="hstat-val">₹19</div>
+        <div class="hstat-lbl">Starting/km</div>
       </div>
       <div class="hero-stat">
-        <div class="hero-stat-val">₹12</div>
-        <div class="hero-stat-lbl">Starting/km</div>
+        <div class="hstat-val">100%</div>
+        <div class="hstat-lbl">Safe</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hstat-val">Pan</div>
+        <div class="hstat-lbl">India</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- BOOKING SECTION -->
-<div class="booking-wrap">
+<!-- BOOKING -->
+<div class="book-wrap">
 
-  <!-- STEP INDICATOR -->
-  <div class="step-indicator">
-    <div class="step-dot active" id="dot-1">1</div>
-    <div class="step-line" id="line-1"></div>
-    <div class="step-dot" id="dot-2">2</div>
-    <div class="step-line" id="line-2"></div>
-    <div class="step-dot" id="dot-3">3</div>
+  <!-- STEPS -->
+  <div class="steps-bar">
+    <div class="sdot active" id="dot-1">1</div>
+    <div class="sline" id="line-1"></div>
+    <div class="sdot" id="dot-2">2</div>
+    <div class="sline" id="line-2"></div>
+    <div class="sdot" id="dot-3">3</div>
   </div>
-  <div class="step-labels">
-    <div class="step-label active" id="lbl-1">Route</div>
-    <div class="step-label" id="lbl-2">Vehicle</div>
-    <div class="step-label" id="lbl-3">Confirm</div>
+  <div class="step-lbls">
+    <div class="slbl active" id="lbl-1">Route</div>
+    <div class="slbl" id="lbl-2">Vehicle</div>
+    <div class="slbl" id="lbl-3">Confirm</div>
   </div>
 
-  <!-- ── STEP 1: ROUTE ── -->
-  <div class="book-card step-content" id="step-1">
-    <div class="card-title">🗺️ Apna Route Chunein</div>
+  <!-- ── STEP 1 ── -->
+  <div class="bcard step-anim" id="step-1">
+    <div class="ctitle">🗺️ Apna Route Chunein</div>
 
     <div class="trip-toggle">
-      <button class="trip-btn active" id="btn-oneway" onclick="setTrip('one')">One Way</button>
-      <button class="trip-btn" id="btn-round" onclick="setTrip('round')">Round Trip</button>
+      <button class="trip-btn active" id="btn-ow" onclick="setTrip('one')">One Way</button>
+      <button class="trip-btn" id="btn-rt" onclick="setTrip('round')">Round Trip</button>
     </div>
 
-    <div class="field">
-      <div class="field-icon">📍</div>
-      <div class="field-inner">
-        <div class="field-label-sm">Pickup Location</div>
-        <input type="text" id="s1-pickup" placeholder="Kahan se uthna hai">
+    <!-- PICKUP -->
+    <div class="ifield" id="field-pickup">
+      <div class="ifield-top">
+        <div class="ifield-icon">📍</div>
+        <div class="ifield-inner">
+          <div class="ilbl">Pickup Location</div>
+          <input type="text" id="inp-pickup" placeholder="Shahero ya gaon ka naam..." autocomplete="off"
+            oninput="searchPlace('pickup',this.value)" onblur="hideSugg('pickup',300)">
+        </div>
+        <div id="pickup-loading" style="display:none; font-size:16px;">⏳</div>
+      </div>
+      <div class="suggestions" id="sugg-pickup"></div>
+    </div>
+
+    <!-- DROP -->
+    <div class="ifield" id="field-drop">
+      <div class="ifield-top">
+        <div class="ifield-icon">🏁</div>
+        <div class="ifield-inner">
+          <div class="ilbl">Drop Location</div>
+          <input type="text" id="inp-drop" placeholder="Kahan jana hai..." autocomplete="off"
+            oninput="searchPlace('drop',this.value)" onblur="hideSugg('drop',300)">
+        </div>
+        <div id="drop-loading" style="display:none; font-size:16px;">⏳</div>
+      </div>
+      <div class="suggestions" id="sugg-drop"></div>
+    </div>
+
+    <!-- DISTANCE RESULT -->
+    <div class="dist-box" id="dist-box">
+      <div class="dist-km" id="dist-km">— km</div>
+      <div class="dist-sub" id="dist-route-show">Route calculating...</div>
+    </div>
+
+    <!-- MANUAL DISTANCE -->
+    <div class="manual-dist-box" id="manual-dist-box" style="display:none;">
+      <b>📏 Distance manually set karein:</b> (agar auto nahi hua)
+      <div style="display:flex;gap:8px;margin-top:8px;align-items:center;">
+        <input type="number" id="manual-km" placeholder="KM" min="1"
+          style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:14px;flex:1;outline:none;font-family:'Hind',sans-serif;"
+          oninput="setManualDist(this.value)">
+        <span style="font-size:12px;color:var(--muted);">km</span>
       </div>
     </div>
 
-    <div class="field">
-      <div class="field-icon">🏁</div>
-      <div class="field-inner">
-        <div class="field-label-sm">Drop Location</div>
-        <input type="text" id="s1-drop" placeholder="Kahan jana hai">
-      </div>
-    </div>
-
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-      <div class="field" style="margin:0;">
-        <div class="field-icon">📅</div>
-        <div class="field-inner">
-          <div class="field-label-sm">Date</div>
-          <input type="date" id="s1-date">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div class="ifield" style="margin:0;">
+        <div class="ifield-top">
+          <div class="ifield-icon">📅</div>
+          <div class="ifield-inner">
+            <div class="ilbl">Date</div>
+            <input type="date" id="inp-date">
+          </div>
         </div>
       </div>
-      <div class="field" style="margin:0;">
-        <div class="field-icon">🕐</div>
-        <div class="field-inner">
-          <div class="field-label-sm">Time</div>
-          <input type="time" id="s1-time">
+      <div class="ifield" style="margin:0;">
+        <div class="ifield-top">
+          <div class="ifield-icon">🕐</div>
+          <div class="ifield-inner">
+            <div class="ilbl">Time</div>
+            <input type="time" id="inp-time">
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="field" style="margin-top:10px;">
-      <div class="field-icon">👥</div>
-      <div class="field-inner">
-        <div class="field-label-sm">Passengers</div>
-        <select id="s1-pass">
-          <option>1 Person</option><option>2 Persons</option>
-          <option>3 Persons</option><option>4 Persons</option>
-          <option>5 Persons</option><option>6 Persons</option><option>7+ Persons</option>
-        </select>
+    <div class="ifield" style="margin-top:10px;">
+      <div class="ifield-top">
+        <div class="ifield-icon">👥</div>
+        <div class="ifield-inner">
+          <div class="ilbl">Passengers</div>
+          <select id="inp-pass">
+            <option>1 Person</option><option>2 Persons</option>
+            <option>3 Persons</option><option>4 Persons</option>
+            <option>5 Persons</option><option>6 Persons</option>
+            <option>7+ Persons</option>
+          </select>
+        </div>
       </div>
     </div>
 
-    <button class="btn-primary" onclick="goStep2()">Check Price →</button>
-    <div class="err-msg" id="err-1"></div>
+    <button class="btn-main" onclick="goStep2()">CHECK PRICE →</button>
+    <div class="err" id="err-1"></div>
   </div>
 
-  <!-- ── STEP 2: VEHICLE ── -->
-  <div class="book-card step-content" id="step-2" style="display:none;">
-    <div class="card-title">🚗 Vehicle Chunein</div>
-    <div style="background:rgba(245,166,35,0.06); border:1px solid rgba(245,166,35,0.2); border-radius:12px; padding:12px 14px; margin-bottom:18px; font-size:13px;">
-      <span style="color:var(--muted);">📍</span> <span id="s2-route-show" style="font-weight:500;"></span><br>
-      <span style="color:var(--muted); font-size:12px;" id="s2-date-show"></span>
+  <!-- ── STEP 2 ── -->
+  <div class="bcard step-anim" id="step-2" style="display:none;">
+    <div class="ctitle">🚗 Vehicle Chunein</div>
+
+    <div style="background:rgba(245,197,24,0.06);border:1px solid rgba(245,197,24,0.2);border-radius:12px;padding:12px 14px;margin-bottom:18px;">
+      <div style="font-size:14px;font-weight:600;" id="s2-route"></div>
+      <div style="font-size:12px;color:var(--muted);margin-top:3px;" id="s2-meta"></div>
+      <div style="font-family:'Montserrat',sans-serif;font-size:18px;font-weight:800;color:var(--accent);margin-top:4px;" id="s2-dist-show"></div>
     </div>
 
-    <div class="vehicle-list">
-      <div class="veh-card" onclick="selectVeh(this,'Hatchback','Mini',3,'WagonR, Celerio, i10 aur similar',12)">
-        <div class="veh-emoji">🚗</div>
-        <div class="veh-info">
-          <div class="veh-name">Mini / Hatchback</div>
-          <div class="veh-desc">3 Seats • WagonR, Celerio, i10</div>
-        </div>
-        <div>
-          <div class="veh-price" id="vp-hatch">—</div>
-          <div class="veh-price-sub">Estimated</div>
-        </div>
-      </div>
-      <div class="veh-card" onclick="selectVeh(this,'Sedan','Sedan',4,'Dzire, Aura, Xcent aur similar',15)">
-        <div class="veh-emoji">🚙</div>
-        <div class="veh-info">
-          <div class="veh-name">Sedan</div>
-          <div class="veh-desc">4 Seats • Dzire, Aura, Xcent</div>
-        </div>
-        <div>
-          <div class="veh-price" id="vp-sedan">—</div>
-          <div class="veh-price-sub">Estimated</div>
-        </div>
-      </div>
-      <div class="veh-card" onclick="selectVeh(this,'SUV','SUV',7,'Ertiga, Innova aur similar',20)">
-        <div class="veh-emoji">🚐</div>
-        <div class="veh-info">
-          <div class="veh-name">SUV</div>
-          <div class="veh-desc">7 Seats • Ertiga, Innova</div>
-        </div>
-        <div>
-          <div class="veh-price" id="vp-suv">—</div>
-          <div class="veh-price-sub">Estimated</div>
-        </div>
-      </div>
-      <div class="veh-card" onclick="selectVeh(this,'Tempo Traveller','Tempo Traveller',12,'12 Seater Tempo',30)">
-        <div class="veh-emoji">🚌</div>
-        <div class="veh-info">
-          <div class="veh-name">Tempo Traveller</div>
-          <div class="veh-desc">12 Seats • Group Travel</div>
-        </div>
-        <div>
-          <div class="veh-price" id="vp-tempo">—</div>
-          <div class="veh-price-sub">Estimated</div>
-        </div>
-      </div>
-      <div class="veh-card" onclick="selectVeh(this,'Luxury Car','Luxury',4,'Innova Crysta, Fortuner',35)">
-        <div class="veh-emoji">🏎️</div>
-        <div class="veh-info">
-          <div class="veh-name">Luxury Car</div>
-          <div class="veh-desc">4 Seats • Crysta, Fortuner</div>
-        </div>
-        <div>
-          <div class="veh-price" id="vp-lux">—</div>
-          <div class="veh-price-sub">Estimated</div>
-        </div>
-      </div>
+    <div class="veh-list" id="veh-list">
+      <!-- Dynamically filled -->
     </div>
 
-    <div style="background:rgba(245,166,35,0.05); border:1px solid rgba(245,166,35,0.15); border-radius:10px; padding:10px 14px; margin-top:14px; font-size:12px; color:var(--muted);">
-      ⚠️ Prices are estimates only. Final price may vary based on actual route.
+    <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-top:12px;font-size:11px;color:var(--muted);">
+      ⚠️ Ye estimated fare hai. Final price route ke hisab se thoda vary ho sakta hai.
     </div>
 
-    <div class="btn-row">
-      <button class="btn-secondary" onclick="goStep1()">← Edit</button>
-      <button class="btn-primary" style="flex:2; margin:0;" onclick="goStep3()">Next →</button>
+    <div class="btn-row2">
+      <button class="btn-back" onclick="goStep1()">← Edit</button>
+      <button class="btn-main" style="flex:2;margin:0;" onclick="goStep3()">NEXT →</button>
     </div>
-    <div class="err-msg" id="err-2"></div>
+    <div class="err" id="err-2"></div>
   </div>
 
-  <!-- ── STEP 3: REVIEW + CONFIRM ── -->
-  <div class="book-card step-content" id="step-3" style="display:none;">
-    <div class="card-title">✅ Review Your Ride</div>
+  <!-- ── STEP 3 ── -->
+  <div class="bcard step-anim" id="step-3" style="display:none;">
+    <div class="ctitle">✅ Review Your Ride</div>
 
-    <div class="review-row">
-      <span class="review-icon">📍</span>
-      <div><div class="review-key">Route</div><div class="review-val" id="r-route"></div></div>
+    <div class="rev-row">
+      <span class="rev-icon">📍</span>
+      <div><div class="rev-key">Route</div><div class="rev-val" id="r-route"></div></div>
     </div>
-    <div class="review-row">
-      <span class="review-icon">📅</span>
-      <div><div class="review-key">Schedule</div><div class="review-val" id="r-schedule"></div></div>
+    <div class="rev-row">
+      <span class="rev-icon">📅</span>
+      <div><div class="rev-key">Schedule</div><div class="rev-val" id="r-sched"></div></div>
     </div>
-    <div class="review-row">
-      <span class="review-icon">🚗</span>
-      <div><div class="review-key">Vehicle</div><div class="review-val" id="r-vehicle"></div></div>
+    <div class="rev-row">
+      <span class="rev-icon">🚗</span>
+      <div><div class="rev-key">Vehicle</div><div class="rev-val" id="r-veh"></div></div>
     </div>
-    <div class="review-row">
-      <span class="review-icon">👥</span>
-      <div><div class="review-key">Passengers</div><div class="review-val" id="r-pass"></div></div>
+    <div class="rev-row">
+      <span class="rev-icon">📏</span>
+      <div><div class="rev-key">Distance</div><div class="rev-val" id="r-dist"></div></div>
     </div>
-    <div class="review-row">
-      <span class="review-icon">💰</span>
-      <div><div class="review-key">Estimated Fare</div><div class="review-val accent" id="r-fare"></div></div>
+    <div class="rev-row">
+      <span class="rev-icon">💰</span>
+      <div><div class="rev-key">Estimated Fare</div><div class="rev-val big" id="r-fare"></div></div>
     </div>
 
-    <div style="border-top:1px solid var(--border); margin:16px 0;"></div>
+    <div style="border-top:1px solid var(--border);margin:14px 0;"></div>
 
-    <div class="field">
-      <div class="field-icon">👤</div>
-      <div class="field-inner">
-        <div class="field-label-sm">Your Full Name</div>
-        <input type="text" id="s3-name" placeholder="Apna poora naam">
+    <div class="ifield">
+      <div class="ifield-top">
+        <div class="ifield-icon">👤</div>
+        <div class="ifield-inner">
+          <div class="ilbl">Your Full Name</div>
+          <input type="text" id="s3-name" placeholder="Apna poora naam">
+        </div>
       </div>
     </div>
-    <div class="field">
-      <div class="field-icon">📱</div>
-      <div class="field-inner">
-        <div class="field-label-sm">10-digit Mobile Number</div>
-        <input type="tel" id="s3-phone" placeholder="Mobile number" maxlength="10">
+    <div class="ifield">
+      <div class="ifield-top">
+        <div class="ifield-icon">📱</div>
+        <div class="ifield-inner">
+          <div class="ilbl">Mobile Number</div>
+          <input type="tel" id="s3-phone" placeholder="10-digit number" maxlength="10">
+        </div>
       </div>
     </div>
-    <div class="field">
-      <div class="field-icon">📧</div>
-      <div class="field-inner">
-        <div class="field-label-sm">Email (Optional)</div>
-        <input type="email" id="s3-email" placeholder="aapka@email.com">
+    <div class="ifield">
+      <div class="ifield-top">
+        <div class="ifield-icon">📧</div>
+        <div class="ifield-inner">
+          <div class="ilbl">Email (Optional)</div>
+          <input type="email" id="s3-email" placeholder="aapka@email.com">
+        </div>
       </div>
     </div>
 
-    <div class="btn-row">
-      <button class="btn-secondary" onclick="goStep2()">← Edit</button>
-      <button class="btn-primary" style="flex:2; margin:0;" id="confirm-btn" onclick="confirmBooking()">
-        🚀 Confirm Booking
+    <div class="btn-row2">
+      <button class="btn-back" onclick="goStep2()">← Edit</button>
+      <button class="btn-main" style="flex:2;margin:0;" id="conf-btn" onclick="confirmBooking()">
+        🚀 CONFIRM BOOKING
       </button>
     </div>
-    <div class="err-msg" id="err-3"></div>
+    <div class="err" id="err-3"></div>
   </div>
 
-  <!-- ── SUCCESS ── -->
-  <div class="book-card" id="step-success" style="display:none;">
-    <div class="success-card" style="display:block;">
-      <div class="success-icon">✅</div>
-      <div class="success-title">Booking Confirmed!</div>
-      <div class="success-sub">Aapki request mil gayi hai.<br>Hum jald confirm karenge. 🙏</div>
-      <div style="background:rgba(245,166,35,0.06); border:1px solid rgba(245,166,35,0.2); border-radius:12px; padding:14px; margin-bottom:20px;" id="success-summary"></div>
-      <div class="notify-btns">
-        <a id="wa-btn" href="#" target="_blank" class="btn-wa">💬 WhatsApp pe Confirm</a>
-        <a id="mail-btn" href="#" class="btn-mail">📧 Email Bhejein</a>
-        <button class="btn-new" onclick="resetAll()">+ Nai Booking</button>
-      </div>
+  <!-- SUCCESS -->
+  <div class="bcard" id="step-succ" style="display:none;">
+    <div class="succ-card">
+      <div class="succ-icon">✅</div>
+      <div class="succ-title">Booking Confirmed!</div>
+      <div class="succ-sub">Aapki request hamein mil gayi hai.<br>Hum jald contact karenge. 🙏</div>
+      <div id="succ-summary" style="background:rgba(245,197,24,0.05);border:1px solid rgba(245,197,24,0.2);border-radius:12px;padding:14px;margin-bottom:20px;text-align:left;font-size:13px;line-height:2;color:var(--muted);"></div>
+      <a id="wa-btn" href="#" target="_blank" class="btn-wa">💬 WhatsApp pe Confirm Karein</a>
+      <a id="mail-btn" href="#" class="btn-email">📧 Email Bhejein</a>
+      <button class="btn-new" onclick="resetAll()">+ Nai Booking Karein</button>
     </div>
   </div>
 
 </div>
 
-<!-- FEATURES -->
-<div class="features">
-  <div class="features-title">Kyun Chunein RajRide?</div>
-  <div class="features-grid">
-    <div class="feat-card">
-      <div class="feat-icon">⚡</div>
-      <div class="feat-name">Instant Booking</div>
-      <div class="feat-desc">Sirf 3 steps me ride book karein</div>
+<!-- KEY POINTS -->
+<div class="keypoints">
+  <div class="kp-title">Key Points on Pick-Up</div>
+  <div class="kp-grid" style="max-width:480px;margin:0 auto;">
+    <div class="kp-card">
+      <div class="kp-icon">🚗✨</div>
+      <div class="kp-name">Clean Vehicles</div>
+      <div class="kp-desc">Well maintained aur hygienic cars for a comfortable ride.</div>
     </div>
-    <div class="feat-card">
-      <div class="feat-icon">💰</div>
-      <div class="feat-name">Transparent Price</div>
-      <div class="feat-desc">Pehle price janein, phir book karein</div>
+    <div class="kp-card">
+      <div class="kp-icon">🛡️</div>
+      <div class="kp-name">Safe & Secure</div>
+      <div class="kp-desc">Aapki safety hamari top priority. Complete peace of mind.</div>
     </div>
-    <div class="feat-card">
-      <div class="feat-icon">🛡️</div>
-      <div class="feat-name">Safe Travel</div>
-      <div class="feat-desc">Verified drivers, safe journey</div>
+    <div class="kp-card">
+      <div class="kp-icon">📍</div>
+      <div class="kp-name">GPS Tracking</div>
+      <div class="kp-desc">Live GPS tracking for every ride for transparency & safety.</div>
     </div>
-    <div class="feat-card">
-      <div class="feat-icon">📞</div>
-      <div class="feat-name">24/7 Support</div>
-      <div class="feat-desc">Kabhi bhi call karein, hum ready hain</div>
+    <div class="kp-card">
+      <div class="kp-icon">🎧</div>
+      <div class="kp-name">24×7 Support</div>
+      <div class="kp-desc">Round the clock support for all your queries & assistance.</div>
     </div>
+  </div>
+</div>
+
+<!-- LOCATIONS -->
+<div class="locations-section">
+  <div class="loc-title">📍 Ride Locations</div>
+  <div class="loc-grid">
+    <span class="loc-chip">Jharkhand</span>
+    <span class="loc-chip">Bihar</span>
+    <span class="loc-chip">Uttar Pradesh</span>
+    <span class="loc-chip">Chhattisgarh</span>
+    <span class="loc-chip">Odisha</span>
+    <span class="loc-chip">West Bengal</span>
+    <span class="loc-chip">Delhi</span>
+    <span class="loc-chip">Hazaribagh</span>
+    <span class="loc-chip">Patna</span>
+    <span class="loc-chip">Ranchi</span>
   </div>
 </div>
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-logo">Raj<span>Ride</span></div>
-  <div class="footer-tagline">Safe, affordable & comfortable taxi service — available 24/7 across Jharkhand & Bihar.</div>
+  <div class="footer-logo">Safar <span>Saathi</span></div>
+  <div class="footer-logo-sub">RIDE</div>
+  <div class="footer-tagline">Safe, affordable & comfortable taxi service — available 24/7 across Jharkhand, Bihar & Pan India.</div>
+  <div class="footer-quote">"Aapka Rasta, Hamari Zimmedari"</div>
 
-  <div class="footer-divider"></div>
-
-  <div class="footer-section-title">Our Services</div>
-  <ul class="footer-services">
+  <div class="fdiv"></div>
+  <div class="fsec-title">Our Services</div>
+  <ul class="fservices">
     <li>24/7 Cab Booking</li>
     <li>Instant Confirmation</li>
     <li>Transparent Pricing</li>
-    <li>Outstation Trips</li>
-    <li>Airport Transfers</li>
+    <li>Outstation & Airport Trips</li>
+    <li>On Time Pick-Up</li>
+    <li>Customer Satisfaction</li>
   </ul>
 
-  <div class="footer-divider"></div>
-
-  <div class="footer-section-title">Contact Us</div>
-  <div class="footer-contact">
+  <div class="fdiv"></div>
+  <div class="fsec-title">Contact Us</div>
+  <div class="fcontact">
     <a href="#">📍 Hazaribagh, Jharkhand</a>
     <a href="tel:7979720282">📞 +91 79797 20282</a>
     <a href="mailto:prabhat.raj.rj@gmail.com">✉️ prabhat.raj.rj@gmail.com</a>
     <a href="https://websolution2026.github.io/rajride/" target="_blank">🌐 websolution2026.github.io/rajride</a>
   </div>
 
-  <div class="footer-divider"></div>
-  <div class="footer-copyright">© 2026 RajRide. All Rights Reserved.</div>
+  <div class="fdiv"></div>
+  <div class="ftagline-bottom">Safar Saathi Ride ke saath, har manzil hai aasaan!</div>
+  <div class="fcopyright">© 2026 Safar Saathi Ride. All Rights Reserved.</div>
 </footer>
 
 <script>
-// ===============================================
+// ── CONFIG ──
 const SUPABASE_URL = 'https://ksgpotzxzvebrzdzjexb.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_AWBGqLtEHvWS5ITmlnzaHA_bfbLHHO-';
 const API_URL = SUPABASE_URL + '/rest/v1';
 const HEADERS = {
-  'Content-Type': 'application/json',
-  'apikey': SUPABASE_KEY,
-  'Authorization': 'Bearer ' + SUPABASE_KEY,
-  'Prefer': 'return=minimal'
+  'Content-Type':'application/json',
+  'apikey':SUPABASE_KEY,
+  'Authorization':'Bearer '+SUPABASE_KEY,
+  'Prefer':'return=minimal'
 };
 const OWNER_PHONE = '917979720282';
 const OWNER_EMAIL = 'prabhat.raj.rj@gmail.com';
-// ===============================================
 
-let tripType = 'one';
-let selVehicle = { name:'', rate:0 };
-let estFare = 0;
+// ── VEHICLE RATES ──
+const VEHICLES = [
+  { key:'mini',   emoji:'🚗', name:'Mini / Hatchback', desc:'3 Seats • WagonR, Celerio, i10 aur similar', rate:19 },
+  { key:'sedan',  emoji:'🚙', name:'Sedan',            desc:'4 Seats • Dzire, Aura, Xcent aur similar',  rate:21 },
+  { key:'suv',    emoji:'🚐', name:'SUV',              desc:'7 Seats • Ertiga, Innova aur similar',       rate:22 },
+  { key:'tempo',  emoji:'🚌', name:'Tempo Traveller',  desc:'12 Seats • Group Travel',                   rate:30 },
+  { key:'luxury', emoji:'🏎️', name:'Luxury Car',       desc:'4 Seats • Innova Crysta, Fortuner',         rate:35 },
+];
 
-// Min date = today
-document.getElementById('s1-date').min = new Date().toISOString().split('T')[0];
+// ── STATE ──
+let tripType   = 'one';
+let pickupTxt  = '';
+let dropTxt    = '';
+let distanceKm = 0;
+let selVeh     = null;
+let searchTimers = {};
 
-function setTrip(type) {
-  tripType = type;
-  document.getElementById('btn-oneway').classList.toggle('active', type==='one');
-  document.getElementById('btn-round').classList.toggle('active', type==='round');
+document.getElementById('inp-date').min = new Date().toISOString().split('T')[0];
+
+// ── TRIP TYPE ──
+function setTrip(t) {
+  tripType = t;
+  document.getElementById('btn-ow').classList.toggle('active', t==='one');
+  document.getElementById('btn-rt').classList.toggle('active', t==='round');
 }
 
-// ── STEP NAVIGATION ──
-function updateSteps(active) {
+// ── LOCATION SEARCH (OpenStreetMap Nominatim — free, no key needed) ──
+function searchPlace(type, val) {
+  clearTimeout(searchTimers[type]);
+  if (val.length < 3) { hideSuggNow(type); return; }
+  searchTimers[type] = setTimeout(() => fetchPlaces(type, val), 400);
+}
+
+async function fetchPlaces(type, query) {
+  try {
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5&countrycodes=in&addressdetails=1`,
+      { headers: { 'Accept-Language': 'en' } }
+    );
+    const data = await res.json();
+    showSuggestions(type, data);
+  } catch(e) { console.error(e); }
+}
+
+function showSuggestions(type, results) {
+  const box = document.getElementById('sugg-' + type);
+  if (!results.length) { box.style.display='none'; return; }
+  box.innerHTML = results.map(r => {
+    const city  = r.address.city || r.address.town || r.address.village || r.address.county || '';
+    const state = r.address.state || '';
+    const name  = r.address.amenity || r.address.road || city || r.display_name.split(',')[0];
+    const detail = [city, state].filter(Boolean).join(', ');
+    return `<div class="sugg-item" onclick="selectPlace('${type}','${escQ(r.display_name.split(',').slice(0,3).join(','))}',${r.lat},${r.lon})">
+      <span>📍</span>
+      <div><div class="si-name">${escH(name)}</div><div class="si-detail">${escH(detail)}</div></div>
+    </div>`;
+  }).join('');
+  box.style.display = 'block';
+}
+
+let pickupCoords = null, dropCoords = null;
+
+function selectPlace(type, name, lat, lon) {
+  const inp = document.getElementById('inp-' + type);
+  inp.value = name;
+  hideSuggNow(type);
+  if (type === 'pickup') { pickupTxt = name; pickupCoords = {lat, lon}; }
+  else                   { dropTxt  = name; dropCoords  = {lat, lon}; }
+  if (pickupCoords && dropCoords) calcDistance();
+}
+
+function hideSugg(type, delay) { setTimeout(() => hideSuggNow(type), delay); }
+function hideSuggNow(type) {
+  const b = document.getElementById('sugg-'+type);
+  if (b) b.style.display = 'none';
+}
+
+// ── DISTANCE CALC (Haversine formula — straight line × 1.3 road factor) ──
+function calcDistance() {
+  if (!pickupCoords || !dropCoords) return;
+  const R = 6371;
+  const dLat = toRad(dropCoords.lat - pickupCoords.lat);
+  const dLon = toRad(dropCoords.lon - pickupCoords.lon);
+  const a = Math.sin(dLat/2)*Math.sin(dLat/2) +
+            Math.cos(toRad(pickupCoords.lat))*Math.cos(toRad(dropCoords.lat))*
+            Math.sin(dLon/2)*Math.sin(dLon/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  const straight = R * c;
+  distanceKm = Math.round(straight * 1.3); // road factor
+
+  const pickup = document.getElementById('inp-pickup').value;
+  const drop   = document.getElementById('inp-drop').value;
+  document.getElementById('dist-km').textContent    = distanceKm + ' km';
+  document.getElementById('dist-route-show').textContent = pickup.split(',')[0] + ' → ' + drop.split(',')[0] + ' (approx)';
+  document.getElementById('dist-box').style.display = 'block';
+  document.getElementById('manual-dist-box').style.display = 'none';
+}
+
+function toRad(d) { return d * Math.PI / 180; }
+
+function setManualDist(v) {
+  distanceKm = parseInt(v) || 0;
+  if (distanceKm > 0) {
+    document.getElementById('dist-km').textContent = distanceKm + ' km (manual)';
+    document.getElementById('dist-box').style.display = 'block';
+  }
+}
+
+// ── STEPS ──
+function updateStepUI(active) {
   [1,2,3].forEach(i => {
     const dot = document.getElementById('dot-'+i);
     const lbl = document.getElementById('lbl-'+i);
-    dot.className = 'step-dot' + (i < active ? ' done' : i === active ? ' active' : '');
-    dot.textContent = i < active ? '✓' : i;
-    lbl.className = 'step-label' + (i === active ? ' active' : '');
+    dot.className = 'sdot' + (i<active?' done':i===active?' active':'');
+    dot.textContent = i<active ? '✓' : i;
+    lbl.className = 'slbl' + (i===active?' active':'');
   });
   [1,2].forEach(i => {
-    document.getElementById('line-'+i).className = 'step-line' + (i < active ? ' done' : '');
+    document.getElementById('line-'+i).className = 'sline'+(i<active?' done':'');
   });
-  ['step-1','step-2','step-3','step-success'].forEach(id => {
+  ['step-1','step-2','step-3','step-succ'].forEach(id => {
     document.getElementById(id).style.display = 'none';
   });
 }
 
+function scrollToBook() {
+  window.scrollTo({top: document.querySelector('.book-wrap').offsetTop - 20, behavior:'smooth'});
+}
+
 function goStep1() {
-  updateSteps(1);
+  updateStepUI(1);
   document.getElementById('step-1').style.display = 'block';
-  window.scrollTo({top: document.querySelector('.booking-wrap').offsetTop - 20, behavior:'smooth'});
+  scrollToBook();
 }
 
 function goStep2() {
-  const pickup = document.getElementById('s1-pickup').value.trim();
-  const drop   = document.getElementById('s1-drop').value.trim();
-  const date   = document.getElementById('s1-date').value;
-  const time   = document.getElementById('s1-time').value;
+  const pickup = document.getElementById('inp-pickup').value.trim();
+  const drop   = document.getElementById('inp-drop').value.trim();
+  const date   = document.getElementById('inp-date').value;
+  const time   = document.getElementById('inp-time').value;
 
-  if (!pickup) return showErr('err-1','❗ Pickup location bharen');
-  if (!drop)   return showErr('err-1','❗ Drop location bharen');
+  if (!pickup) return showErr('err-1','❗ Pickup location chunein');
+  if (!drop)   return showErr('err-1','❗ Drop location chunein');
   if (!date)   return showErr('err-1','❗ Date chunein');
   if (!time)   return showErr('err-1','❗ Time chunein');
 
-  // Update step 2 display
-  document.getElementById('s2-route-show').textContent = pickup + ' → ' + drop + (tripType==='round' ? ' (Round Trip)' : ' (One Way)');
-  document.getElementById('s2-date-show').textContent  = fmtDate(date) + ' • ' + time;
+  pickupTxt = pickup; dropTxt = drop;
 
-  // Show estimated prices (base: ₹15/km estimate ~150km default, actual shown per vehicle)
-  const fares = { hatch:0, sedan:0, suv:0, tempo:0, lux:0 };
-  document.getElementById('vp-hatch').textContent = '₹12/km';
-  document.getElementById('vp-sedan').textContent = '₹15/km';
-  document.getElementById('vp-suv').textContent   = '₹20/km';
-  document.getElementById('vp-tempo').textContent = '₹30/km';
-  document.getElementById('vp-lux').textContent   = '₹35/km';
+  // Show manual dist if auto not calculated
+  if (!distanceKm) {
+    document.getElementById('manual-dist-box').style.display = 'block';
+    return showErr('err-1','❗ Distance calculate nahi hua — neeche manually KM set karein');
+  }
 
-  updateSteps(2);
+  // Build vehicle list with calculated fares
+  const isRound = tripType === 'round';
+  document.getElementById('veh-list').innerHTML = VEHICLES.map(v => {
+    let fare = v.rate * distanceKm;
+    if (isRound) fare = fare * 2;
+    return `<div class="vcard" onclick="selectVeh(this,'${v.key}','${v.name}',${v.rate},${fare})">
+      <div class="vcard-emoji">${v.emoji}</div>
+      <div class="vcard-info">
+        <div class="vcard-name">${v.name}</div>
+        <div class="vcard-desc">${v.desc}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px;">₹${v.rate}/km${isRound?' × 2 (Round Trip)':''}</div>
+      </div>
+      <div class="vcard-price-wrap">
+        <div class="vcard-price">₹${fare.toLocaleString('en-IN')}</div>
+        <div class="vcard-rate">Estimated</div>
+        <div class="vcard-selected-badge">SELECTED ✓</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('s2-route').textContent = pickup.split(',')[0] + ' → ' + drop.split(',')[0];
+  document.getElementById('s2-meta').textContent  = fmtDate(date) + ' • ' + time + ' • ' + document.getElementById('inp-pass').value;
+  document.getElementById('s2-dist-show').textContent = '📏 ' + distanceKm + ' km' + (isRound ? ' × 2 = ' + (distanceKm*2) + ' km (Round Trip)' : '');
+
+  selVeh = null;
+  updateStepUI(2);
   document.getElementById('step-2').style.display = 'block';
-  document.querySelectorAll('.veh-card').forEach(c => c.classList.remove('selected'));
-  selVehicle = { name:'', rate:0 };
-  window.scrollTo({top: document.querySelector('.booking-wrap').offsetTop - 20, behavior:'smooth'});
+  scrollToBook();
 }
 
-function selectVeh(el, key, name, seats, desc, rate) {
-  document.querySelectorAll('.veh-card').forEach(c => c.classList.remove('selected'));
+function selectVeh(el, key, name, rate, fare) {
+  document.querySelectorAll('.vcard').forEach(c => c.classList.remove('selected'));
   el.classList.add('selected');
-  selVehicle = { key, name, seats, desc, rate };
-  estFare = 0; // Will show per km
+  selVeh = { key, name, rate, fare };
 }
 
 function goStep3() {
-  if (!selVehicle.name) return showErr('err-2','❗ Ek vehicle chunein');
+  if (!selVeh) return showErr('err-2','❗ Ek vehicle chunein');
+  const pickup = document.getElementById('inp-pickup').value.trim();
+  const drop   = document.getElementById('inp-drop').value.trim();
+  const date   = document.getElementById('inp-date').value;
+  const time   = document.getElementById('inp-time').value;
+  const pass   = document.getElementById('inp-pass').value;
+  const isRound = tripType === 'round';
 
-  const pickup = document.getElementById('s1-pickup').value.trim();
-  const drop   = document.getElementById('s1-drop').value.trim();
-  const date   = document.getElementById('s1-date').value;
-  const time   = document.getElementById('s1-time').value;
-  const pass   = document.getElementById('s1-pass').value;
+  document.getElementById('r-route').textContent = pickup.split(',').slice(0,2).join(',') + ' → ' + drop.split(',').slice(0,2).join(',');
+  document.getElementById('r-sched').textContent = fmtDate(date) + ' • ' + time + (isRound?' (Round Trip)':' (One Way)');
+  document.getElementById('r-veh').textContent   = selVeh.name;
+  document.getElementById('r-dist').textContent  = distanceKm + ' km' + (isRound?' × 2 = '+(distanceKm*2)+' km':'') + ' (approx)';
+  document.getElementById('r-fare').textContent  = '₹' + selVeh.fare.toLocaleString('en-IN');
 
-  document.getElementById('r-route').textContent    = pickup + ' → ' + drop;
-  document.getElementById('r-schedule').textContent = fmtDate(date) + ' • ' + time + (tripType==='round' ? ' (Round Trip)' : ' (One Way)');
-  document.getElementById('r-vehicle').textContent  = selVehicle.name + ' (' + tripType === 'one' ? 'One Way' : 'Round Trip' + ')';
-  document.getElementById('r-vehicle').textContent  = selVehicle.name + (tripType==='round' ? ' (Round Trip)' : ' (One Way)');
-  document.getElementById('r-pass').textContent     = pass;
-  document.getElementById('r-fare').textContent     = '₹' + selVehicle.rate + '/km (Estimated)';
-
-  updateSteps(3);
+  updateStepUI(3);
   document.getElementById('step-3').style.display = 'block';
-  window.scrollTo({top: document.querySelector('.booking-wrap').offsetTop - 20, behavior:'smooth'});
+  scrollToBook();
 }
 
 async function confirmBooking() {
   const name  = document.getElementById('s3-name').value.trim();
   const phone = document.getElementById('s3-phone').value.trim();
-  if (!name)                       return showErr('err-3','❗ Apna naam bharen');
-  if (!phone || phone.length < 10) return showErr('err-3','❗ Valid 10-digit number dalen');
+  if (!name)                      return showErr('err-3','❗ Apna naam bharen');
+  if (!phone||phone.length < 10)  return showErr('err-3','❗ Valid 10-digit number dalen');
 
-  const btn = document.getElementById('confirm-btn');
+  const btn = document.getElementById('conf-btn');
   btn.textContent = '⏳ Submit ho raha hai...';
   btn.disabled = true;
 
-  const pickup = document.getElementById('s1-pickup').value.trim();
-  const drop   = document.getElementById('s1-drop').value.trim();
-  const date   = document.getElementById('s1-date').value;
-  const time   = document.getElementById('s1-time').value;
-  const pass   = document.getElementById('s1-pass').value;
-  const email  = document.getElementById('s3-email').value;
+  const pickup  = document.getElementById('inp-pickup').value.trim();
+  const drop    = document.getElementById('inp-drop').value.trim();
+  const date    = document.getElementById('inp-date').value;
+  const time    = document.getElementById('inp-time').value;
+  const pass    = document.getElementById('inp-pass').value;
+  const email   = document.getElementById('s3-email').value;
+  const isRound = tripType === 'round';
 
   try {
     const res = await fetch(API_URL + '/requests', {
-      method: 'POST',
-      headers: HEADERS,
+      method:'POST', headers:HEADERS,
       body: JSON.stringify({
         name, phone, email, pickup,
         drop_place:   drop,
         journey_date: date,
         journey_time: time,
-        vehicle:      selVehicle.name + (tripType==='round' ? ' (Round Trip)' : ' (One Way)'),
+        vehicle:      selVeh.name + (isRound?' (Round Trip)':' (One Way)'),
         passengers:   pass,
-        note:         'Rate: ₹' + selVehicle.rate + '/km',
+        note:         'Distance: '+distanceKm+'km | Rate: ₹'+selVeh.rate+'/km | Fare: ₹'+selVeh.fare,
         status:       'pending'
       })
     });
     if (!res.ok) { const e = await res.json(); throw new Error(e.message); }
 
-    // Build WhatsApp message
-    const msg = `🚗 *RAJRIDE – Nayi Booking*\n\n👤 *Naam:* ${name}\n📱 *Contact:* ${phone}\n📍 *Pickup:* ${pickup}\n🏁 *Drop:* ${drop}\n📅 *Date:* ${fmtDate(date)}\n🕐 *Time:* ${time}\n🚘 *Vehicle:* ${selVehicle.name} (${tripType==='round'?'Round Trip':'One Way'})\n💰 *Rate:* ₹${selVehicle.rate}/km\n👥 *Passengers:* ${pass}\n\n_RajRide Booking System_`;
+    const msg = `🚗 *SAFAR SAATHI RIDE – Nayi Booking*\n\n👤 *Naam:* ${name}\n📱 *Contact:* ${phone}\n\n📍 *Pickup:* ${pickup.split(',').slice(0,2).join(',')}\n🏁 *Drop:* ${drop.split(',').slice(0,2).join(',')}\n📅 *Date:* ${fmtDate(date)}\n🕐 *Time:* ${time}\n🔄 *Trip:* ${isRound?'Round Trip':'One Way'}\n\n🚗 *Vehicle:* ${selVeh.name}\n📏 *Distance:* ${distanceKm} km${isRound?' × 2':''}\n💰 *Estimated Fare:* ₹${selVeh.fare.toLocaleString('en-IN')}\n👥 *Passengers:* ${pass}\n\n_Safar Saathi Ride — Har Safar, Aapka Saathi_`;
 
     document.getElementById('wa-btn').href   = `https://wa.me/${OWNER_PHONE}?text=${encodeURIComponent(msg)}`;
-    document.getElementById('mail-btn').href = `mailto:${OWNER_EMAIL}?subject=${encodeURIComponent('New Booking – '+name)}&body=${encodeURIComponent(msg.replace(/\*/g,''))}`;
+    document.getElementById('mail-btn').href = `mailto:${OWNER_EMAIL}?subject=${encodeURIComponent('Safar Saathi – New Booking: '+name)}&body=${encodeURIComponent(msg.replace(/\*/g,''))}`;
 
-    document.getElementById('success-summary').innerHTML = `
-      <div style="font-size:13px; line-height:2; color:var(--muted); text-align:left;">
-        <b style="color:var(--text);">👤</b> ${name} &nbsp;|&nbsp; <b style="color:var(--text);">📱</b> ${phone}<br>
-        <b style="color:var(--text);">📍</b> ${pickup} → ${drop}<br>
-        <b style="color:var(--text);">📅</b> ${fmtDate(date)}, ${time}<br>
-        <b style="color:var(--text);">🚗</b> ${selVehicle.name} &nbsp;|&nbsp; <b style="color:var(--accent);">₹${selVehicle.rate}/km</b>
-      </div>`;
+    document.getElementById('succ-summary').innerHTML =
+      `<b style="color:var(--text)">👤</b> ${name} &nbsp;|&nbsp; <b style="color:var(--text)">📱</b> ${phone}<br>
+       <b style="color:var(--text)">📍</b> ${pickup.split(',')[0]} → ${drop.split(',')[0]}<br>
+       <b style="color:var(--text)">📅</b> ${fmtDate(date)}, ${time}<br>
+       <b style="color:var(--text)">🚗</b> ${selVeh.name} &nbsp;|&nbsp; <b style="color:var(--accent)">₹${selVeh.fare.toLocaleString('en-IN')}</b>`;
 
-    updateSteps(4);
-    document.getElementById('step-success').style.display = 'block';
-    window.scrollTo({top: document.querySelector('.booking-wrap').offsetTop - 20, behavior:'smooth'});
+    updateStepUI(4);
+    document.getElementById('step-succ').style.display = 'block';
+    scrollToBook();
 
-  } catch(err) {
-    showErr('err-3','❗ Submit nahi hua. Dobara try karein.');
-    btn.innerHTML = '🚀 Confirm Booking';
+  } catch(e) {
+    showErr('err-3','❗ Submit nahi hua. Internet check karein.');
+    btn.innerHTML = '🚀 CONFIRM BOOKING';
     btn.disabled = false;
   }
 }
 
 function resetAll() {
-  ['s1-pickup','s1-drop','s1-date','s1-time','s3-name','s3-phone','s3-email'].forEach(id => {
-    document.getElementById(id).value = '';
+  ['inp-pickup','inp-drop','inp-date','inp-time','s3-name','s3-phone','s3-email'].forEach(id=>{
+    document.getElementById(id).value='';
   });
-  document.getElementById('s1-pass').value = '1 Person';
-  tripType = 'one';
-  setTrip('one');
-  selVehicle = { name:'', rate:0 };
+  document.getElementById('inp-pass').value='1 Person';
+  pickupCoords=null; dropCoords=null; distanceKm=0; selVeh=null;
+  document.getElementById('dist-box').style.display='none';
+  document.getElementById('manual-dist-box').style.display='none';
+  tripType='one'; setTrip('one');
   goStep1();
 }
 
-function showErr(id, msg) {
-  const el = document.getElementById(id);
-  el.textContent = msg; el.style.display = 'block';
-  setTimeout(() => el.style.display = 'none', 4000);
+function showErr(id,msg) {
+  const el=document.getElementById(id);
+  el.textContent=msg; el.style.display='block';
+  setTimeout(()=>el.style.display='none',4000);
 }
 
 function fmtDate(d) {
-  if (!d) return '';
-  const [y,m,day] = d.split('-');
-  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const dt = new Date(y,m-1,day);
-  return `${days[dt.getDay()]}, ${day} ${months[+m-1]} ${y}`;
+  if(!d) return '';
+  const [y,m,day]=d.split('-');
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const dt=new Date(y,m-1,day);
+  return `${days[dt.getDay()]}, ${day} ${months[+m-1]}`;
 }
+
+function escH(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function escQ(s) { return String(s||'').replace(/'/g,"\\'"); }
 </script>
 </body>
 </html>
