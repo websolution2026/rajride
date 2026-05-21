@@ -31,6 +31,37 @@ body{background:var(--bg);color:var(--text);font-family:'Hind',sans-serif;min-he
   padding:0 16px 50px;
   position:relative;overflow:hidden;
 }
+.hero-car-img {
+  position:absolute;
+  bottom:0; right:-30px;
+  width:85%;
+  max-width:440px;
+  opacity:0.18;
+  pointer-events:none;
+  z-index:1;
+  filter: drop-shadow(0 0 40px rgba(245,197,24,0.3));
+}
+.hero-road {
+  position:absolute;
+  bottom:0; left:0; right:0;
+  height:80px;
+  background: linear-gradient(to top, rgba(245,197,24,0.04) 0%, transparent 100%);
+  pointer-events:none;
+  z-index:1;
+}
+.hero-road::before {
+  content:'';
+  position:absolute;
+  bottom:20px; left:0; right:0;
+  height:2px;
+  background: repeating-linear-gradient(
+    to right,
+    rgba(245,197,24,0.3) 0px,
+    rgba(245,197,24,0.3) 40px,
+    transparent 40px,
+    transparent 80px
+  );
+}
 .hero-bg-glow{
   position:absolute;top:-120px;right:-80px;
   width:500px;height:500px;
@@ -47,7 +78,7 @@ body{background:var(--bg);color:var(--text);font-family:'Hind',sans-serif;min-he
 /* NAV */
 .nav{
   display:flex;align-items:center;justify-content:space-between;
-  padding:16px 0;position:relative;z-index:10;
+  padding:16px 0;position:relative;z-index:20;
   border-bottom:1px solid rgba(245,197,24,0.1);
   margin-bottom:32px;
 }
@@ -87,7 +118,7 @@ body{background:var(--bg);color:var(--text);font-family:'Hind',sans-serif;min-he
 
 /* HERO CONTENT */
 .hero-content{
-  position:relative;z-index:5;
+  position:relative;z-index:10;
   max-width:480px;margin:0 auto;
   text-align:center;
 }
@@ -511,6 +542,70 @@ footer{
 <div class="hero">
   <div class="hero-bg-glow"></div>
   <div class="hero-bg-glow2"></div>
+  <div class="hero-road"></div>
+  <!-- Free cab SVG illustration -->
+  <svg class="hero-car-img" viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg" fill="none">
+    <!-- Car body shadow -->
+    <ellipse cx="400" cy="345" rx="280" ry="22" fill="rgba(0,0,0,0.5)"/>
+    <!-- Main car body -->
+    <rect x="100" y="220" width="600" height="120" rx="20" fill="#1a2038"/>
+    <!-- Car cabin / roof -->
+    <path d="M220 220 C240 160 280 130 340 118 L460 118 C520 118 560 148 580 220Z" fill="#141828"/>
+    <!-- Roof highlight -->
+    <path d="M240 220 C258 168 292 142 345 130 L455 130 C508 142 542 168 560 220Z" fill="#1e2640"/>
+    <!-- Windshield -->
+    <path d="M258 218 C272 172 300 148 348 138 L452 138 C500 148 528 172 542 218Z" fill="rgba(100,160,255,0.15)" stroke="rgba(245,197,24,0.3)" stroke-width="2"/>
+    <!-- Side windows -->
+    <rect x="175" y="158" width="75" height="62" rx="8" fill="rgba(100,160,255,0.12)" stroke="rgba(245,197,24,0.25)" stroke-width="1.5"/>
+    <rect x="550" y="158" width="75" height="62" rx="8" fill="rgba(100,160,255,0.12)" stroke="rgba(245,197,24,0.25)" stroke-width="1.5"/>
+    <!-- Door lines -->
+    <line x1="400" y1="225" x2="400" y2="330" stroke="rgba(245,197,24,0.15)" stroke-width="1.5"/>
+    <line x1="280" y1="225" x2="280" y2="330" stroke="rgba(245,197,24,0.15)" stroke-width="1.5"/>
+    <line x1="520" y1="225" x2="520" y2="330" stroke="rgba(245,197,24,0.15)" stroke-width="1.5"/>
+    <!-- Door handles -->
+    <rect x="235" y="273" width="28" height="6" rx="3" fill="rgba(245,197,24,0.4)"/>
+    <rect x="355" y="273" width="28" height="6" rx="3" fill="rgba(245,197,24,0.4)"/>
+    <rect x="475" y="273" width="28" height="6" rx="3" fill="rgba(245,197,24,0.4)"/>
+    <!-- Front lights -->
+    <ellipse cx="128" cy="258" rx="22" ry="14" fill="rgba(245,197,24,0.6)"/>
+    <ellipse cx="128" cy="258" rx="14" ry="9" fill="rgba(255,230,80,0.8)"/>
+    <!-- Rear lights -->
+    <rect x="668" y="248" width="22" height="20" rx="4" fill="rgba(239,68,68,0.7)"/>
+    <!-- Front bumper -->
+    <path d="M100 310 Q95 330 108 338 L180 338" stroke="rgba(245,197,24,0.3)" stroke-width="2" fill="none"/>
+    <!-- Rear bumper -->
+    <path d="M700 310 Q705 330 692 338 L620 338" stroke="rgba(245,197,24,0.3)" stroke-width="2" fill="none"/>
+    <!-- Front wheel -->
+    <circle cx="220" cy="338" r="42" fill="#0d1017" stroke="rgba(245,197,24,0.4)" stroke-width="3"/>
+    <circle cx="220" cy="338" r="28" fill="#141824" stroke="rgba(245,197,24,0.3)" stroke-width="2"/>
+    <circle cx="220" cy="338" r="12" fill="rgba(245,197,24,0.5)"/>
+    <!-- Rear wheel -->
+    <circle cx="580" cy="338" r="42" fill="#0d1017" stroke="rgba(245,197,24,0.4)" stroke-width="3"/>
+    <circle cx="580" cy="338" r="28" fill="#141824" stroke="rgba(245,197,24,0.3)" stroke-width="2"/>
+    <circle cx="580" cy="338" r="12" fill="rgba(245,197,24,0.5)"/>
+    <!-- Wheel spokes front -->
+    <line x1="220" y1="310" x2="220" y2="366" stroke="rgba(245,197,24,0.4)" stroke-width="2"/>
+    <line x1="192" y1="338" x2="248" y2="338" stroke="rgba(245,197,24,0.4)" stroke-width="2"/>
+    <line x1="200" y1="318" x2="240" y2="358" stroke="rgba(245,197,24,0.3)" stroke-width="1.5"/>
+    <line x1="240" y1="318" x2="200" y2="358" stroke="rgba(245,197,24,0.3)" stroke-width="1.5"/>
+    <!-- Wheel spokes rear -->
+    <line x1="580" y1="310" x2="580" y2="366" stroke="rgba(245,197,24,0.4)" stroke-width="2"/>
+    <line x1="552" y1="338" x2="608" y2="338" stroke="rgba(245,197,24,0.4)" stroke-width="2"/>
+    <line x1="560" y1="318" x2="600" y2="358" stroke="rgba(245,197,24,0.3)" stroke-width="1.5"/>
+    <line x1="600" y1="318" x2="560" y2="358" stroke="rgba(245,197,24,0.3)" stroke-width="1.5"/>
+    <!-- TAXI sign on roof -->
+    <rect x="340" y="100" width="120" height="32" rx="6" fill="rgba(245,197,24,0.9)"/>
+    <text x="400" y="121" text-anchor="middle" fill="#000" font-size="14" font-weight="800" font-family="Arial">TAXI</text>
+    <!-- Body stripe -->
+    <rect x="100" y="268" width="600" height="8" rx="2" fill="rgba(245,197,24,0.12)"/>
+    <!-- Logo on door -->
+    <circle cx="400" cy="285" r="18" fill="rgba(245,197,24,0.08)" stroke="rgba(245,197,24,0.2)" stroke-width="1"/>
+    <text x="400" y="290" text-anchor="middle" fill="rgba(245,197,24,0.5)" font-size="13" font-weight="800" font-family="Arial">S</text>
+    <!-- Speed lines -->
+    <line x1="30" y1="260" x2="95" y2="260" stroke="rgba(245,197,24,0.15)" stroke-width="2"/>
+    <line x1="15" y1="275" x2="95" y2="275" stroke="rgba(245,197,24,0.1)" stroke-width="1.5"/>
+    <line x1="40" y1="290" x2="95" y2="290" stroke="rgba(245,197,24,0.08)" stroke-width="1"/>
+  </svg>
 
   <div class="nav">
     <div class="nav-logo-wrap">
@@ -527,7 +622,7 @@ footer{
   </div>
 
   <div class="hero-content">
-    <div class="hero-tag">🚗🚗 Har Safar, Aapka Saathi 🚗🚗</div>
+    <div class="hero-tag">🚗🚗 Har Safar, Aapka Saathi 🚗🚗 </div>
     <div class="hero-brand">
       <div class="line1">SAFAR</div>
       <div class="line2">SAATHI</div>
