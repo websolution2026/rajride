@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RajRide – Admin Panel</title>
+<title>Safar Saathi Ride – Admin Panel</title>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Hind:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -11,7 +11,7 @@
     --surface: #131720;
     --card: #1a2030;
     --border: #232a3a;
-    --accent: #f59e0b;
+    --accent: #f5c518;
     --red: #ef4444;
     --green: #10b981;
     --blue: #3b82f6;
@@ -680,7 +680,13 @@
 <!-- ===== LOGIN OVERLAY ===== -->
 <div class="login-overlay" id="login-overlay">
   <div class="login-box">
-    <div class="login-logo">🚗 RAJRIDE</div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px;">
+      <div style="background:var(--accent);width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;color:#000;font-size:22px;font-family:'Rajdhani',sans-serif;">S</div>
+      <div>
+        <div class="login-logo" style="text-align:left;font-size:24px;">Safar <span style="color:var(--accent);">Saathi</span></div>
+        <div style="background:var(--accent);color:#000;font-size:9px;font-weight:700;padding:1px 8px;border-radius:3px;letter-spacing:2px;display:inline-block;margin-top:2px;">RIDE</div>
+      </div>
+    </div>
     <div class="login-sub">ADMIN PANEL — SECURE LOGIN</div>
 
     <div class="login-field">
@@ -703,12 +709,15 @@
 </div>
 
 <div class="topbar">
-  <div class="logo">
-    🚗 RAJRIDE
-    <span class="logo-badge">ADMIN</span>
-    <div class="live-dot" title="Live data"></div>
+  <div class="logo" style="display:flex;align-items:center;gap:10px;">
+    <div style="background:var(--accent);width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;color:#000;font-size:16px;">S</div>
+    <div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:#fff;line-height:1;">Safar <span style="color:var(--accent);">Saathi</span> <span style="font-size:12px;background:var(--accent);color:#000;padding:1px 6px;border-radius:3px;letter-spacing:1px;">RIDE</span></div>
+      <div style="font-size:9px;color:var(--muted2);letter-spacing:1.5px;margin-top:1px;">ADMIN PANEL</div>
+    </div>
+    <div class="live-dot" title="Live data" style="margin-left:4px;"></div>
   </div>
-  <div style="display:flex; align-items:center; gap:12px;">
+  <div style="display:flex; align-items:center; gap:10px;">
     <span style="font-size:12px; color:var(--muted2);">📱 7979720282</span>
     <button class="refresh-btn" onclick="refreshAll()">⟳ Refresh</button>
     <button class="logout-btn" onclick="doLogout()">🚪 Logout</button>
@@ -1960,7 +1969,7 @@ function doLogin() {
     startRealtimeRequests();
     loadBills();
     renderBillHistory();
-    showToast('✅ Welcome Prabhat ji!');
+    showToast('✅ Welcome! Safar Saathi Admin');
   } else {
     // Failed
     lockData.count = (lockData.count || 0) + 1;
@@ -2021,15 +2030,18 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 </script>
-<footer style="background:var(--surface); border-top:1px solid var(--border); padding:24px; text-align:center; margin-top:40px;">
-  <div style="font-family:'Rajdhani',sans-serif; font-size:20px; font-weight:700; color:var(--accent); margin-bottom:6px;">🚗 RAJRIDE</div>
-  <div style="font-size:12px; color:var(--muted2); margin-bottom:12px;">Safe, affordable & comfortable taxi service — 24/7 across Jharkhand & Bihar</div>
+<footer style="background:var(--surface); border-top:3px solid var(--accent); padding:28px 24px 20px; text-align:center; margin-top:40px;">
+  <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:6px;">
+    <div style="background:var(--accent);width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;color:#000;font-size:16px;font-family:'Rajdhani',sans-serif;">S</div>
+    <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:#fff;">Safar <span style="color:var(--accent);">Saathi</span> <span style="font-size:11px;background:var(--accent);color:#000;padding:1px 6px;border-radius:3px;letter-spacing:1px;">RIDE</span></div>
+  </div>
+  <div style="font-size:12px; color:var(--muted2); margin-bottom:10px; font-style:italic;">"Aapka Rasta, Hamari Zimmedari"</div>
   <div style="display:flex; justify-content:center; gap:20px; flex-wrap:wrap; font-size:12px; color:var(--muted2); margin-bottom:10px;">
     <span>📍 Hazaribagh, Jharkhand</span>
     <span>📞 +91 79797 20282</span>
     <span>✉️ prabhat.raj.rj@gmail.com</span>
   </div>
-  <div style="font-size:11px; color:var(--muted); margin-top:8px;">© 2026 RajRide. All Rights Reserved.</div>
+  <div style="font-size:11px; color:var(--muted); margin-top:8px;">© 2026 Safar Saathi Ride. All Rights Reserved.</div>
 </footer>
 </body>
 </html>
