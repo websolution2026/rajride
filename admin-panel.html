@@ -2039,7 +2039,9 @@ window.doLogout = doLogout;
 
 // ===== TRACKING =====
 function cpId(id) {
-  navigator.clipboard.writeText(id).then(()=>showToast('Booking ID copy ho gayi!')).catch(()=>prompt('ID:',id));
+  navigator.clipboard.writeText(id)
+    .then(function(){showToast('Booking ID copy ho gayi!');})
+    .catch(function(){prompt('ID copy karein:',id);});
 }
 window.cpId = cpId;
 
@@ -2048,29 +2050,38 @@ function openDriverLink(id) {
   var dUrl = base + 'driver.html?id=' + id;
   var tUrl = base + 'tracking.html?id=' + id;
   var r = requests.find(function(x){return x.id===id;}) || {};
-  var waText = '&#x1F697; Safar Saathi - Driver Link\n\n' +
-    'Aapki nayi ride:\n' +
-    'Customer: ' + (r.name||'') + '\n' +
-    'Phone: ' + (r.phone||'') + '\n\n' +
-    'Trip shuru karne ke liye link:\n' + dUrl;
-  document.getElementById('drv-modal-body').innerHTML =
-    '<div style="margin-bottom:14px;">'+
-    '<div style="font-size:11px;color:var(--muted2);letter-spacing:1px;margin-bottom:6px;">BOOKING ID</div>'+
-    '<div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px;font-family:monospace;font-size:11px;color:var(--accent);word-break:break-all;">'+id+'</div>'+
-    '<button onclick="navigator.clipboard.writeText(''+id+'').then(()=>showToast('ID copy!'))" style="margin-top:6px;background:none;border:1px solid var(--border);color:var(--muted2);border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;">&#x1F4CB; Copy ID</button>'+
-    '</div>'+
-    '<div style="display:flex;flex-direction:column;gap:8px;">'+
-    '<a href="https://wa.me/?text='+encodeURIComponent(waText)+'" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;background:#25d366;color:#fff;border-radius:10px;text-decoration:none;font-family:Rajdhani,sans-serif;font-weight:700;font-size:14px;">&#x1F4AC; Driver ko WhatsApp pe Bhejein</a>'+
-    '<button onclick="navigator.clipboard.writeText(''+dUrl+'').then(()=>showToast('Driver link copy!'))" style="padding:13px;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:10px;font-family:Rajdhani,sans-serif;font-weight:700;font-size:14px;cursor:pointer;">&#x1F4CB; Driver Link Copy</button>'+
-    '<a href="'+tUrl+'" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;background:rgba(59,130,246,0.1);color:#3b82f6;border:1px solid rgba(59,130,246,0.3);border-radius:10px;text-decoration:none;font-family:Rajdhani,sans-serif;font-weight:700;font-size:14px;">&#x1F4CD; Live Tracking Dekho</a>'+
-    '<button onclick="navigator.clipboard.writeText(''+tUrl+'').then(()=>showToast('Tracking link copy!'))" style="padding:13px;background:var(--surface);color:var(--muted2);border:1px solid var(--border);border-radius:10px;font-family:Rajdhani,sans-serif;font-weight:700;font-size:14px;cursor:pointer;">&#x1F4CB; Customer Tracking Link Copy</button>'+
-    '</div>';
+  var waText = 'Safar Saathi - Nayi Ride' +
+    '\n\nCustomer: ' + (r.name||'') +
+    '\nPhone: ' + (r.phone||'') +
+    '\n\nTrip link:\n' + dUrl;
+
+  var html = '';
+  html += '<div style="margin-bottom:14px;">';
+  html += '<div style="font-size:11px;color:var(--muted2);letter-spacing:1px;margin-bottom:6px;">BOOKING ID</div>';
+  html += '<div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px;font-family:monospace;font-size:11px;color:var(--accent);word-break:break-all;">' + id + '</div>';
+  html += '<button onclick="copyText('' + id + '')" style="margin-top:6px;background:none;border:1px solid var(--border);color:var(--muted2);border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;">Copy ID</button>';
+  html += '</div>';
+  html += '<div style="display:flex;flex-direction:column;gap:8px;">';
+  html += '<a href="https://wa.me/?text=' + encodeURIComponent(waText) + '" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;background:#25d366;color:#fff;border-radius:10px;text-decoration:none;font-family:Rajdhani,sans-serif;font-weight:700;font-size:14px;">WhatsApp pe Driver ko Bhejein</a>';
+  html += '<button onclick="copyText('' + dUrl + '')" style="padding:13px;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:10px;font-family:Rajdhani,sans-serif;font-weight:700;font-size:14px;cursor:pointer;">Driver Link Copy</button>';
+  html += '<a href="' + tUrl + '" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;background:rgba(59,130,246,0.1);color:#3b82f6;border:1px solid rgba(59,130,246,0.3);border-radius:10px;text-decoration:none;font-family:Rajdhani,sans-serif;font-weight:700;font-size:14px;">Live Tracking Dekho</a>';
+  html += '<button onclick="copyText('' + tUrl + '')" style="padding:13px;background:var(--surface);color:var(--muted2);border:1px solid var(--border);border-radius:10px;font-family:Rajdhani,sans-serif;font-weight:700;font-size:14px;cursor:pointer;">Customer Tracking Link Copy</button>';
+  html += '</div>';
+
+  document.getElementById('drv-modal-body').innerHTML = html;
   document.getElementById('drv-modal').classList.add('show');
 }
 window.openDriverLink = openDriverLink;
 
+function copyText(txt) {
+  navigator.clipboard.writeText(txt)
+    .then(function(){showToast('Copy ho gayi!');})
+    .catch(function(){prompt('Copy karein:',txt);});
+}
+window.copyText = copyText;
+
 function openTrackLink(id) {
-  const url = window.location.origin + window.location.pathname.replace('admin-panel.html','') + 'tracking.html?id=' + id;
+  var url = window.location.origin + window.location.pathname.replace('admin-panel.html','') + 'tracking.html?id=' + id;
   window.open(url, '_blank');
 }
 window.openTrackLink = openTrackLink;
