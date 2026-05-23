@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Safar Saathi – Track Your Ride</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Hind:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+:root{
+  --bg:#0d1117;--card:#161c28;--card2:#1c2438;
+  --border:#252d40;--accent:#f5c518;--text:#f0f2f8;
+  --muted:#7a8499;--green:#22c55e;--red:#ef4444;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Hind',sans-serif;min-height:100vh;}
+
+.header{
+  background:var(--card);border-bottom:3px solid var(--accent);
+  padding:14px 20px;display:flex;align-items:center;
+  justify-content:space-between;position:sticky;top:0;z-index:1000;
+}
+.header-logo{font-family:'Montserrat',sans-serif;font-size:18px;font-weight:800;color:#fff;}
+.header-logo span{color:var(--accent);}
+.live-badge{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.3);
+  color:var(--green);padding:5px 12px;border-radius:20px;
+  font-size:11px;font-weight:700;font-family:'Montserrat',sans-serif;
+}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(34,197,94,0.5);}50%{opacity:0.8;box-shadow:0 0 0 6px rgba(34,197,94,0);}}
+
+/* MAP — full screen feel */
+#track-map{
+  height: calc(100vh - 180px);
+  min-height:400px;
+  width:100%;
+}
+
+/* BOTTOM SHEET */
+.bottom-sheet{
+  background:var(--card);
+  border-top:3px solid var(--accent);
+  padding:16px 20px;
+}
+.bs-row{
+  display:flex;justify-content:space-between;
+  align-items:center;flex-wrap:wrap;gap:10px;
+}
+.bs-info{display:flex;flex-direction:column;gap:6px;}
+.bs-name{font-family:'Montserrat',sans-serif;font-size:16px;font-weight:700;}
+.bs-route{font-size:12px;color:var(--muted);}
+.bs-status{
+  padding:6px 14px;border-radius:20px;
+  font-size:12px;font-weight:700;
+  font-family:'Montserrat',sans-serif;letter-spacing:0.5px;
+}
+.bs-status.pending{background:rgba(245,197,24,0.12);color:var(--accent);border:1px solid rgba(245,197,24,0.3);}
+.bs-status.in_progress{background:rgba(34,197,94,0.12);color:var(--green);border:1px solid rgba(34,197,94,0.3);}
+.bs-status.completed{background:rgba(59,130,246,0.12);color:#3b82f6;border:1px solid rgba(59,130,246,0.3);}
+
+.update-info{
+  text-align:center;font-size:11px;color:var(--muted);
+  padding:6px;background:rgba(255,255,255,0.02);
+  border-radius:8px;margin-top:10px;
+}
+
+/* LOADING / ERROR */
+.loading-screen{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;min-height:70vh;text-align:center;
+  padding:30px;
+}
+.loading-icon{font-size:48px;margin-bottom:16px;}
+.loading-title{font-family:'Montserrat',sans-serif;font-size:20px;font-weight:700;margin-bottom:8px;}
+.loading-sub{font-size:13px;color:var(--muted);line-height:1.6;}
+.spin{animation:spin 1.5s linear infinite;display:inline-block;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* CALL BUTTON */
+.btn-call{
+  display:flex;align-items:center;gap:8px;
+  background:var(--accent);color:#000;
+  border:none;border-radius:10px;padding:10px 16px;
+  font-family:'Montserrat',sans-serif;font-size:13px;
+  font-weight:700;cursor:pointer;text-decoration:none;
+}
+
+/* INFO CARDS */
+.info-strip{
+  display:flex;gap:8px;padding:0 20px 14px;
+  overflow-x:auto;margin-top:12px;
+}
+.info-chip{
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:10px;padding:8px 12px;white-space:nowrap;
+  font-size:12px;display:flex;align-items:center;gap:6px;
+  flex-shrink:0;
+}
+.info-chip span{color:var(--muted);}
+.info-chip b{color:var(--text);}
+</style>
+
+<style>
+/* Text select disable */
+* {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+/* Allow inputs to still work */
+input, textarea, select {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  user-select: text !important;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">Safar <span>Saathi</span></div>
+  <div class="live-badge" id="live-badge">
+    <div class="live-dot"></div>
+    LIVE TRACKING
+  </div>
+</div>
+
+<!-- LOADING -->
+<div class="loading-screen" id="loading-screen">
+  <div class="loading-icon"><span class="spin">🔄</span></div>
+  <div class="loading-title">Ride Track Ho Rahi Hai...</div>
+  <div class="loading-sub">Driver ki location le rahe hain.<br>Thoda wait karein.</div>
+</div>
+
+<!-- MAP -->
+<div id="map-section" style="display:none;">
+  <div id="track-map"></div>
+
+  <!-- INFO STRIP -->
+  <div class="info-strip" id="info-strip"></div>
+
+  <!-- BOTTOM SHEET -->
+  <div class="bottom-sheet">
+    <div class="bs-row">
+      <div class="bs-info">
+        <div class="bs-name" id="bs-cust">—</div>
+        <div class="bs-route" id="bs-route">—</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+        <div class="bs-status pending" id="bs-status">PENDING</div>
+        <a href="tel:7979720282" class="btn-call">📞 Call Driver</a>
+      </div>
+    </div>
+    <div class="update-info" id="update-info">📡 Location update ho rahi hai...</div>
+  </div>
+</div>
+
+<!-- ERROR -->
+<div class="loading-screen" id="error-screen" style="display:none;">
+  <div class="loading-icon">❌</div>
+  <div class="loading-title">Ride Nahi Mili</div>
+  <div class="loading-sub" id="error-msg">Tracking link sahi nahi hai ya ride expire ho gayi.</div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://ksgpotzxzvebrzdzjexb.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_AWBGqLtEHvWS5ITmlnzaHA_bfbLHHO-';
+const API_URL = SUPABASE_URL + '/rest/v1';
+const HEADERS = {
+  'apikey': SUPABASE_KEY,
+  'Authorization': 'Bearer ' + SUPABASE_KEY
+};
+
+let trackMap = null;
+let driverMarker = null;
+let pickupMarker = null;
+let dropMarker = null;
+let refreshInterval = null;
+let bookingId = null;
+let rideData = null;
+
+// Get booking ID from URL
+const params = new URLSearchParams(window.location.search);
+bookingId = params.get('id');
+
+if (!bookingId) {
+  showError('Tracking link me Booking ID nahi hai.');
+} else {
+  initTracking();
+}
+
+async function initTracking() {
+  try {
+    // Load ride details
+    const res = await fetch(API_URL + '/requests?id=eq.' + bookingId, { headers: HEADERS });
+    const data = await res.json();
+    if (!data.length) { showError('Is ID ki koi ride nahi mili.'); return; }
+    rideData = data[0];
+
+    // Init map
+    initMap();
+    showRideInfo();
+
+    // Load driver location
+    await refreshDriverLocation();
+
+    // Refresh every 8 seconds
+    refreshInterval = setInterval(refreshDriverLocation, 8000);
+
+    document.getElementById('loading-screen').style.display = 'none';
+    document.getElementById('map-section').style.display    = 'block';
+
+  } catch(e) {
+    showError('Connection error. Internet check karein.');
+  }
+}
+
+function initMap() {
+  // Default center: Hazaribagh
+  trackMap = L.map('track-map', { zoomControl:true }).setView([23.9970, 85.3591], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution:'© <a href="https://openstreetmap.org">OpenStreetMap</a>'
+  }).addTo(trackMap);
+}
+
+function showRideInfo() {
+  document.getElementById('bs-cust').textContent  = '👤 ' + (rideData.name || '—');
+  document.getElementById('bs-route').textContent =
+    '📍 ' + (rideData.pickup||'—').split(',')[0] + ' → 🏁 ' + (rideData.drop_place||'—').split(',')[0];
+
+  const statusEl = document.getElementById('bs-status');
+  statusEl.textContent = (rideData.status || 'pending').toUpperCase().replace('_',' ');
+  statusEl.className   = 'bs-status ' + (rideData.status || 'pending');
+
+  // Info chips
+  document.getElementById('info-strip').innerHTML = `
+    <div class="info-chip">🚗 <span>Vehicle:</span> <b>${rideData.vehicle||'—'}</b></div>
+    <div class="info-chip">📅 <span>Date:</span> <b>${rideData.journey_date||'—'}</b></div>
+    <div class="info-chip">🕐 <span>Time:</span> <b>${rideData.journey_time||'—'}</b></div>
+    <div class="info-chip">👥 <span>Passengers:</span> <b>${rideData.passengers||'—'}</b></div>
+  `;
+}
+
+async function refreshDriverLocation() {
+  try {
+    const res = await fetch(
+      API_URL + '/driver_locations?booking_id=eq.' + bookingId,
+      { headers: HEADERS }
+    );
+    const data = await res.json();
+
+    if (!data.length || !data[0].lat) {
+      document.getElementById('update-info').textContent =
+        '⏳ Driver ne abhi trip start nahi ki. Wait karein...';
+      return;
+    }
+
+    const loc = data[0];
+    const lat = parseFloat(loc.lat);
+    const lon = parseFloat(loc.lon);
+
+    // Driver icon
+    const driverIcon = L.divIcon({
+      html: `<div style="background:#f5c518;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;border:3px solid #fff;box-shadow:0 4px 16px rgba(245,197,24,0.5);animation:pulse 2s infinite;">🚗</div>`,
+      iconSize:[44,44], iconAnchor:[22,22], className:''
+    });
+
+    if (!driverMarker) {
+      driverMarker = L.marker([lat, lon], { icon: driverIcon })
+        .addTo(trackMap)
+        .bindPopup('<b>🚗 Aapka Driver</b><br>Yahan hai abhi')
+        .openPopup();
+      trackMap.setView([lat, lon], 15);
+    } else {
+      driverMarker.setLatLng([lat, lon]);
+      trackMap.setView([lat, lon], 15);
+    }
+
+    // Update time
+    const updTime = loc.updated_at ? new Date(loc.updated_at).toLocaleTimeString('hi-IN') : '—';
+    document.getElementById('update-info').textContent =
+      '📡 Last update: ' + updTime + ' • Har 8 second me refresh';
+
+    // Update status
+    if (loc.status) {
+      const statusEl = document.getElementById('bs-status');
+      statusEl.textContent = loc.status.toUpperCase().replace('_',' ');
+      statusEl.className   = 'bs-status ' + loc.status;
+    }
+
+    // Live badge
+    document.getElementById('live-badge').style.background = 'rgba(34,197,94,0.15)';
+
+  } catch(e) {
+    document.getElementById('update-info').textContent = '⚠️ Location update failed. Retry ho raha hai...';
+  }
+}
+
+function showError(msg) {
+  document.getElementById('loading-screen').style.display = 'none';
+  document.getElementById('error-screen').style.display   = 'flex';
+  document.getElementById('error-msg').textContent        = msg;
+}
+</script>
+
+<script>
+// ============================================================
+//  🔒 SAFAR SAATHI — CODE PROTECTION
+// ============================================================
+
+// 1. Right click disable
+document.addEventListener('contextmenu', function(e) {
+  e.preventDefault();
+  return false;
+});
+
+// 2. Keyboard shortcuts block
+document.addEventListener('keydown', function(e) {
+  // Ctrl+U (View Source)
+  if (e.ctrlKey && e.key === 'u') { e.preventDefault(); return false; }
+  // Ctrl+S (Save)
+  if (e.ctrlKey && e.key === 's') { e.preventDefault(); return false; }
+  // Ctrl+Shift+I (DevTools)
+  if (e.ctrlKey && e.shiftKey && e.key === 'I') { e.preventDefault(); return false; }
+  // Ctrl+Shift+J (Console)
+  if (e.ctrlKey && e.shiftKey && e.key === 'J') { e.preventDefault(); return false; }
+  // Ctrl+Shift+C (Inspect)
+  if (e.ctrlKey && e.shiftKey && e.key === 'C') { e.preventDefault(); return false; }
+  // F12
+  if (e.key === 'F12') { e.preventDefault(); return false; }
+  // Ctrl+A (Select All)
+  if (e.ctrlKey && e.key === 'a') { e.preventDefault(); return false; }
+  // Ctrl+C (Copy)
+  if (e.ctrlKey && e.key === 'c') {
+    const sel = window.getSelection().toString();
+    if (sel.length > 0) { e.preventDefault(); return false; }
+  }
+});
+
+// 3. Text select disable
+document.addEventListener('selectstart', function(e) {
+  e.preventDefault();
+  return false;
+});
+
+// 4. Drag disable
+document.addEventListener('dragstart', function(e) {
+  e.preventDefault();
+  return false;
+});
+
+// 5. DevTools detection — size change method
+(function() {
+  var threshold = 160;
+  var check = function() {
+    if (
+      window.outerWidth - window.innerWidth > threshold ||
+      window.outerHeight - window.innerHeight > threshold
+    ) {
+      document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0d1117;flex-direction:column;gap:16px;"><div style=\'font-size:48px;\'>🔒</div><div style=\'font-family:Montserrat,sans-serif;font-size:20px;font-weight:700;color:#f5c518;\'>Access Denied</div><div style=\'font-size:13px;color:#7a8499;\'>Safar Saathi Ride © 2026</div></div>';
+    }
+  };
+  setInterval(check, 1000);
+})();
+
+// 6. Print disable
+window.addEventListener('beforeprint', function(e) {
+  document.body.style.display = 'none';
+});
+window.addEventListener('afterprint', function(e) {
+  document.body.style.display = '';
+});
+
+// 7. Copy event override
+document.addEventListener('copy', function(e) {
+  e.clipboardData.setData('text/plain', '© Safar Saathi Ride 2026 — Unauthorized copy is prohibited.');
+  e.preventDefault();
+});
+
+// ============================================================
+</script>
+</body>
+</html>
