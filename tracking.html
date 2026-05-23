@@ -34,9 +34,14 @@ body{background:var(--bg);color:var(--text);font-family:'Hind',sans-serif;min-he
 
 /* MAP — full screen feel */
 #track-map{
-  height: calc(100vh - 180px);
-  min-height:400px;
-  width:100%;
+  height: calc(100vh - 200px);
+  min-height:450px;
+  width:100% !important;
+  display:block !important;
+}
+.leaflet-container {
+  width: 100% !important;
+  height: 100% !important;
 }
 
 /* BOTTOM SHEET */
@@ -225,6 +230,8 @@ function initMap() {
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution:'© <a href="https://openstreetmap.org">OpenStreetMap</a>'
   }).addTo(trackMap);
+  // Fix partial render issue
+  setTimeout(() => { trackMap.invalidateSize(); }, 300);
 }
 
 function showRideInfo() {
