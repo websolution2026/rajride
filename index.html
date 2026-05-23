@@ -1226,7 +1226,25 @@ async function confirmBooking() {
     });
     if (!res.ok) { const e = await res.json(); throw new Error(e.message); }
 
-    const msg = `🚗 *SAFAR SAATHI RIDE – Nayi Booking*\n\n👤 *Naam:* ${name}\n📱 *Contact:* ${phone}\n\n📍 *Pickup:* ${pickup.split(',').slice(0,2).join(',')}\n🏁 *Drop:* ${drop.split(',').slice(0,2).join(',')}\n📅 *Date:* ${fmtDate(date)}\n🕐 *Time:* ${time}\n🔄 *Trip:* ${isRound?'Round Trip':'One Way'}\n\n🚗 *Vehicle:* ${selVeh.name}\n📏 *Distance:* ${distanceKm} km${isRound?' × 2':''}\n💰 *Estimated Fare:* ₹${selVeh.fare.toLocaleString('en-IN')}\n👥 *Passengers:* ${pass}\n\n_Safar Saathi Ride — Har Safar, Aapka Saathi_`;
+    const msg = [
+      '🚗 *SAFAR SAATHI RIDE - Nayi Booking*',
+      '',
+      '👤 *Naam:* ' + name,
+      '📱 *Contact:* ' + phone,
+      '',
+      '📍 *Pickup:* ' + pickup.split(',').slice(0,2).join(','),
+      '🏁 *Drop:* ' + drop.split(',').slice(0,2).join(','),
+      '📅 *Date:* ' + fmtDate(date),
+      '🕐 *Time:* ' + time,
+      '🔄 *Trip:* ' + (isRound ? 'Round Trip' : 'One Way'),
+      '',
+      '🚗 *Vehicle:* ' + selVeh.name,
+      '📏 *Distance:* ' + distanceKm + ' km' + (isRound ? ' x 2' : ''),
+      '💰 *Estimated Fare:* Rs.' + selVeh.fare.toLocaleString('en-IN'),
+      '👥 *Passengers:* ' + pass,
+      '',
+      '_Safar Saathi Ride - Har Safar, Aapka Saathi_'
+    ].join('\n');
 
     document.getElementById('wa-btn').href   = `https://wa.me/${OWNER_PHONE}?text=${encodeURIComponent(msg)}`;
     document.getElementById('mail-btn').href = `mailto:${OWNER_EMAIL}?subject=${encodeURIComponent('Safar Saathi – New Booking: '+name)}&body=${encodeURIComponent(msg.replace(/\*/g,''))}`;
