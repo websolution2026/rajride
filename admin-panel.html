@@ -793,6 +793,7 @@ input, textarea, select {
           <thead>
             <tr>
               <th>#</th>
+              <th>Booking ID</th>
               <th>Customer</th>
               <th>Route</th>
               <th>Date / Time</th>
@@ -1170,6 +1171,13 @@ input, textarea, select {
 </div>
 
 <div class="toast" id="toast"></div>
+<div class="modal-bg" id="drv-modal">
+  <div class="modal">
+    <div class="modal-h">&#x1F697; Driver &amp; Tracking <button class="modal-close" onclick="document.getElementById('drv-modal').classList.remove('show')">&#x2715;</button></div>
+    <div id="drv-modal-body"></div>
+    <div style="margin-top:12px;"><button class="filter-pill" onclick="document.getElementById('drv-modal').classList.remove('show')">Band Karein</button></div>
+  </div>
+</div>
 
 <script>
 // ===============================================
@@ -1293,6 +1301,7 @@ function renderReqs() {
   tbody.innerHTML = filtered.map((r, i) => `
     <tr>
       <td style="color:var(--muted2);font-size:12px">${i+1}</td>
+      <td><div onclick="cpId('${r.id}')" style="font-family:'Rajdhani',sans-serif;font-size:11px;color:var(--accent);font-weight:700;cursor:pointer;">${r.id ? r.id.substring(0,8)+'...' : '-'}</div><div style="font-size:10px;color:var(--muted2);">tap copy</div></td>
       <td>
         <div style="font-weight:600">${esc(r.name)}</div>
         <div style="font-size:12px;color:var(--muted2)">📱 ${esc(r.phone)}</div>
@@ -2028,16 +2037,34 @@ function doLogout() {
 window.doLogout = doLogout;
 
 // ===== TRACKING =====
+function cpId(id) {
+  navigator.clipboard.writeText(id).then(()=>showToast('Booking ID copy ho gayi!')).catch(()=>prompt('ID:',id));
+}
+window.cpId = cpId;
+
 function openDriverLink(id) {
-  const url = window.location.origin + window.location.pathname.replace('admin-panel.html','') + 'driver.html?id=' + id;
-  const msg = '🚗 *Safar Saathi – Driver Link*\n\nNeeche diye link pe click karke trip start karein:\n' + url;
-  const wa = 'https://wa.me/?text=' + encodeURIComponent(msg);
-  // Show modal with options
-  if (confirm('Driver ko WhatsApp pe link bhejna chahte hain?\n\n' + url)) {
-    window.open(wa, '_blank');
-  } else {
-    navigator.clipboard.writeText(url).then(() => showToast('Driver link copy ho gayi!'));
-  }
+  var base = window.location.origin + window.location.pathname.replace('admin-panel.html','');
+  var dUrl = base + 'driver.html?id=' + id;
+  var tUrl = base + 'tracking.html?id=' + id;
+  var r = requests.find(function(x){return x.id===id;}) || {};
+  var waText = '&#x1F697; Safar Saathi - Driver Link\n\n' +
+    'Aapki nayi ride:\n' +
+    'Customer: ' + (r.name||'') + '\n' +
+    'Phone: ' + (r.phone||'') + '\n\n' +
+    'Trip shuru karne ke liye link:\n' + dUrl;
+  document.getElementById('drv-modal-body').innerHTML =
+    '<div style="margin-bottom:14px;">'+
+    '<div style="font-size:11px;color:var(--muted2);letter-spacing:1px;margin-bottom:6px;">BOOKING ID</div>'+
+    '<div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px;font-family:monospace;font-size:11px;color:var(--accent);word-break:break-all;">'+id+'</div>'+
+    '<button onclick="navigator.clipboard.writeText(''+id+'').then(()=>showToast('ID copy!'))" style="margin-top:6px;background:none;border:1px solid var(--border);color:var(--muted2);border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;">&#x1F4CB; Copy ID</button>'+
+    '</div>'+
+    '<div style="display:flex;flex-direction:column;gap:8px;">'+
+    '<a href="https://wa.me/?text='+encodeURIComponent(waText)+'" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;background:#25d366;color:#fff;border-radius:10px;text-decoration:none;font-family:Rajdhani,sans-serif;font-weight:700;font-size:14px;">&#x1F4AC; Driver ko WhatsApp pe Bhejein</a>'+
+    '<button onclick="navigator.clipboard.writeText(''+dUrl+'').then(()=>showToast('Driver link copy!'))" style="padding:13px;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:10px;font-family:Rajdhani,sans-serif;font-weight:700;font-size:14px;cursor:pointer;">&#x1F4CB; Driver Link Copy</button>'+
+    '<a href="'+tUrl+'" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;background:rgba(59,130,246,0.1);color:#3b82f6;border:1px solid rgba(59,130,246,0.3);border-radius:10px;text-decoration:none;font-family:Rajdhani,sans-serif;font-weight:700;font-size:14px;">&#x1F4CD; Live Tracking Dekho</a>'+
+    '<button onclick="navigator.clipboard.writeText(''+tUrl+'').then(()=>showToast('Tracking link copy!'))" style="padding:13px;background:var(--surface);color:var(--muted2);border:1px solid var(--border);border-radius:10px;font-family:Rajdhani,sans-serif;font-weight:700;font-size:14px;cursor:pointer;">&#x1F4CB; Customer Tracking Link Copy</button>'+
+    '</div>';
+  document.getElementById('drv-modal').classList.add('show');
 }
 window.openDriverLink = openDriverLink;
 
