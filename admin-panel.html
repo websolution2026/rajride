@@ -673,6 +673,22 @@
     display: none;
   }
 </style>
+
+<style>
+/* Text select disable */
+* {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+/* Allow inputs to still work */
+input, textarea, select {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  user-select: text !important;
+}
+</style>
 </head>
 <body>
 
@@ -1295,6 +1311,8 @@ function renderReqs() {
         <div class="actions">
           <button class="icon-btn" onclick="viewReq('${r.id}')" title="View">👁️</button>
           <button class="icon-btn green" onclick="openConfirmModal('${r.id}')" title="Confirmation Bhejein" style="background:rgba(16,185,129,0.1);">✅</button>
+          <button class="icon-btn" onclick="openDriverLink('${r.id}')" title="Driver App Kholein" style="background:rgba(245,197,24,0.1);border-color:rgba(245,197,24,0.3);color:#f5c518;">🚗</button>
+          <button class="icon-btn" onclick="openTrackLink('${r.id}')" title="Live Track Karein" style="background:rgba(59,130,246,0.1);border-color:rgba(59,130,246,0.3);color:#3b82f6;">📍</button>
           <button class="icon-btn blue"  onclick="setStatus('${r.id}','completed')" title="Complete">🏁</button>
           <button class="icon-btn"       onclick="prefillBilling('${r.id}')" title="Bill Banao">🧾</button>
           <button class="icon-btn red"   onclick="delReq('${r.id}')" title="Delete">🗑️</button>
@@ -2009,6 +2027,26 @@ function doLogout() {
 }
 window.doLogout = doLogout;
 
+// ===== TRACKING =====
+function openDriverLink(id) {
+  const url = window.location.origin + window.location.pathname.replace('admin-panel.html','') + 'driver.html?id=' + id;
+  const msg = '🚗 *Safar Saathi – Driver Link*\n\nNeeche diye link pe click karke trip start karein:\n' + url;
+  const wa = 'https://wa.me/?text=' + encodeURIComponent(msg);
+  // Show modal with options
+  if (confirm('Driver ko WhatsApp pe link bhejna chahte hain?\n\n' + url)) {
+    window.open(wa, '_blank');
+  } else {
+    navigator.clipboard.writeText(url).then(() => showToast('Driver link copy ho gayi!'));
+  }
+}
+window.openDriverLink = openDriverLink;
+
+function openTrackLink(id) {
+  const url = window.location.origin + window.location.pathname.replace('admin-panel.html','') + 'tracking.html?id=' + id;
+  window.open(url, '_blank');
+}
+window.openTrackLink = openTrackLink;
+
 // ===== BOOT =====
 document.addEventListener('DOMContentLoaded', () => {
   loadBills();
@@ -2043,5 +2081,82 @@ document.addEventListener('DOMContentLoaded', () => {
   </div>
   <div style="font-size:11px; color:var(--muted); margin-top:8px;">© 2026 Safar Saathi Ride. All Rights Reserved.</div>
 </footer>
+
+<script>
+// ============================================================
+//  🔒 SAFAR SAATHI — CODE PROTECTION
+// ============================================================
+
+// 1. Right click disable
+document.addEventListener('contextmenu', function(e) {
+  e.preventDefault();
+  return false;
+});
+
+// 2. Keyboard shortcuts block
+document.addEventListener('keydown', function(e) {
+  // Ctrl+U (View Source)
+  if (e.ctrlKey && e.key === 'u') { e.preventDefault(); return false; }
+  // Ctrl+S (Save)
+  if (e.ctrlKey && e.key === 's') { e.preventDefault(); return false; }
+  // Ctrl+Shift+I (DevTools)
+  if (e.ctrlKey && e.shiftKey && e.key === 'I') { e.preventDefault(); return false; }
+  // Ctrl+Shift+J (Console)
+  if (e.ctrlKey && e.shiftKey && e.key === 'J') { e.preventDefault(); return false; }
+  // Ctrl+Shift+C (Inspect)
+  if (e.ctrlKey && e.shiftKey && e.key === 'C') { e.preventDefault(); return false; }
+  // F12
+  if (e.key === 'F12') { e.preventDefault(); return false; }
+  // Ctrl+A (Select All)
+  if (e.ctrlKey && e.key === 'a') { e.preventDefault(); return false; }
+  // Ctrl+C (Copy)
+  if (e.ctrlKey && e.key === 'c') {
+    const sel = window.getSelection().toString();
+    if (sel.length > 0) { e.preventDefault(); return false; }
+  }
+});
+
+// 3. Text select disable
+document.addEventListener('selectstart', function(e) {
+  e.preventDefault();
+  return false;
+});
+
+// 4. Drag disable
+document.addEventListener('dragstart', function(e) {
+  e.preventDefault();
+  return false;
+});
+
+// 5. DevTools detection — size change method
+(function() {
+  var threshold = 160;
+  var check = function() {
+    if (
+      window.outerWidth - window.innerWidth > threshold ||
+      window.outerHeight - window.innerHeight > threshold
+    ) {
+      document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0d1117;flex-direction:column;gap:16px;"><div style=\'font-size:48px;\'>🔒</div><div style=\'font-family:Montserrat,sans-serif;font-size:20px;font-weight:700;color:#f5c518;\'>Access Denied</div><div style=\'font-size:13px;color:#7a8499;\'>Safar Saathi Ride © 2026</div></div>';
+    }
+  };
+  setInterval(check, 1000);
+})();
+
+// 6. Print disable
+window.addEventListener('beforeprint', function(e) {
+  document.body.style.display = 'none';
+});
+window.addEventListener('afterprint', function(e) {
+  document.body.style.display = '';
+});
+
+// 7. Copy event override
+document.addEventListener('copy', function(e) {
+  e.clipboardData.setData('text/plain', '© Safar Saathi Ride 2026 — Unauthorized copy is prohibited.');
+  e.preventDefault();
+});
+
+// ============================================================
+</script>
 </body>
 </html>
