@@ -183,10 +183,24 @@ input, textarea, select {
   <!-- NO RIDE STATE -->
   <div id="no-ride-section" class="no-ride fade-in">
     <div class="no-ride-icon">🚗</div>
-    <div class="no-ride-title">Booking ID Enter Karein</div>
-    <div class="no-ride-sub">Admin ne aapko jo Booking ID di hai, woh neeche enter karein aur trip start karein.</div>
-    <input type="text" class="manual-id-input" id="booking-id-inp" placeholder="Booking ID (jaise: abc123...)">
-    <button class="btn-load" onclick="loadRide()">🔍 Ride Load Karein</button>
+    <div class="no-ride-title">Driver App</div>
+    <div class="no-ride-sub">Admin aapko WhatsApp pe ek link bhejenge — us link ko click karte hi ride automatically load ho jaayegi.</div>
+
+    <div style="background:rgba(245,197,24,0.08);border:1px solid rgba(245,197,24,0.25);border-radius:12px;padding:14px;margin-bottom:16px;text-align:left;">
+      <div style="font-size:11px;font-weight:700;color:var(--accent);letter-spacing:1px;margin-bottom:10px;">&#x2139;&#xFE0F; KAISE KAAM KARTA HAI:</div>
+      <div style="font-size:13px;color:var(--muted);line-height:2;">
+        <div>1&#xFE0F;&#x20E3; Admin aapko WhatsApp pe link bhejenge</div>
+        <div>2&#xFE0F;&#x20E3; Us link pe click karein — ride load hogi</div>
+        <div>3&#xFE0F;&#x20E3; <b style="color:var(--text);">Start Trip</b> button dabao</div>
+        <div>4&#xFE0F;&#x20E3; Location share hoti rahegi automatically</div>
+      </div>
+    </div>
+
+    <div style="border-top:1px solid var(--border);padding-top:14px;margin-top:4px;">
+      <div style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;margin-bottom:8px;text-align:left;">YA MANUALLY BOOKING ID ENTER KAREIN:</div>
+      <input type="text" class="manual-id-input" id="booking-id-inp" placeholder="Booking ID paste karein yahan...">
+      <button class="btn-load" onclick="loadRide()">&#x1F50D; Ride Load Karein</button>
+    </div>
   </div>
 
   <!-- RIDE INFO -->
