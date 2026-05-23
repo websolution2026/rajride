@@ -535,6 +535,22 @@ footer{
   .kp-grid{grid-template-columns:1fr 1fr;}
 }
 </style>
+
+<style>
+/* Text select disable */
+* {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+/* Allow inputs to still work */
+input, textarea, select {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  user-select: text !important;
+}
+</style>
 </head>
 <body>
 
@@ -622,7 +638,7 @@ footer{
   </div>
 
   <div class="hero-content">
-    <div class="hero-tag">🚗🚗 Har Safar, Aapka Saathi 🚗🚗 </div>
+    <div class="hero-tag">⭐⭐⭐ Har Safar, Aapka Saathi</div>
     <div class="hero-brand">
       <div class="line1">SAFAR</div>
       <div class="line2">SAATHI</div>
@@ -1261,6 +1277,83 @@ function fmtDate(d) {
 
 function escH(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function escQ(s) { return String(s||'').replace(/'/g,"\\'"); }
+</script>
+
+<script>
+// ============================================================
+//  🔒 SAFAR SAATHI — CODE PROTECTION
+// ============================================================
+
+// 1. Right click disable
+document.addEventListener('contextmenu', function(e) {
+  e.preventDefault();
+  return false;
+});
+
+// 2. Keyboard shortcuts block
+document.addEventListener('keydown', function(e) {
+  // Ctrl+U (View Source)
+  if (e.ctrlKey && e.key === 'u') { e.preventDefault(); return false; }
+  // Ctrl+S (Save)
+  if (e.ctrlKey && e.key === 's') { e.preventDefault(); return false; }
+  // Ctrl+Shift+I (DevTools)
+  if (e.ctrlKey && e.shiftKey && e.key === 'I') { e.preventDefault(); return false; }
+  // Ctrl+Shift+J (Console)
+  if (e.ctrlKey && e.shiftKey && e.key === 'J') { e.preventDefault(); return false; }
+  // Ctrl+Shift+C (Inspect)
+  if (e.ctrlKey && e.shiftKey && e.key === 'C') { e.preventDefault(); return false; }
+  // F12
+  if (e.key === 'F12') { e.preventDefault(); return false; }
+  // Ctrl+A (Select All)
+  if (e.ctrlKey && e.key === 'a') { e.preventDefault(); return false; }
+  // Ctrl+C (Copy)
+  if (e.ctrlKey && e.key === 'c') {
+    const sel = window.getSelection().toString();
+    if (sel.length > 0) { e.preventDefault(); return false; }
+  }
+});
+
+// 3. Text select disable
+document.addEventListener('selectstart', function(e) {
+  e.preventDefault();
+  return false;
+});
+
+// 4. Drag disable
+document.addEventListener('dragstart', function(e) {
+  e.preventDefault();
+  return false;
+});
+
+// 5. DevTools detection — size change method
+(function() {
+  var threshold = 160;
+  var check = function() {
+    if (
+      window.outerWidth - window.innerWidth > threshold ||
+      window.outerHeight - window.innerHeight > threshold
+    ) {
+      document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0d1117;flex-direction:column;gap:16px;"><div style=\'font-size:48px;\'>🔒</div><div style=\'font-family:Montserrat,sans-serif;font-size:20px;font-weight:700;color:#f5c518;\'>Access Denied</div><div style=\'font-size:13px;color:#7a8499;\'>Safar Saathi Ride © 2026</div></div>';
+    }
+  };
+  setInterval(check, 1000);
+})();
+
+// 6. Print disable
+window.addEventListener('beforeprint', function(e) {
+  document.body.style.display = 'none';
+});
+window.addEventListener('afterprint', function(e) {
+  document.body.style.display = '';
+});
+
+// 7. Copy event override
+document.addEventListener('copy', function(e) {
+  e.clipboardData.setData('text/plain', '© Safar Saathi Ride 2026 — Unauthorized copy is prohibited.');
+  e.preventDefault();
+});
+
+// ============================================================
 </script>
 </body>
 </html>
