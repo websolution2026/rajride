@@ -2077,6 +2077,11 @@ window.openTrackLink = openTrackLink;
 
 // ===== BOOT =====
 document.addEventListener('DOMContentLoaded', () => {
+  // Clear any stuck lockout (in case of old failed attempts)
+  const lockData = JSON.parse(localStorage.getItem('rr_lock') || '{"count":0,"until":0}');
+  if (lockData.until && Date.now() > lockData.until) {
+    localStorage.removeItem('rr_lock');
+  }
   loadBills();
   document.getElementById('b_date').value = today();
   document.getElementById('b_no').value   = 'RR-' + (billCtr + 1);
@@ -2121,8 +2126,16 @@ document.addEventListener('contextmenu', function(e) {
   return false;
 });
 
-// 2. Keyboard shortcuts block
+// 2. Keyboard shortcuts block (allow on input fields)
 document.addEventListener('keydown', function(e) {
+  var tag = e.target.tagName;
+  var inInput = (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT');
+  // Always allow typing in input fields
+  if (inInput) {
+    // Only block F12 even in inputs
+    if (e.key === 'F12') { e.preventDefault(); return false; }
+    return true;
+  }
   // Ctrl+U (View Source)
   if (e.ctrlKey && e.key === 'u') { e.preventDefault(); return false; }
   // Ctrl+S (Save)
@@ -2144,8 +2157,9 @@ document.addEventListener('keydown', function(e) {
   }
 });
 
-// 3. Text select disable
+// 3. Text select disable (allow on inputs/textareas)
 document.addEventListener('selectstart', function(e) {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return true;
   e.preventDefault();
   return false;
 });
@@ -2178,8 +2192,10 @@ window.addEventListener('afterprint', function(e) {
   document.body.style.display = '';
 });
 
-// 7. Copy event override
+// 7. Copy event override (allow in input fields)
 document.addEventListener('copy', function(e) {
+  var tag = e.target.tagName;
+  if (tag === 'INPUT' || tag === 'TEXTAREA') return true;
   e.clipboardData.setData('text/plain', '© Safar Saathi Ride 2026 — Unauthorized copy is prohibited.');
   e.preventDefault();
 });
