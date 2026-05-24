@@ -696,31 +696,37 @@ input, textarea, select {
 <!-- ===== LOGIN OVERLAY ===== -->
 <div class="login-overlay" id="login-overlay">
   <div class="login-box">
-    <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px;">
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:12px;">
       <div style="background:var(--accent);width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;color:#000;font-size:22px;font-family:'Rajdhani',sans-serif;">S</div>
       <div>
-        <div class="login-logo" style="text-align:left;font-size:24px;">Safar <span style="color:var(--accent);">Saathi</span></div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;color:#fff;">Safar <span style="color:var(--accent);">Saathi</span></div>
         <div style="background:var(--accent);color:#000;font-size:9px;font-weight:700;padding:1px 8px;border-radius:3px;letter-spacing:2px;display:inline-block;margin-top:2px;">RIDE</div>
       </div>
     </div>
-    <div class="login-sub">ADMIN PANEL — SECURE LOGIN</div>
+    <div style="text-align:center;font-size:11px;color:var(--muted2);letter-spacing:2px;margin-bottom:28px;">ADMIN PANEL — SECURE LOGIN</div>
 
-    <div class="login-field">
-      <label>👤 Username</label>
-      <input type="text" id="login-user" placeholder="Username" autocomplete="username"
-        onkeydown="if(event.key==='Enter') doLogin()">
+    <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px;">
+      <label style="font-size:11px;font-weight:600;letter-spacing:1px;color:var(--muted2);text-transform:uppercase;">Username</label>
+      <input type="text" id="login-user" placeholder="admin" autocomplete="off"
+        onkeyup="if(event.key==='Enter')doLogin()"
+        style="background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:13px 16px;color:var(--text);font-family:'Hind',sans-serif;font-size:15px;outline:none;width:100%;transition:border-color 0.2s;"
+        onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
     </div>
-    <div class="login-field">
-      <label>🔒 Password</label>
-      <input type="password" id="login-pass" placeholder="Password" autocomplete="current-password"
-        onkeydown="if(event.key==='Enter') doLogin()">
+    <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:20px;">
+      <label style="font-size:11px;font-weight:600;letter-spacing:1px;color:var(--muted2);text-transform:uppercase;">Password</label>
+      <input type="password" id="login-pass" placeholder="Password"
+        onkeyup="if(event.key==='Enter')doLogin()"
+        style="background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:13px 16px;color:var(--text);font-family:'Hind',sans-serif;font-size:15px;outline:none;width:100%;transition:border-color 0.2s;"
+        onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
     </div>
 
-    <button class="login-btn" onclick="doLogin()">🔓 Login Karein</button>
-
-    <div class="login-error" id="login-error">❌ Galat username ya password!</div>
-    <div class="login-lock-msg" id="login-lock">🔒 Bahut zyada galat attempts! 5 minute baad try karein.</div>
-    <div class="login-attempts" id="login-attempts"></div>
+    <button id="login-btn" onclick="doLogin()"
+      style="width:100%;background:var(--accent);color:#000;border:none;border-radius:12px;padding:15px;font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:all 0.2s;">
+      Login Karein
+    </button>
+    <div id="login-error" style="display:none;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:10px;padding:10px 14px;font-size:13px;color:#ef4444;text-align:center;margin-top:12px;">
+      Galat username ya password!
+    </div>
   </div>
 </div>
 
@@ -1949,142 +1955,51 @@ function fillBillingFromMap() {
 window.fillBillingFromMap = fillBillingFromMap;
 
 // ===== AUTH =====
-const ADMIN_USER = 'admin';
-const ADMIN_PASS = 'rajride123';
-const SESSION_KEY = 'rr_admin_session';
-const MAX_ATTEMPTS = 5;
-const LOCK_DURATION = 5 * 60 * 1000; // 5 minutes
+var ADMIN_USER = 'admin';
+var ADMIN_PASS = 'rajride123';
 
 function checkSession() {
-  const session = localStorage.getItem(SESSION_KEY);
-  if (session) {
-    try {
-      const { token, expiry } = JSON.parse(session);
-      if (token === btoa(ADMIN_USER + ADMIN_PASS) && Date.now() < expiry) {
-        document.getElementById('login-overlay').classList.add('hidden');
-        return true;
-      }
-    } catch(e) {}
+  var s = localStorage.getItem('ss_session');
+  if (s === 'loggedin') {
+    document.getElementById('login-overlay').style.display = 'none';
+    return true;
   }
-  document.getElementById('login-overlay').classList.remove('hidden');
+  document.getElementById('login-overlay').style.display = 'flex';
   return false;
 }
 
 function doLogin() {
-  // Check lockout
-  const lockData = JSON.parse(localStorage.getItem('rr_lock') || '{"count":0,"until":0}');
-  if (Date.now() < lockData.until) {
-    document.getElementById('login-lock').style.display = 'block';
-    document.getElementById('login-error').classList.remove('show');
-    const mins = Math.ceil((lockData.until - Date.now()) / 60000);
-    document.getElementById('login-lock').textContent = `🔒 ${mins} minute baad try karein.`;
-    return;
-  }
+  var u = document.getElementById('login-user').value;
+  var p = document.getElementById('login-pass').value;
+  var errEl = document.getElementById('login-error');
+  var btn = document.getElementById('login-btn');
 
-  const user = document.getElementById('login-user').value.trim();
-  const pass = document.getElementById('login-pass').value;
-
-  if (user === ADMIN_USER && pass === ADMIN_PASS) {
-    // Success
-    localStorage.removeItem('rr_lock');
-    localStorage.setItem(SESSION_KEY, JSON.stringify({
-      token: btoa(ADMIN_USER + ADMIN_PASS),
-      expiry: Date.now() + (8 * 60 * 60 * 1000) // 8 hours session
-    }));
-    document.getElementById('login-overlay').classList.add('hidden');
-    document.getElementById('login-error').classList.remove('show');
-    document.getElementById('login-attempts').textContent = '';
+  if (u === ADMIN_USER && p === ADMIN_PASS) {
+    localStorage.setItem('ss_session', 'loggedin');
+    document.getElementById('login-overlay').style.display = 'none';
+    errEl.style.display = 'none';
+    btn.textContent = 'Login Ho Gaya!';
     startRealtimeRequests();
     loadBills();
-    renderBillHistory();
-    showToast('✅ Welcome! Safar Saathi Admin');
+    showToast('Welcome Prabhat ji!');
   } else {
-    // Failed
-    lockData.count = (lockData.count || 0) + 1;
-    const remaining = MAX_ATTEMPTS - lockData.count;
-
-    if (lockData.count >= MAX_ATTEMPTS) {
-      lockData.until = Date.now() + LOCK_DURATION;
-      localStorage.setItem('rr_lock', JSON.stringify(lockData));
-      document.getElementById('login-lock').style.display = 'block';
-      document.getElementById('login-error').classList.remove('show');
-      document.getElementById('login-attempts').textContent = '';
-    } else {
-      localStorage.setItem('rr_lock', JSON.stringify(lockData));
-      document.getElementById('login-error').classList.add('show');
-      document.getElementById('login-lock').style.display = 'none';
-      document.getElementById('login-attempts').textContent =
-        `⚠️ ${remaining} aur chances bache hain`;
-    }
-
-    // Shake animation
-    const box = document.querySelector('.login-box');
-    box.style.animation = 'none';
-    box.offsetHeight;
-    box.style.animation = 'shake 0.4s ease';
+    errEl.style.display = 'block';
+    errEl.textContent = 'Galat username ya password!';
+    document.getElementById('login-pass').value = '';
+    document.getElementById('login-pass').focus();
   }
 }
 window.doLogin = doLogin;
 
 function doLogout() {
   if (!confirm('Logout karna chahte hain?')) return;
-  localStorage.removeItem(SESSION_KEY);
-  document.getElementById('login-overlay').classList.remove('hidden');
+  localStorage.removeItem('ss_session');
   document.getElementById('login-user').value = '';
   document.getElementById('login-pass').value = '';
-  document.getElementById('login-error').classList.remove('show');
-  document.getElementById('login-attempts').textContent = '';
+  document.getElementById('login-error').style.display = 'none';
+  document.getElementById('login-overlay').style.display = 'flex';
 }
 window.doLogout = doLogout;
-
-// ===== TRACKING =====
-function cpId(id) {
-  navigator.clipboard.writeText(id)
-    .then(function(){showToast('Booking ID copy ho gayi!');})
-    .catch(function(){prompt('ID copy karein:',id);});
-}
-window.cpId = cpId;
-
-function openDriverLink(id) {
-  var base = window.location.origin + window.location.pathname.replace('admin-panel.html','');
-  var dUrl = base + 'driver.html?id=' + id;
-  var tUrl = base + 'tracking.html?id=' + id;
-  var r = requests.find(function(x){return x.id===id;}) || {};
-  var waText = 'Safar Saathi - Nayi Ride' +
-    '\n\nCustomer: ' + (r.name||'') +
-    '\nPhone: ' + (r.phone||'') +
-    '\n\nTrip link:\n' + dUrl;
-
-  var html = '';
-  html += '<div style="margin-bottom:14px;">';
-  html += '<div style="font-size:11px;color:var(--muted2);letter-spacing:1px;margin-bottom:6px;">BOOKING ID</div>';
-  html += '<div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px;font-family:monospace;font-size:11px;color:var(--accent);word-break:break-all;">' + id + '</div>';
-  html += '<button onclick="copyText('' + id + '')" style="margin-top:6px;background:none;border:1px solid var(--border);color:var(--muted2);border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;">Copy ID</button>';
-  html += '</div>';
-  html += '<div style="display:flex;flex-direction:column;gap:8px;">';
-  html += '<a href="https://wa.me/?text=' + encodeURIComponent(waText) + '" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;background:#25d366;color:#fff;border-radius:10px;text-decoration:none;font-family:Rajdhani,sans-serif;font-weight:700;font-size:14px;">WhatsApp pe Driver ko Bhejein</a>';
-  html += '<button onclick="copyText('' + dUrl + '')" style="padding:13px;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:10px;font-family:Rajdhani,sans-serif;font-weight:700;font-size:14px;cursor:pointer;">Driver Link Copy</button>';
-  html += '<a href="' + tUrl + '" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;background:rgba(59,130,246,0.1);color:#3b82f6;border:1px solid rgba(59,130,246,0.3);border-radius:10px;text-decoration:none;font-family:Rajdhani,sans-serif;font-weight:700;font-size:14px;">Live Tracking Dekho</a>';
-  html += '<button onclick="copyText('' + tUrl + '')" style="padding:13px;background:var(--surface);color:var(--muted2);border:1px solid var(--border);border-radius:10px;font-family:Rajdhani,sans-serif;font-weight:700;font-size:14px;cursor:pointer;">Customer Tracking Link Copy</button>';
-  html += '</div>';
-
-  document.getElementById('drv-modal-body').innerHTML = html;
-  document.getElementById('drv-modal').classList.add('show');
-}
-window.openDriverLink = openDriverLink;
-
-function copyText(txt) {
-  navigator.clipboard.writeText(txt)
-    .then(function(){showToast('Copy ho gayi!');})
-    .catch(function(){prompt('Copy karein:',txt);});
-}
-window.copyText = copyText;
-
-function openTrackLink(id) {
-  var url = window.location.origin + window.location.pathname.replace('admin-panel.html','') + 'tracking.html?id=' + id;
-  window.open(url, '_blank');
-}
-window.openTrackLink = openTrackLink;
 
 // ===== BOOT =====
 document.addEventListener('DOMContentLoaded', () => {
@@ -2105,7 +2020,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById(id)?.addEventListener('input', buildPreview)
   );
 
-  // Check session — agar logged in hai toh hi data load karo
+  // Check session
   if (checkSession()) {
     startRealtimeRequests();
     loadBills();
