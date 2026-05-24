@@ -1179,9 +1179,25 @@ input, textarea, select {
 <div class="toast" id="toast"></div>
 <div class="modal-bg" id="drv-modal">
   <div class="modal">
-    <div class="modal-h">&#x1F697; Driver &amp; Tracking <button class="modal-close" onclick="document.getElementById('drv-modal').classList.remove('show')">&#x2715;</button></div>
-    <div id="drv-modal-body"></div>
-    <div style="margin-top:12px;"><button class="filter-pill" onclick="document.getElementById('drv-modal').classList.remove('show')">Band Karein</button></div>
+    <div class="modal-h">&#x1F697; Driver &amp; Tracking
+      <button class="modal-close" onclick="document.getElementById('drv-modal').classList.remove('show')">&#x2715;</button>
+    </div>
+    <div id="drv-modal-body">
+      <div style="margin-bottom:14px;">
+        <div style="font-size:11px;color:var(--muted2);letter-spacing:1px;margin-bottom:6px;font-weight:700;">BOOKING ID</div>
+        <div id="drv-id-box" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-family:monospace;font-size:12px;color:var(--accent);word-break:break-all;"></div>
+        <button onclick="drvCopyId()" style="margin-top:8px;background:none;border:1px solid var(--border);color:var(--muted2);border-radius:6px;padding:5px 12px;font-size:12px;cursor:pointer;width:100%;">&#x1F4CB; Booking ID Copy Karein</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <button onclick="drvOpenWa()" style="padding:13px;background:#25d366;color:#fff;border:none;border-radius:10px;font-family:Rajdhani,sans-serif;font-weight:700;font-size:14px;cursor:pointer;width:100%;">&#x1F4AC; Driver ko WhatsApp pe Bhejein</button>
+        <button onclick="drvCopyDrv()" style="padding:13px;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:10px;font-family:Rajdhani,sans-serif;font-weight:700;font-size:14px;cursor:pointer;width:100%;">&#x1F4CB; Driver Link Copy Karein</button>
+        <button onclick="drvOpenTrk()" style="padding:13px;background:rgba(59,130,246,0.1);color:#3b82f6;border:1px solid rgba(59,130,246,0.3);border-radius:10px;font-family:Rajdhani,sans-serif;font-weight:700;font-size:14px;cursor:pointer;width:100%;">&#x1F4CD; Live Tracking Dekho</button>
+        <button onclick="drvCopyTrk()" style="padding:13px;background:var(--surface);color:var(--muted2);border:1px solid var(--border);border-radius:10px;font-family:Rajdhani,sans-serif;font-weight:700;font-size:14px;cursor:pointer;width:100%;">&#x1F4CB; Customer Tracking Link Copy</button>
+      </div>
+    </div>
+    <div style="margin-top:12px;">
+      <button class="filter-pill" onclick="document.getElementById('drv-modal').classList.remove('show')">Band Karein</button>
+    </div>
   </div>
 </div>
 
@@ -1601,21 +1617,24 @@ function buildPreview() {
   const vcolor = document.getElementById('cf_vcolor').value.trim();
   const note   = document.getElementById('cf_note').value.trim();
 
-  let msg = `✅ *RAJRIDE – Booking Confirmed!*\n\nNamaste *${r.name}* ji 🙏\n\nAapki booking confirm ho gayi hai. Neeche aapki trip ki details hain:\n\n`;
-  msg += `📍 *Pickup:* ${r.pickup}\n🏁 *Drop:* ${r.drop}\n📅 *Date:* ${fmtDate(r.date)}\n🕐 *Time:* ${r.time}\n🚘 *Vehicle:* ${r.vehicle}\n👥 *Passengers:* ${r.passengers}\n`;
+  let msg = '\u2705 *Safar Saathi Ride \u2013 Booking Confirmed!*\n\nNamaste *' + r.name + '* ji \uD83D\uDE4F\n\nAapki booking confirm ho gayi hai. Neeche aapki trip ki details hain:\n\n';
+  msg += '\uD83D\uDCCD *Pickup:* ' + r.pickup + '\n\uD83C\uDFC1 *Drop:* ' + (r.drop||r.drop_place||'') + '\n\uD83D\uDCC5 *Date:* ' + fmtDate(r.journey_date||r.date) + '\n\uD83D\uDD50 *Time:* ' + (r.journey_time||r.time) + '\n\uD83D\uDE98 *Vehicle:* ' + r.vehicle + '\n\uD83D\uDC65 *Passengers:* ' + r.passengers + '\n';
 
   if (driver || dphone || vnum || vcolor) {
-    msg += `\n🚗 *Aapka Driver:*\n`;
-    if (driver) msg += `   👤 Naam: ${driver}\n`;
-    if (dphone) msg += `   📱 Phone: ${dphone}\n`;
-    if (vnum)   msg += `   🔢 Vehicle No: ${vnum}\n`;
-    if (vcolor) msg += `   🎨 Vehicle: ${vcolor}\n`;
+    msg += '\n\uD83D\uDE97 *Aapka Driver:*\n';
+    if (driver) msg += '   \uD83D\uDC64 Naam: ' + driver + '\n';
+    if (dphone) msg += '   \uD83D\uDCF1 Phone: ' + dphone + '\n';
+    if (vnum)   msg += '   \uD83D\uDD22 Vehicle No: ' + vnum + '\n';
+    if (vcolor) msg += '   \uD83D\uDE99 Vehicle: ' + vcolor + '\n';
   }
-  if (note) msg += `\n📝 *Note:* ${note}\n`;
-  msg += `\nKisi bhi sahayta ke liye:\n📞 *7979720282*\n\n_RajRide – Aapki Seva Mein Sada Taiyaar_ 🚗`;
+    if (note) msg += '\n\uD83D\uDCDD *Note:* ' + note + '\n';
+  msg += '\nKisi bhi sahayta ke liye:\n\uD83D\uDCDE *7979720282*\n\n_Safar Saathi Ride \u2013 Har Safar, Aapka Saathi_';
 
-  document.getElementById('cf-wa-btn').href   = `https://wa.me/91${(r.phone||'').replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`;
-  document.getElementById('cf-mail-btn').href = `mailto:${r.email||''}?subject=${encodeURIComponent('RajRide Booking Confirmed – ' + fmtDate(r.date))}&body=${encodeURIComponent(msg.replace(/\*/g,''))}`;
+  var custPhone = (r.phone||'').replace(/\D/g,'');
+  var custEmail = r.email || '';
+  var confSubject = 'Safar Saathi – Booking Confirmed';
+  document.getElementById('cf-wa-btn').href   = 'https://wa.me/91' + custPhone + '?text=' + encodeURIComponent(msg);
+  document.getElementById('cf-mail-btn').href = 'mailto:' + custEmail + '?subject=' + encodeURIComponent(confSubject) + '&body=' + encodeURIComponent(msg.replace(/\*/g,''));
 
   if (_showPreview) document.getElementById('msg-preview-box').textContent = msg;
 }
@@ -2000,6 +2019,58 @@ function doLogout() {
   document.getElementById('login-overlay').style.display = 'flex';
 }
 window.doLogout = doLogout;
+
+// ===== TRACKING & DRIVER =====
+function cpId(id) {
+  navigator.clipboard.writeText(id)
+    .then(function() { showToast('Booking ID copy ho gayi!'); })
+    .catch(function() { prompt('Booking ID:', id); });
+}
+window.cpId = cpId;
+
+function copyText(txt) {
+  navigator.clipboard.writeText(txt)
+    .then(function() { showToast('Copy ho gayi!'); })
+    .catch(function() { prompt('Copy karein:', txt); });
+}
+window.copyText = copyText;
+
+function openDriverLink(id) {
+  var base = window.location.origin + window.location.pathname.replace('admin-panel.html', '');
+  var dUrl = base + 'driver.html?id=' + id;
+  var tUrl = base + 'tracking.html?id=' + id;
+  var r = requests.find(function(x) { return x.id === id; }) || {};
+
+  // Store values for button clicks
+  window._drvId  = id;
+  window._drvUrl = dUrl;
+  window._trkUrl = tUrl;
+  window._waText = 'Safar Saathi Ride - Driver Link' +
+    '\nCustomer: ' + (r.name  || '') +
+    '\nPhone: '    + (r.phone || '') +
+    '\n\nTrip link:\n' + dUrl;
+
+  document.getElementById('drv-id-box').textContent = id;
+  document.getElementById('drv-modal').classList.add('show');
+}
+window.openDriverLink = openDriverLink;
+
+function drvCopyId()  { copyText(window._drvId);  }
+function drvCopyDrv() { copyText(window._drvUrl); }
+function drvCopyTrk() { copyText(window._trkUrl); }
+function drvOpenWa()  { window.open('https://wa.me/?text=' + encodeURIComponent(window._waText), '_blank'); }
+function drvOpenTrk() { window.open(window._trkUrl, '_blank'); }
+window.drvCopyId  = drvCopyId;
+window.drvCopyDrv = drvCopyDrv;
+window.drvCopyTrk = drvCopyTrk;
+window.drvOpenWa  = drvOpenWa;
+window.drvOpenTrk = drvOpenTrk;
+
+function openTrackLink(id) {
+  var base = window.location.origin + window.location.pathname.replace('admin-panel.html', '');
+  window.open(base + 'tracking.html?id=' + id, '_blank');
+}
+window.openTrackLink = openTrackLink;
 
 // ===== BOOT =====
 document.addEventListener('DOMContentLoaded', () => {
